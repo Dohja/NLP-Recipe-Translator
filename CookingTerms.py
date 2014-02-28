@@ -87,6 +87,7 @@ Steak = Ingredient("steak")
 RibTips = Ingredient("rib tips")
 BeefStew = Ingredient("beef stew")
 VealCutlet = Ingredient("veal cutlet")
+GroundBeef = Ingredient("hamburger")
 
 # types of pork
 PorkRibs = Ingredient("pork ribs")
@@ -98,6 +99,7 @@ PorkCutlet = Ingredient("pork cutlets")
 LambChops = Ingredient("lamb chops")
 Leg = Ingredient("leg of lamb")
 LambRoast = Ingredient("lamb roast")
+GroundLamb = Ingredient("ground lamb")
 
 # types of veg protein
 Tofu = Ingredient("Tofu")
@@ -147,6 +149,7 @@ Eggs = Ingredient("eggs")
 Pigeon = Ingredient("pigeon")
 Quail = Ingredient("quail")
 Turkey = Ingredient("turkey")
+GroundChicken = Ingredient("ground chicken")
 
 # kinds of vegetable
 Artichokes = Ingredient("artichokes")
@@ -395,11 +398,11 @@ CreamCheese = Ingredient("cream cheese")
 
 # PROTEIN #######################################################
 
-Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet])
+Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet, GroundBeef])
 
 Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet])
 
-Lamb.addSubType([LambChops, Leg, LambRoast])
+Lamb.addSubType([LambChops, Leg, LambRoast, GroundLamb])
 
 Meat.addSubType([Beef, Pork, Lamb])
 
@@ -414,7 +417,7 @@ Fish.addSubType([BlueFish, Salmon, WhiteFish, Catfish, Cod, Eel, Haddock, Halibu
 
 Seafood.addSubType([Molluscs, Crustaceans, Fish])
 
-Poultry.addSubType([Chicken, Duck, Goose, Eggs, Pigeon, Quail, Turkey])
+Poultry.addSubType([Chicken, Duck, Goose, Eggs, Pigeon, Quail, Turkey, GroundChicken])
 
 Protein.addSubType([Meat, VegProtein, Seafood, Poultry])
 
