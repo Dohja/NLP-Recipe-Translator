@@ -83,6 +83,12 @@ Lamb = Ingredient("lamb")
 
 # types of beef
 BeefRibs = Ingredient("beef ribs")
+BeefRibs.setTaste(umami, 6)
+BeefRibs.setTaste(sweet, 1)
+BeefRibs.setTaste(salty, 6)
+BeefRibs.setTaste(sour, 2)
+BeefRibs.setTaste(bitter, 1)
+BeefRibs.setTaste(hot, 1)
 Steak = Ingredient("steak")
 RibTips = Ingredient("rib tips")
 BeefStew = Ingredient("beef stew")
