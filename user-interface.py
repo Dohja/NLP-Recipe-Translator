@@ -13,36 +13,22 @@ def SwapRecipes():
     recipeInput = raw_input("Please give me the sequence of operations")
     recipe = processRecipe(ingredients, steps) # OBV NOT DONE YET
 
-    swap = raw_input("did you have an ingredient in mind? if so, please type it here")
-    while swap not in ingredients.keys() or swap != "":
-        swap = raw_input("I didn't see that in my ingredients; please try again, lower case, or hit enter if you just want me to pick something")
+    print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
+    transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options")
 
-    target = raw_input("did you want to switch it with anything in particular?")
-    while target not in IngredientList or swap != "":
-        target = raw_input("I don't know how to use that ingredient... either try again, lower case, or hit enter if you trust me")
+    originalFlavor = calculateFlavorScore(ingredients)
 
-    if swap == "":
-        swap = findSwap(ingredients)
+    if transformation == "veg":
+        newIng, newRecipe = veggify(ingredients, recipe, originalFlavor, IngreDict) ## IMPLEMENT
+    elif transformation == "style":
+        newIng, newRecipe = changeStyle(ingredients, recipe, originalFlavor, IngreDict)
+    elif transformation == "scale":
+        newIng = scaleRecipe(ingredients)
+        newRecipe = recipe.copy ## what does this look like
+    elif transformation == "swap":
+        newIng, newRecipe = swapOut(ingredients, recipe, originalFlavor, IngreDict)
 
-    originalFlavor = calculateFlavorScore(ingredients) 
-    # flavorScore and flavorNoSwap are going to be of type Ingredient, and their internal scores will determine how we're doing
-
-    newIngredients = removeKey(ingredients, swap)
-    newRecipe = removeSwap(recipe, swap) # NOT DONE YET what does this even look like?  Unclear yet
-    
-    if target != "":
-        targetWeighted = weightFactor(target, ingredients, swap, IngreDict)
-        newIngredients[target] = targetWeighted
-
-    flavorNoSwap = calculateFlavorScore(newIngredients)
-
-    # whether we've added something or not, now we need to balance the recipe
-
-    newRecipe, newIngredients = balanceOut(newRecipe, newIngredients, originalFlavor) # NOT DONE YET
-
-     
-    
-    
+    newRecipe, newIngredients = balanceOut(newRecipe, newIngredients, originalFlavor, IngreDict, spiceType) # NOT DONE YET
 
 return
 
@@ -50,9 +36,3 @@ def removeKey(d, key):
     r = dict(d)
     del r[key]
     return r
-
-def balanceOut(newRecipe, newIngredients, oldRecipe, oldIngredients):
-    # add things to newRecipe until it matches oldRecipe
-
-
-    return [newRecipe, newIngredients]

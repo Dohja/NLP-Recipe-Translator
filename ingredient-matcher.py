@@ -37,34 +37,19 @@ def weightFactor(newIngredient, origWeight, swap, IngredientDict):
     for i in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
         weightFactor += IngredientDict[newIngredient][i]
     return weightFactor / 6.0
-    
-def balanceOut(recipe, ingredients, originalFlavor, IngreDict, spices = "all"):
-    
-    newFlavor = calculateFlavorScore(ingredients)
-    flavorDiff = calculateFlavorDiff(originalFlavor, newFlavor)
 
-    if spices == "all":
-        spices = "Spices"
-    elif spices == "european":
-        spices = "EuroSpices"
-    elif spices == "arab":
-        spices = "ArabSpices"
-    elif spices == "south asian":
-        spices = "SouthAsianSpices"
-    elif spices == "east asian":
-        spices = "EastAsianSpices"
-
-    herbsAndSpices = collectSubTypes(spices)
-    herbsAndSpices.extend(collectSubTypes(herbs))
-
-    options = gatherOptions(flavorDiff, herbsAndSpices, {0: {}}, 1)
-    bestOption = findBestOption(options, flavorDiff)
-    recipe.addToRecipe(bestOption) ####
-    for ing in bestOption:
-        ingredients[ing] = bestOption[ing]
-    return [recipe, ingredients]
-
-# need to make all possible subsets that are similar ENOUGH to consider
+def findBestMatch(ing, replacements):
+    bestMatch = None
+    bestScore = 1000000000
+    for i in replacements:
+        score = 0
+        diff = calculateFlavorDiff(ing, i)
+        for t in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
+            score += math.fabs(diff[i])
+        if score < bestScore:
+            bestScore = score
+            bestMatch = i
+    return bestMatch
 
 def calculateFlavorDiff(originalFlavor, newFlavor):
     flavorDiff = Ingredient("flavorDiff")
@@ -80,36 +65,3 @@ def collectSubTypes(ingredient):
         for i in ingredient.subTypes:
             sub.extend(collectSubTypes(i))
         return sub
-
-def gatherOptions(difference, HnS, options, counter):
-    for k in options.keys():
-        localDiff = calculateFlavorDiffer(difference, calculateFlavorScore(options[k]))
-        for i in HnS:
-            strongest = findStrongestTaste(i) 
-            maxRatio = localDiff.strongest/i.strongest
-            for r in range(maxRatio):
-                options[counter] = dict(options[k])
-                options[counter][i] = r
-                counter += 1
-    return options
-
-def findBestOption(options, flavorDiff):
-    bestOption = None
-    bestScore = 100000000
-    for option in options:
-        score = 0
-        diff = calculateFlavorDiff(flavorDiff, option)
-        for i in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
-            score += math.fabs(diff[i])
-        if score < bestScore:
-            bestScore = score
-            bestOption = option
-    return bestOption
-    
-def findStrongestTaste(ingredient):
-    strongest = None
-    valence = 0
-    for i in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
-        if ingredient[i] > valence:
-            strongest = i
-    return strongest
