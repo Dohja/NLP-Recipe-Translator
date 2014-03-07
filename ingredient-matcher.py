@@ -8,7 +8,7 @@ def calculateFlavorScore(ingredients):
 
     for ing in ingredients:
         for taste in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
-            score[taste] += ing.taste * ingredients[ing]
+            score[taste] += ing.taste * ingredients[ing]["weight"]
 
     return score
 
@@ -20,22 +20,22 @@ def findSwap(ingredients):
 
     while len(testList) < 3:
         cutoff -= .333333333333333
-        testList = [ing for ing in ingredients.keys() if ingredients[ing] > cutoff]
+        testList = [ing for ing in ingredients.keys() if ingredients[ing]["weight"] > cutoff]
     trySwap = random.choice(testList)
 
     return trySwap
 
 def weightFactor(newIngredient, origWeight, swap, IngredientDict):
-    toMatch = {"sweet": IngredientDict[swap]["sweet"]*origWeight,
-               "salty": IngredientDict[swap]["salty"]*origWeight,
-               "sour": IngredientDict[swap]["sour"]*origWeight,
-               "bitter": IngredientDict[swap]["bitter"]*origWeight,
-               "umami": IngredientDict[swap]["umami"]*origWeight,
-               "hot": IngredientDict[swap]["hot"]*origWeight}
+    toMatch = {"sweet": IngredientDict[swap].sweet*origWeight,
+               "salty": IngredientDict[swap].salty*origWeight,
+               "sour": IngredientDict[swap].sour*origWeight,
+               "bitter": IngredientDict[swap].bitter*origWeight,
+               "umami": IngredientDict[swap].umami*origWeight,
+               "hot": IngredientDict[swap].hot*origWeight}
 
     weightFactor = 0.0
     for i in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
-        weightFactor += IngredientDict[newIngredient][i]
+        weightFactor += IngredientDict[swap].i / IngredientDict[newIngredient].i
     return weightFactor / 6.0
 
 def findBestMatch(ing, replacements):

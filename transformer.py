@@ -23,27 +23,22 @@ def veggify(ingredients, recipe, originalFlavor, IngredientsDict):
         if cat in IngredientsDict[i].superTypes:
             toSwap.append(i)
     if len(toSwap) == 0:
-        ### only possible if vegetarian without any vegProtein, i.e., just veggies
-        newIng, newRecipe = addMeat(ingredients, recipe, IngredientsDict) ### MAKE THIS
+        print "this appears to be a vegetarian recipe that does not have any vegetarian protein in it... it's hard to just... add meat.  But feel free to throw some chicken in or something!"
     else:
         for i in toSwap:
             newIng, newRecipe = swapOut(newIng, newRecipe, originalFlavor, IngredientsDict, i)
 
     return [newIng, newRecipe]
 
-def changeStyle(ingredients, recipe, originalFlavor, IngredientsDict):
+def changeStyle(ingredients, recipe, originalFlavor, IngredientsDict, swapSpice):
     spices = gatherSpices(ingredients)
     spiceFlavors = calculateFlavorScore(spices)
     newRecipe = recipe.copy ### WHAT DOES THIS LOOK LIKE
     newIngredients = dict(ingredients)
-    newType = raw_input("what spice palate do you want: you can choose European, Arab, South Asian, or East Asian")
-    while newType != 'european' or newType != 'arab' or newType != 'south asian' or newType != 'east asian':
-        newType = raw_input("sorry, try again: what spice palate do you want? please type, in lower case, european, arab, south asian, or east asian.")
-    swapSpice = typeConverter(newType)
     newSpices = collectSubTypes(IngredientsDict[swapSpice])
     for i in spices:
         newSpice = findBestMatch(i, newSpices)
-        newWeight = weightFactor(newSpice, ingredients[i], i, IngredientsDict)
+        newWeight = weightFactor(newSpice, ingredients[i]["weight"], i, IngredientsDict)
         newIngredients = swapIngredients(newIngredients, i, newSpice, newWeight)
         newRecipe = swapInRecipe(newRecipe, i, newSpice)
     return [newIngredients, newRecipe]
@@ -55,7 +50,7 @@ def scaleRecipe(ingredients):
     scale = raw_input("1 leaves the recipe unchanged; 0.5 would halve it; 2 would double it; etc")
     scale = float(scale)
     for i in ingredients.keys():
-        ingredients[i] *= scale
+        ingredients[i]["weight"] *= scale
     return ingredients
 
 def swapOut(ingredients, recipe, originalFlavor, IngreDict, swap=""):
@@ -71,33 +66,22 @@ def swapOut(ingredients, recipe, originalFlavor, IngreDict, swap=""):
     if target == "":
         targetOptions = collectSubTypes(IngredientsDict["Ingredients"])
         target = findBestMatch(swap, targetOptions)
-    targetWeighted = weightFactor(target, ingredients[swap], swap, IngreDict)
+    targetWeighted = weightFactor(target, ingredients[swap]["weight"], swap, IngreDict)
     newIngredients = swapIngredients(ingredients, swap, target, targetWeighted)
     newRecipe = swapInRecipe(newRecipe, swap, target)
     return [newIngredients, newRecipe]
 
-def balanceOut(recipe, ingredients, originalFlavor, IngreDict, spices = "all"):
-    
+def balanceOut(recipe, ingredients, originalFlavor, IngreDict, spices):
+    ## maybe leave this out entirely?
     newFlavor = calculateFlavorScore(ingredients)
     flavorDiff = calculateFlavorDiff(originalFlavor, newFlavor)
-
-    if spices == "all":
-        spices = "Spices"
-    elif spices == "european":
-        spices = "EuroSpices"
-    elif spices == "arab":
-        spices = "ArabSpices"
-    elif spices == "south asian":
-        spices = "SouthAsianSpices"
-    elif spices == "east asian":
-        spices = "EastAsianSpices"
 
     herbsAndSpices = collectSubTypes(spices)
     herbsAndSpices.extend(collectSubTypes(herbs))
 
-    options = gatherOptions(flavorDiff, herbsAndSpices, {0: {}}, 1)
-    bestOption = findBestOption(options, flavorDiff)
-    recipe.addToRecipe(bestOption) ####
+    options = gatherOptions(flavorDiff, herbsAndSpices, {0: {}}, 1) ### to do
+    bestOption = findBestOption(options, flavorDiff) ### to do
+    recipe.addToRecipe(bestOption) #### STILL TO DO
     for ing in bestOption:
         ingredients[ing] = bestOption[ing]
     return [recipe, ingredients]
@@ -120,9 +104,12 @@ def swapIngredients(ingredients, old, new, newWeight):
     return newIng
 
 def swapInRecipe(recipe, old, new):
-    ## replaces all instances of old with new in a recipe
+    newRecipe = recipe.replace(old, new)
     return newRecipe
 
-def addMeat(ing, recipe, ingDict):
-    ### add meat to a vegetarian recipe
-    return [newIng, newRecipe]
+def addToRecipe(ingredientsAndWeights):
+    ## this will be a dictionary of ingredients and their weights to be added to the recipe.
+    ## this is NOT swapping or replacing, but rather adding something entirely new.
+    ## should we even do this? it's only used in balanceOut, which we should maybe not include
+    ## ideas?
+    return

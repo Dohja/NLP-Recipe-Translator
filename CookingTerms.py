@@ -23,8 +23,19 @@ class Ingredient():
             parent.subTypes.append(self)
 
     def setTaste(self, taste, rating):
-        self.taste = rating
-        # so, setTaste(umami, 4); setTaste(sour, 5) or such to define each ingredient
+        if taste == "umami":
+            self.umami = rating
+        elif taste == "sweet":
+            self.sweet = rating
+        elif taste == "sour":
+            self.sour = rating
+        elif taste == "bitter":
+            self.bitter = rating
+        elif taste == "salty":
+            self.salty = rating
+        elif taste == "hot":
+            self.hot = rating
+        # so, setTaste("umami", 4); setTaste("sour", 5) or such to define each ingredient
 
     def setUnits(self, units):
         if units == "weight": self.units = "weight"
@@ -40,6 +51,9 @@ class Ingredient():
             print self.name
             for i in self.subTypes:
                 i.printSubTypes()
+
+    def printIng(self):
+        print "my tastes are: sweet: " + str(self.sweet) + " sour: " + str(self.sour) + " bitter: " + str(self.bitter) + " salty: " + str(self.salty) + " umami: " + str(self.umami)
 
 ## Here comes the heirarchy
 Ingredients = Ingredient("Ingredients")
@@ -83,12 +97,12 @@ Lamb = Ingredient("lamb")
 
 # types of beef
 BeefRibs = Ingredient("beef ribs")
-BeefRibs.setTaste(umami, 6)
-BeefRibs.setTaste(sweet, 1)
-BeefRibs.setTaste(salty, 6)
-BeefRibs.setTaste(sour, 2)
-BeefRibs.setTaste(bitter, 1)
-BeefRibs.setTaste(hot, 1)
+BeefRibs.setTaste("umami", 6)
+BeefRibs.setTaste("sweet", 1)
+BeefRibs.setTaste("salty", 6)
+BeefRibs.setTaste("sour", 2)
+BeefRibs.setTaste("bitter", 1)
+BeefRibs.setTaste("hot", 1)
 Steak = Ingredient("steak")
 RibTips = Ingredient("rib tips")
 BeefStew = Ingredient("beef stew")
