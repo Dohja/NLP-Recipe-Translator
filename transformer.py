@@ -1,5 +1,5 @@
 import CookingTerms
-from ingredient-matcher import *
+from ingredientMatcher import *
 
 def veggify(ingredients, recipe, originalFlavor, IngredientsDict):
 

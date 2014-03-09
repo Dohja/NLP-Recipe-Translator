@@ -18,8 +18,10 @@ def processIngredients(ingText, ingDict, measures):
 
 def processOneIngredient(ing, ingDict, allIng, measures):
     tokens = nltk.PunktWordTokenizer().tokenize(ing)
-    if tokens[1] == '(' and tokens[4] == ')': # for parenthetical measures, which we prefer over the count measure
-        tokens = tokens[2:4] + tokens[6:] # just remove the parens and the things immediately around them
+    if tokens == []: return allIng
+    if tokens[1] == '(':
+        closeParen = tokens.index(')')# for parenthetical measures, which we prefer over the count measure
+        tokens = tokens[2:closeParen] + tokens[closeParen + 1:] # just remove the parens and the things immediately around them
         # 1 (15 ounce) can artichoke hearts therefore becomes simply 15 ounce artichoke hearts
     number = float(fractions.Fraction(tokens[0])) # float-enize everything, including fractions such as 2/3
     units = "count" # default; if it's not a measure, it's a count
@@ -35,7 +37,7 @@ def processOneIngredient(ing, ingDict, allIng, measures):
     else: startAt = 2
     descriptor, name = extractIngredient(tokens[startAt:index], ingDict)
 
-    weight = calculateWeight(name, ingDict, quantity, measurement)
+    weight = calculateWeight(name, ingDict, number, units)
 
     allIng[name] = {"name": name,
                     "weight": weight,
@@ -57,7 +59,7 @@ def extractIngredient(tokens, ingDict):
 def calculateWeight(name, ingDict, amount, unit):
     std = ingDict[name].stdMeasure
     stdU = ingDict[name].units
-    if units == unit: return amount/std
+    if stdU == unit: return amount/std
     else: return convertWeight(amount, unit, std, stdU)
 
 def convertWeight(amount, unit, stdAmt, stdUnit):

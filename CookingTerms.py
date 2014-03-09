@@ -1,8 +1,13 @@
+from sets import Set
+
+
+
 class Ingredient():
-    def __init__(self, name):
+    def __init__(self, name, dict):
         self.name = name
         self.subTypes = []
         self.superTypes = []
+        self.stdMeasure = None
         self.sweet = None
         self.sour = None
         self.bitter = None
@@ -10,14 +15,19 @@ class Ingredient():
         self.umami = None
         self.hot = None # hot meaning spicy
         self.units = None # is this a measured ingredient or a counted ingredient?
+        dict[name] = self
+        
+
 
     def addSubType(self, group):
+
         self.subTypes.extend(group)
         for i in group:
             if self not in i.superTypes:
                 i.addSuperType(self)
 
     def addSuperType(self, parent):
+        self.superTypes.extend(parent.superTypes)
         self.superTypes.append(parent)
         if self not in parent.subTypes:
             parent.subTypes.append(self)
@@ -35,6 +45,7 @@ class Ingredient():
             self.salty = rating
         elif taste == "hot":
             self.hot = rating
+
         # so, setTaste("umami", 4); setTaste("sour", 5) or such to define each ingredient
 
     def setUnits(self, units):
@@ -45,6 +56,9 @@ class Ingredient():
             unit = raw_input("Please indicate whether " + self.name + " is measured by weight, volume, or count")
             self.setUnits(unit)
 
+    def setMeasure(self, measure):
+        self.stdMeasure = measure
+
     def printSubTypes(self):
         if self.subTypes == []: print self.name
         else:
@@ -52,447 +66,2869 @@ class Ingredient():
             for i in self.subTypes:
                 i.printSubTypes()
 
-    def printIng(self):
-        print "my tastes are: sweet: " + str(self.sweet) + " sour: " + str(self.sour) + " bitter: " + str(self.bitter) + " salty: " + str(self.salty) + " umami: " + str(self.umami)
-
-## Here comes the heirarchy
-Ingredients = Ingredient("Ingredients")
-
-#ingredient super types
-Protein = Ingredient("protein")
-Plants = Ingredient("plants") # done
-Spices = Ingredient("spices")
-Dairy = Ingredient("dairy")
-CookingMedia = Ingredient("cooking Media")
-
-# Types of plant ingredients
-Veg = Ingredient("veg") # done
-Herbs = Ingredient("herbs") # done
-Grain = Ingredient("grain") # done
-Fruit = Ingredient("fruit") # Done
-Nuts = Ingredient("nuts") # done
-
-# Types of protein
-Meat = Ingredient("meat")
-VegProtein = Ingredient("veg Protein")
-Seafood = Ingredient("seafood")
-Poultry = Ingredient("poultry")
-
-# types of spices
-EuroSpices = Ingredient("European Spices") # done
-EastAsianSpices = Ingredient("East Asian Spices")
-SouthAsianSpices = Ingredient("South Asian Spices") # done
-ArabSpices = Ingredient("Arab Spices") # done
-
-# types of cooking media
-Oils = Ingredient("oils")
-Broth = Ingredient("broth")
-Stock = Ingredient("stock")
-Wine = Ingredient("wine")
-
-# types of meat
-Beef = Ingredient("beef")
-Pork = Ingredient("pork")
-Lamb = Ingredient("lamb")
-
-# types of beef
-BeefRibs = Ingredient("beef ribs")
-BeefRibs.setTaste("umami", 6)
-BeefRibs.setTaste("sweet", 1)
-BeefRibs.setTaste("salty", 6)
-BeefRibs.setTaste("sour", 2)
-BeefRibs.setTaste("bitter", 1)
-BeefRibs.setTaste("hot", 1)
-Steak = Ingredient("steak")
-RibTips = Ingredient("rib tips")
-BeefStew = Ingredient("beef stew")
-VealCutlet = Ingredient("veal cutlet")
-GroundBeef = Ingredient("hamburger")
-
-# types of pork
-PorkRibs = Ingredient("pork ribs")
-PorkChops = Ingredient("pork chops")
-PorkRoast = Ingredient("pork roast")
-PorkCutlet = Ingredient("pork cutlets")
-
-# types of lamb
-LambChops = Ingredient("lamb chops")
-Leg = Ingredient("leg of lamb")
-LambRoast = Ingredient("lamb roast")
-GroundLamb = Ingredient("ground lamb")
-
-# types of veg protein
-Tofu = Ingredient("Tofu")
-Seitan = Ingredient("Seitan")
-Tempeh = Ingredient("Tempeh")
-
-# Types of seafood
-Molluscs = Ingredient("molluscs")
-Crustaceans = Ingredient("crustaceans")
-Fish = Ingredient("fish")
-
-BlueFish = Ingredient("blue fish")
-Salmon = Ingredient("salmon")
-WhiteFish = Ingredient("whitefish")
-Catfish = Ingredient("catfish")
-Cod = Ingredient("cod")
-Eel = Ingredient("eel")
-Haddock = Ingredient("haddock")
-Halibut = Ingredient("halibut")
-Mackerel = Ingredient("mackerel")
-Pike = Ingredient("pike")
-Pollock = Ingredient("pollock")
-Skate = Ingredient("skate")
-Snapper = Ingredient("snapper")
-Sole = Ingredient("sole")
-Swordfish = Ingredient("swordfish")
-Tilapia = Ingredient("tilapia")
-Trout = Ingredient("trout")
-Tuna = Ingredient("tuna")
-
-Crab = Ingredient("crab")
-Lobster = Ingredient("lobster")
-Shrimp = Ingredient("shrimp")
-
-Clam = Ingredient("clam")
-Mussel = Ingredient("mussel")
-Octopus = Ingredient("octopus")
-Oyster = Ingredient("oyster")
-Scallop = Ingredient("scallop")
-Squid = Ingredient("squid")
-
-# Types of poultry
-Chicken = Ingredient("chicken")
-Duck = Ingredient("duck")
-Goose = Ingredient("goose")
-Eggs = Ingredient("eggs")
-Pigeon = Ingredient("pigeon")
-Quail = Ingredient("quail")
-Turkey = Ingredient("turkey")
-GroundChicken = Ingredient("ground chicken")
-
-# kinds of vegetable
-Artichokes = Ingredient("artichokes")
-Asparagus = Ingredient("asparagus")
-Avocado = Ingredient("avocado")
-GreenBeans = Ingredient("green beans")
-BlackBeans = Ingredient("black beans")
-PintoBeans = Ingredient("pinto beans")
-Beets = Ingredient("beets")
-Broccoli = Ingredient("broccoli")
-BrusselsSprouts = Ingredient("brussels sprouts")
-Cabbage = Ingredient("cabbage")
-Cauliflower = Ingredient("cauliflower")
-CollardGreens = Ingredient("collard greens")
-Cucumber = Ingredient("cucumber")
-BellPepper = Ingredient("bell pepper")
-BananaPepper = Ingredient("banana pepper")
-Carrots = Ingredient("carrots")
-Celery = Ingredient("celery")
-Corn = Ingredient("corn") # should also be a grain
-Eggplant = Ingredient("eggplant")
-Fennel = Ingredient("fennel")
-Garlic = Ingredient("garlic") # should also be an herb
-Ginger = Ingredient("ginger") # should also be a spice
-Horseradish = Ingredient("horseradish") # should also be an herb
-Kale = Ingredient("kale")
-Leeks = Ingredient("leeks")
-Lentils = Ingredient("lentils")
-Lettuce = Ingredient("lettuce")
-OysterMushrooms = Ingredient("oyster mushrooms")
-ButtonMushrooms = Ingredient("button mushrooms")
-ShiitakeMushrooms = Ingredient("shiitake mushrooms")
-CriminiMushrooms = Ingredient("crimini mushrooms")
-ChanterelleMushrooms = Ingredient("chanterelle mushrooms")
-PortabelloMushrooms = Ingredient("portabello mushrooms")
-PorciniMushrooms = Ingredient("porcini mushrooms")
-MorelMushrooms = Ingredient("morel mushrooms")
-Okra = Ingredient("okra")
-Onions = Ingredient("onions")
-Peas = Ingredient("peas")
-Radishes = Ingredient("radishes")
-Shallots = Ingredient("shallots")
-Spinach = Ingredient("spinach")
-AcornSquash = Ingredient("acorn squash")
-ButternutSquash = Ingredient("butternut squash")
-SpaghettiSquash = Ingredient("spaghetti squash")
-Tomatoes = Ingredient("tomatoes")
-GreenTomatoes = Ingredient("green tomatoes")
-Tomatillos = Ingredient("tomatillos")
-Turnips = Ingredient("turnips")
-Zucchini = Ingredient("zucchini")
-Potatoes = Ingredient("potatoes")
-SweetPotatoes = Ingredient("sweet potatoes")
-
-# kinds of herbs
-Parsley = Ingredient("parsley")
-CurleyParsley = Ingredient("curley parsley")
-FlatParsley = Ingredient("flat parsley")
-Parsley.addSubType([CurleyParsley, FlatParsley])
-
-Cilantro = Ingredient("cilantro")
-Basil = Ingredient("basil")
-Watercress = Ingredient("watercress")
-Dill = Ingredient("dill")
-Mint = Ingredient("mint")
-BayLeaves = Ingredient("bay leaves")
-Rosemary = Ingredient("rosemary")
-Lavender = Ingredient("lavender")
-Thyme = Ingredient("thyme")
-Chives = Ingredient("chives")
-Sorrel = Ingredient("sorrel")
-
-# kinds of spices
-# European
-AllSpice = Ingredient("allspice")
-Anise = Ingredient("anise")
-Mustard = Ingredient("mustard")
-Cayenne = Ingredient("cayenne") # should be in east and south asian too
-Cinnamon = Ingredient("cinnamon") # should be in all
-FennelSeed = Ingredient("fennel seed")
-BlackPepper = Ingredient("black pepper") # all
-Salt = Ingredient("salt") #all
-Sugar = Ingredient("sugar") #all
-BrownSugar = Ingredient("brown sugar") # all
-Mace = Ingredient("mace") # south asian too
-Nutmeg = Ingredient("nutmeg")
-Paprika = Ingredient("paprika") # south asian, arab
-Saffron = Ingredient("saffron") # all
-Tarragon = Ingredient("tarragon") # arab
-Turmeric = Ingredient("turmeric") # south asian, arab
-Sage = Ingredient("sage")
-
-# East Asian
-
-# South Asian
-CaromSeeds = Ingredient("carom seeds")
-Asafoetida = Ingredient("asafoetida")
-Cardamom = Ingredient("cardamom")
-Cumin = Ingredient("cumin") # should be in arab too
-Curry = Ingredient("curry")
-Coriander = Ingredient("coriander")
-ChiliPepper = Ingredient("chili pepper")
-Fenugreek = Ingredient("fenugreek")
-KaffirLime = Ingredient("kaffir lime")
-Lemongrass = Ingredient("lemongrass")
-
-# Arab
-Cardamom = Ingredient("cardamom")
-Baharat = Ingredient("baharat")
-Sumac = Ingredient("sumac")
-Zatar = Ingredient("zatar")
-
-# Grains
-Wheat = Ingredient("wheat")
-Rice = Ingredient("rice")
-Quinoa = Ingredient("quinoa")
-Millet = Ingredient("millet")
-Teff = Ingredient("teff")
-Flour = Ingredient("flour")
-Buckwheat = Ingredient("buckwheat")
-Barley = Ingredient("barley")
-Bulghur = Ingredient("bulghur")
-
-WhiteFlour = Ingredient("white flour")
-WholeWheatFlour = Ingredient("whole wheat flour")
-BuckwheatFlour = Ingredient("buckwheat flour")
-CousCous = Ingredient("couscous")
-CornFlour = Ingredient("corn flour")
-
-WhiteRice = Ingredient("white rice")
-JasmineRice = Ingredient("jasmine rice")
-BrownRice = Ingredient("brown rice")
-BasmatiRice = Ingredient("basmati rice")
-SushiRice = Ingredient("sushi rice")
-WildRice = Ingredient("wild rice")
-
-# Fruit
-Apple = Ingredient("apple")
-Banana = Ingredient("banana")
-Pear = Ingredient("pear")
-Grapes = Ingredient("grapes")
-Mango = Ingredient("mango")
-Peach = Ingredient("peach")
-Berries = Ingredient("berries")
-Lemon = Ingredient("lemon")
-Lime = Ingredient("lime")
-Orange = Ingredient("orange")
-Grapefruit = Ingredient("grapefruit")
-Apricots = Ingredient("apricots")
-Fig = Ingredient("fig")
-Pineapple = Ingredient("pineapple")
-Melon = Ingredient("melon")
-Nectarines = Ingredient("nectarines")
-
-Strawberries = Ingredient("strawberries")
-Raspberries = Ingredient("raspberries")
-Blueberries = Ingredient("blueberries")
-Blackberries = Ingredient("blackberries")
-
-Watermelon = Ingredient("watermelon")
-Honeydew = Ingredient("honeydew")
-Cantaloupe = Ingredient("cantaloupe")
-
-# Nuts
-Almonds = Ingredient("almonds")
-Cashews = Ingredient("cashews")
-Peanuts = Ingredient("peanuts")
-Pistachios = Ingredient("pistachios")
-Hazelnuts = Ingredient("hazelnuts")
-Walnuts = Ingredient("walnuts")
-Pecans = Ingredient("pecans")
-Chestnuts = Ingredient("chestnuts")
-PineNuts = Ingredient("pine nuts")
-Macadamia = Ingredient("macadamia nuts")
-
-# Oils
-PeanutOil = Ingredient("peanut oil")
-OliveOil = Ingredient("olive oil")
-SafflowerOil = Ingredient("safflower oil")
-CanolaOil = Ingredient("canola oil")
-VegetableOil = Ingredient("vegetable oil")
-WalnutOil = Ingredient("walnut oil")
-SesameOil = Ingredient("sesame oil")
-
-# Broth
-ChickenBoullion = Ingredient("chicken boullion")
-ChickenBroth = Ingredient("chicken broth")
-BeefBoullion = Ingredient("beef boullion")
-BeefBroth = Ingredient("beef broth")
-VegetableBoullion = Ingredient("vegetable boullion")
-VegetableBroth = Ingredient("vegetable broth")
-FishBoullion = Ingredient("fish boullion")
-FishBroth = Ingredient("fish broth")
-
-# Stock
-ChickenStock = Ingredient("chicken stock")
-BeefStock = Ingredient("beef stock")
-VegetableStock = Ingredient("vegetable stock")
-FishStock = Ingredient("fish stock")
-LobsterStock = Ingredient("lobster stock")
-
-# Wine
-RedWine = Ingredient("red wine")
-WhiteWine = Ingredient("white wine")
-
-Cabernet = Ingredient("cabernet")
-Beaujolais = Ingredient("beaujolais")
-Malbec = Ingredient("malbec")
-Merlot = Ingredient("merlot")
-PinotNoir = Ingredient("pinot noir")
-Syrah = Ingredient("syrah")
-Shiraz = Ingredient("shiraz")
-Zinfandel = Ingredient("zinfandel")
-
-Chardonnay = Ingredient("chardonnay")
-Muscat = Ingredient("muscat")
-PinotBlanc = Ingredient("pinot blanc")
-PinotGrigio = Ingredient("pinot grigio")
-Riesling = Ingredient("riesling")
-Sauvignon = Ingredient("sauvignon")
-
-# Dairy
-Milk = Ingredient("milk")
-Cream = Ingredient("cream")
-Cheese = Ingredient("cheese")
-Butter = Ingredient("butter")
-Ghee = Ingredient("ghee")
-Yogurt = Ingredient("yogurt")
-
-GreekYogurt = Ingredient("greek yogurt")
-PlainYogurt = Ingredient("plain yogurt")
-FlavoredYogurt = Ingredient("flavored yogurt")
-Kefir = Ingredient("kefir")
-
-BlueCheese = Ingredient("blue cheese")
-GoatCheese = Ingredient("goat cheese")
-Cheddar = Ingredient("cheddar")
-Mozzarella = Ingredient("mozarella")
-Swiss = Ingredient("swiss cheese")
-Parmesan = Ingredient("parmesan")
-Asiago = Ingredient("asiago")
-Gorgonzola = Ingredient("gorgonzola")
-CreamCheese = Ingredient("cream cheese")
-
-# putting together heirarchy
-
-# PROTEIN #######################################################
-
-Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet, GroundBeef])
-
-Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet])
-
-Lamb.addSubType([LambChops, Leg, LambRoast, GroundLamb])
-
-Meat.addSubType([Beef, Pork, Lamb])
-
-VegProtein.addSubType([Tofu, Seitan, Tempeh])
-
-Molluscs.addSubType([Clam, Mussel, Octopus, Oyster, Scallop, Squid])
-
-Crustaceans.addSubType([Crab, Lobster, Shrimp])
-
-Fish.addSubType([BlueFish, Salmon, WhiteFish, Catfish, Cod, Eel, Haddock, Halibut, Mackerel, Pike,
-                 Pollock, Skate, Snapper, Sole, Swordfish, Tilapia, Trout, Tuna])
-
-Seafood.addSubType([Molluscs, Crustaceans, Fish])
-
-Poultry.addSubType([Chicken, Duck, Goose, Eggs, Pigeon, Quail, Turkey, GroundChicken])
-
-Protein.addSubType([Meat, VegProtein, Seafood, Poultry])
-
-# PLANTS ######################################
-Veg.addSubType([Artichokes, Asparagus, GreenBeans, Beets, Broccoli, BrusselsSprouts, Cabbage, CollardGreens, BellPepper,
-                BananaPepper, Carrots, Celery, Corn, Eggplant, Garlic, Ginger, Horseradish, Kale, Leeks, Lettuce, OysterMushrooms,
-                ButtonMushrooms, ShiitakeMushrooms, CriminiMushrooms, ChanterelleMushrooms, PortabelloMushrooms, PorciniMushrooms,
-                MorelMushrooms, Okra, Onions, Peas, Radishes, Shallots, Spinach, AcornSquash, ButternutSquash, SpaghettiSquash,
-                Tomatoes, GreenTomatoes, Tomatillos, Turnips, Zucchini, Fennel, Avocado, Cauliflower, Cucumber, Potatoes,
-                SweetPotatoes, Lentils, BlackBeans, PintoBeans])
-
-Herbs.addSubType([Parsley, Cilantro, Basil, Watercress, Dill, Mint, BayLeaves,
-                  Rosemary, Lavender, Thyme, Chives, Sorrel, Garlic, Horseradish])
-
-Rice.addSubType([WhiteRice, JasmineRice, BrownRice, BasmatiRice, SushiRice, WildRice])
-Flour.addSubType([WhiteFlour, WholeWheatFlour, BuckwheatFlour, CousCous, CornFlour])
-Grain.addSubType([Wheat, Rice, Quinoa, Millet, Teff, Flour, Buckwheat, Barley, Bulghur])
-
-Berries.addSubType([Strawberries, Raspberries, Blueberries, Blackberries])
-Melon.addSubType([Watermelon, Honeydew, Cantaloupe])
-Fruit.addSubType([Apple, Banana, Pear, Grapes, Mango, Peach, Berries, Lemon, Lime, Orange,
-                  Grapefruit, Apricots, Fig, Pineapple, Melon, Nectarines])
-
-Nuts.addSubType([Almonds, Cashews, Peanuts, Pistachios, Hazelnuts, Walnuts, Pecans, Chestnuts, PineNuts, Macadamia])
-
-Plants.addSubType([Veg, Herbs, Fruit, Grain, Nuts])
-
-# SPICES ########################################################
-ArabSpices.addSubType([Cumin, Cinnamon, Cayenne, BlackPepper, Salt, Sugar, BrownSugar, Paprika, Saffron, Tarragon,
-                       Turmeric, Cardamom, Baharat, Sumac, Zatar])
-SouthAsianSpices.addSubType([Cayenne, Cinnamon, BlackPepper, Ginger, Salt, Sugar, BrownSugar, Mace, Paprika, Saffron,
-                             Turmeric, CaromSeeds, Asafoetida, Cardamom, Cumin, Curry, Coriander, ChiliPepper,
-                             Fenugreek, KaffirLime, Lemongrass])
-EuroSpices.addSubType([AllSpice, Anise, Mustard, Cayenne, Cinnamon, FennelSeed, BlackPepper, BlackPepper, Salt,
-                       Sugar, BrownSugar, Mace, Nutmeg, Paprika, Paprika, Saffron, Tarragon, Turmeric, Sage, Ginger])
-
-Spices.addSubType([EuroSpices, EastAsianSpices, SouthAsianSpices, ArabSpices]) # not done with EastAsia; done with others?
-
-# DAIRY #################################################################
-Cheese.addSubType([BlueCheese, GoatCheese, Cheddar, Mozzarella, Swiss, Parmesan, Asiago, Gorgonzola, CreamCheese])
-Yogurt.addSubType([GreekYogurt, PlainYogurt, FlavoredYogurt])
-Dairy.addSubType([Milk, Cream, Cheese, Butter, Ghee, Yogurt])
-
-# COOKING MEDIA ######################################################
-Oils.addSubType([PeanutOil, OliveOil, SafflowerOil, CanolaOil, VegetableOil, WalnutOil, SesameOil])
-
-Broth.addSubType([ChickenBoullion, ChickenBroth, BeefBoullion, BeefBroth, VegetableBoullion, VegetableBroth, FishBoullion, FishBroth])
-
-Stock.addSubType([ChickenStock, BeefStock, VegetableStock, FishStock, LobsterStock])
-
-RedWine.addSubType([Cabernet, Beaujolais, Malbec, Merlot, PinotNoir, Syrah, Shiraz, Zinfandel])
-WhiteWine.addSubType([Chardonnay, Muscat, PinotBlanc, PinotGrigio, Riesling, Sauvignon])
-Wine.addSubType([RedWine, WhiteWine])
-
-CookingMedia.addSubType([Oils, Broth, Stock, Wine, Butter, Ghee])
-###########################################
-
-Ingredients.addSubType([Protein, Plants, Spices, Dairy, CookingMedia])
+
+def collectIngredients():
+    ing = {}
+    ## Here comes the heirarchy
+    Ingredients = Ingredient("Ingredients", ing)
+
+    #ingredient super types
+    Protein = Ingredient("protein", ing)
+    Plants = Ingredient("plants", ing) # done
+    Spices = Ingredient("spices", ing)
+    Dairy = Ingredient("dairy", ing)
+    CookingMedia = Ingredient("cooking Media", ing)
+
+    # Types of plant ingredients
+    Veg = Ingredient("veg", ing) # done
+    Herbs = Ingredient("herbs", ing) # done
+    Grain = Ingredient("grain", ing) # done
+    Fruit = Ingredient("fruit", ing) # Done
+    Nuts = Ingredient("nuts", ing) # done
+
+    # Types of protein
+    Meat = Ingredient("meat", ing)
+    VegProtein = Ingredient("veg Protein", ing)
+    Seafood = Ingredient("seafood", ing)
+    Poultry = Ingredient("poultry", ing)
+
+    # types of spices
+    EuroSpices = Ingredient("European Spices", ing) # done
+    EastAsianSpices = Ingredient("East Asian Spices", ing)
+    SouthAsianSpices = Ingredient("South Asian Spices", ing) # done
+    ArabSpices = Ingredient("Arab Spices", ing) # done
+
+    # types of cooking media
+    Oils = Ingredient("oils", ing)
+    Broth = Ingredient("broth", ing)
+    Stock = Ingredient("stock", ing)
+    Wine = Ingredient("wine", ing)
+
+    # types of meat
+    Beef = Ingredient("beef", ing)
+    Pork = Ingredient("pork", ing)
+    Lamb = Ingredient("lamb", ing)
+
+    # types of beef
+    BeefRibs = Ingredient("beef ribs", ing)
+    BeefRibs.setTaste("umami", 6)
+    BeefRibs.setTaste("salty", 5)
+    BeefRibs.setTaste("sweet", 2)
+    BeefRibs.setTaste("sour", 7)
+    BeefRibs.setTaste("bitter", 2)
+    BeefRibs.setTaste("hot", 1)
+    BeefRibs.setUnits("weight")
+    BeefRibs.setMeasure("8 ounces")
+
+
+    Steak = Ingredient("steak", ing)
+    Steak.setTaste("umami", 6)
+    Steak.setTaste("salty", 5)
+    Steak.setTaste("sweet", 1)
+    Steak.setTaste("sour", 8)
+    Steak.setTaste("bitter", 2)
+    Steak.setTaste("hot", 1)
+    Steak.setUnits("weight")
+    Steak.setMeasure("8 ounces")
+
+    RibTips = Ingredient("rib tips", ing)
+    RibTips.setTaste("umami", 6)
+    RibTips.setTaste("salty", 4)
+    RibTips.setTaste("sweet", 1)
+    RibTips.setTaste("sour", 7)
+    RibTips.setTaste("bitter", 2)
+    RibTips.setTaste("hot", 1)
+    RibTips.setUnits("weight")
+    RibTips.setMeasure("8 ounces")
+
+    BeefStew = Ingredient("beef stew", ing)
+
+    BeefStew.setTaste("umami", 6)
+    BeefStew.setTaste("salty", 6)
+    BeefStew.setTaste("sweet", 2)
+    BeefStew.setTaste("sour", 8)
+    BeefStew.setTaste("bitter", 2)
+    BeefStew.setTaste("hot", 1)
+    BeefStew.setUnits("weight")
+    BeefStew.setMeasure("8 ounces")
+
+    VealCutlet = Ingredient("veal cutlet", ing)
+    VealCutlet.setTaste("umami", 5)
+    VealCutlet.setTaste("salty", 4)
+    VealCutlet.setTaste("sweet", 1)
+    VealCutlet.setTaste("sour", 6)
+    VealCutlet.setTaste("bitter", 2)
+    VealCutlet.setTaste("hot", 1)
+    VealCutlet.setUnits("weight")
+    VealCutlet.setMeasure("8 ounces")
+
+
+    GroundBeef = Ingredient("hamburger", ing)
+    GroundBeef.setTaste("umami", 7)
+    GroundBeef.setTaste("salty", 6)
+    GroundBeef.setTaste("sweet", 1)
+    GroundBeef.setTaste("sour", 7)
+    GroundBeef.setTaste("bitter", 2)
+    GroundBeef.setTaste("hot", 1)
+    GroundBeef.setUnits("weight")
+    GroundBeef.setMeasure("8 ounces")
+
+    # types of pork
+    PorkRibs = Ingredient("pork ribs", ing)
+    PorkRibs.setTaste("umami", 4)
+    PorkRibs.setTaste("salty", 3)
+    PorkRibs.setTaste("sweet", 3)
+    PorkRibs.setTaste("sour", 6)
+    PorkRibs.setTaste("bitter", 1)
+    PorkRibs.setTaste("hot", 1)
+    PorkRibs.setUnits("weight")
+    PorkRibs.setMeasure("8 ounces")
+
+    PorkChops = Ingredient("pork chops", ing)
+    PorkChops.setTaste("umami", 4)
+    PorkChops.setTaste("salty", 3)
+    PorkChops.setTaste("sweet", 4)
+    PorkChops.setTaste("sour", 7)
+    PorkChops.setTaste("bitter", 1)
+    PorkChops.setTaste("hot", 1)
+    PorkChops.setUnits("count")
+    PorkChops.setMeasure(1)
+
+
+    PorkRoast = Ingredient("pork roast", ing)
+    PorkRoast.setTaste("umami", 5)
+    PorkRoast.setTaste("salty", 3)
+    PorkRoast.setTaste("sweet", 4)
+    PorkRoast.setTaste("sour", 7)
+    PorkRoast.setTaste("bitter", 1)
+    PorkRoast.setTaste("hot", 1)
+    PorkRoast.setUnits("weight")
+    PorkRoast.setMeasure("8 ounces")
+
+
+    PorkCutlet = Ingredient("pork cutlets", ing)
+    PorkCutlet.setTaste("umami", 4)
+    PorkCutlet.setTaste("salty", 2)
+    PorkCutlet.setTaste("sweet", 3)
+    PorkCutlet.setTaste("sour", 6)
+    PorkCutlet.setTaste("bitter", 1)
+    PorkCutlet.setTaste("hot", 1)
+    PorkCutlet.setUnits("count")
+    PorkCutlet.setMeasure(1) 
+
+    # types of lamb
+    LambChops = Ingredient("lamb chops", ing)
+    LambChops.setTaste("umami", 5)
+    LambChops.setTaste("salty", 2)
+    LambChops.setTaste("sweet", 2)
+    LambChops.setTaste("sour" , 7)
+    LambChops.setTaste("bitter", 1)
+    LambChops.setTaste("hot", 1)
+    LambChops.setUnits("weight")
+    LambChops.setMeasure("8 ounces")
+
+    LambLeg = Ingredient("leg of lamb", ing)
+    LambLeg.setTaste("umami", 5)
+    LambLeg.setTaste("salty", 3)
+    LambLeg.setTaste("sweet", 2)
+    LambLeg.setTaste("sour" , 7)
+    LambLeg.setTaste("bitter", 2)
+    LambLeg.setTaste("hot", 1)
+    LambLeg.setUnits("weight")
+    LambLeg.setMeasure("8 ounces")
+
+    LambRoast = Ingredient("lamb roast", ing)
+    LambRoast.setTaste("umami", 5)
+    LambRoast.setTaste("salty", 3)
+    LambRoast.setTaste("sweet", 2)
+    LambRoast.setTaste("sour" , 7)
+    LambRoast.setTaste("bitter", 2)
+    LambRoast.setTaste("hot", 1)
+    LambRoast.setUnits("weight")
+    LambRoast.setMeasure("8 ounces")
+
+    GroundLamb = Ingredient("ground lamb", ing)
+    GroundLamb.setTaste("umami", 4)
+    GroundLamb.setTaste("salty", 2)
+    GroundLamb.setTaste("sweet", 2)
+    GroundLamb.setTaste("sour" , 7)
+    GroundLamb.setTaste("bitter", 1)
+    GroundLamb.setTaste("hot", 1)
+    GroundLamb.setUnits("weight")
+    GroundLamb.setMeasure("8 ounces")
+
+    # types of veg protein
+    Tofu = Ingredient("Tofu", ing)
+    Tofu.setTaste("umami", 1)
+    Tofu.setTaste("salty", 2)
+    Tofu.setTaste("sweet", 1)
+    Tofu.setTaste("sour", 3)
+    Tofu.setTaste("bitter", 1)
+    Tofu.setTaste("hot", 1)
+    Tofu.setUnits("weight")
+    Tofu.setMeasure("3 ounces")
+
+    Seitan = Ingredient("Seitan", ing)
+    Seitan.setTaste("umami", 2)
+    Seitan.setTaste("salty", 2)
+    Seitan.setTaste("sweet", 2)
+    Seitan.setTaste("sour", 2)
+    Seitan.setTaste("bitter", 1)
+    Seitan.setTaste("hot", 1)
+    Seitan.setUnits("weight")
+    Seitan.setMeasure("3 ounces")
+
+    Tempeh = Ingredient("Tempeh", ing)
+    Tempeh.setTaste("umami", 2)
+    Tempeh.setTaste("salty", 2)
+    Tempeh.setTaste("sweet", 3)
+    Tempeh.setTaste("sour", 2)
+    Tempeh.setTaste("bitter", 2)
+    Tempeh.setTaste("hot", 1)
+    Tempeh.setUnits("weight")
+    Tempeh.setMeasure("3 ounces")
+
+    # Types of seafood
+    Molluscs = Ingredient("molluscs", ing)
+    Molluscs.setTaste("umami", 2)
+    Molluscs.setTaste("salty", 6)
+    Molluscs.setTaste("sweet", 4)
+    Molluscs.setTaste("sour", 7)
+    Molluscs.setTaste("bitter", 2)
+    Molluscs.setTaste("hot", 1)
+    Molluscs.setUnits("weight")
+    Molluscs.setMeasure("6 ounces")
+
+
+    Crustaceans = Ingredient("crustaceans", ing)
+    Crustaceans.setTaste("umami", 2)
+    Crustaceans.setTaste("salty", 6)
+    Crustaceans.setTaste("sweet", 3)
+    Crustaceans.setTaste("sour", 7)
+    Crustaceans.setTaste("bitter", 2)
+    Crustaceans.setTaste("hot", 1)
+    Crustaceans.setUnits("weight")
+    Crustaceans.setMeasure("6 ounces")
+
+    Fish = Ingredient("fish", ing)
+    Fish.setTaste("umami", 3)
+    Fish.setTaste("salty", 6)
+    Fish.setTaste("sweet", 4)
+    Fish.setTaste("sour", 8)
+    Fish.setTaste("bitter", 2)
+    Fish.setTaste("hot", 1)
+    Fish.setUnits("weight")
+    Fish.setMeasure("6 ounces")
+
+
+
+    BlueFish = Ingredient("blue fish", ing)
+    BlueFish.setTaste("umami", 3) 
+    BlueFish.setTaste("salty", 6)
+    BlueFish.setTaste("sweet", 4)
+    BlueFish.setTaste("sour", 8)
+    BlueFish.setTaste("bitter", 2)
+    BlueFish.setTaste("hot", 1)
+    BlueFish.setUnits("weight")
+    BlueFish.setMeasure("6 ounces")
+
+    Salmon = Ingredient("salmon", ing)
+    Salmon.setTaste("umami", 3)
+    Salmon.setTaste("salty", 7)
+    Salmon.setTaste("sweet", 4)
+    Salmon.setTaste("sour", 8)
+    Salmon.setTaste("bitter", 2)
+    Salmon.setTaste("hot", 1)
+    Salmon.setUnits("weight")
+    Salmon.setMeasure("6 ounces")
+
+    WhiteFish = Ingredient("whitefish", ing)
+    WhiteFish.setTaste("umami", 3)
+    WhiteFish.setTaste("salty", 7)
+    WhiteFish.setTaste("sweet", 4)
+    WhiteFish.setTaste("sour", 8)
+    WhiteFish.setTaste("bitter", 2)
+    WhiteFish.setTaste("hot", 1)
+    WhiteFish.setUnits("weight")
+    WhiteFish.setMeasure("6 ounces")
+
+
+    Catfish = Ingredient("catfish", ing)
+    Catfish.setTaste("umami", 3)
+    Catfish.setTaste("salty", 6)
+    Catfish.setTaste("sweet", 4)
+    Catfish.setTaste("sour", 8)
+    Catfish.setTaste("bitter", 2)
+    Catfish.setTaste("hot", 1)
+    Catfish.setUnits("weight")
+    Catfish.setMeasure("6 ounces")
+
+    Cod = Ingredient("cod", ing)
+    Cod.setTaste("umami", 3)
+    Cod.setTaste("salty", 7)
+    Cod.setTaste("sweet", 4)
+    Cod.setTaste("sour", 5)
+    Cod.setTaste("bitter", 2)
+    Cod.setTaste("hot", 1)
+    Cod.setUnits("weight")
+    Cod.setMeasure("6 ounces")
+
+    Eel = Ingredient("eel", ing)
+    Eel.setTaste("umami", 4)
+    Eel.setTaste("salty", 7)
+    Eel.setTaste("sweet", 4)
+    Eel.setTaste("sour", 7)
+    Eel.setTaste("bitter", 1)
+    Eel.setTaste("hot", 1)
+    Eel.setUnits("weight")
+    Eel.setMeasure("6 ounces")
+
+    Haddock = Ingredient("haddock", ing)
+    Haddock.setTaste("umami", 3)
+    Haddock.setTaste("salty", 6)
+    Haddock.setTaste("sweet", 4)
+    Haddock.setTaste("sour", 7)
+    Haddock.setTaste("bitter", 2)
+    Haddock.setTaste("hot", 1)
+    Haddock.setUnits("weight")
+    Haddock.setMeasure("6 ounces")
+
+    Halibut = Ingredient("halibut", ing)
+    Halibut.setTaste("umami", 3)
+    Halibut.setTaste("salty", 6)
+    Halibut.setTaste("sweet", 3)
+    Halibut.setTaste("sour", 7)
+    Halibut.setTaste("bitter", 2)
+    Halibut.setTaste("hot", 1)
+    Halibut.setUnits("weight")
+    Halibut.setMeasure("6 ounces")
+
+
+    Mackerel = Ingredient("mackerel", ing)
+    Mackerel.setTaste("umami", 3)
+    Mackerel.setTaste("salty", 7)
+    Mackerel.setTaste("sweet", 3)
+    Mackerel.setTaste("sour", 7)
+    Mackerel.setTaste("bitter", 2)
+    Mackerel.setTaste("hot", 1)
+    Mackerel.setUnits("weight")
+    Mackerel.setMeasure("6 ounces")
+
+    Pike = Ingredient("pike", ing)
+    Pike.setTaste("umami", 3)
+    Pike.setTaste("salty", 7)
+    Pike.setTaste("sweet", 3)
+    Pike.setTaste("sour", 7)
+    Pike.setTaste("bitter", 2)
+    Pike.setTaste("hot", 1)
+    Pike.setUnits("weight")
+    Pike.setMeasure("6 ounces")
+
+    Pollock = Ingredient("pollock", ing)
+    Pollock.setTaste("umami", 3)
+    Pollock.setTaste("salty", 7)
+    Pollock.setTaste("sweet", 3)
+    Pollock.setTaste("sour", 7)
+    Pollock.setTaste("bitter", 2)
+    Pollock.setTaste("hot", 1)
+    Pollock.setUnits("weight")
+    Pollock.setMeasure("6 ounces")
+
+    Skate = Ingredient("skate", ing)
+    Skate.setTaste("umami", 3)
+    Skate.setTaste("salty", 7)
+    Skate.setTaste("sweet", 4)
+    Skate.setTaste("sour", 7)
+    Skate.setTaste("bitter", 2)
+    Skate.setTaste("hot", 1)
+    Skate.setUnits("weight")
+    Skate.setMeasure("6 ounces")
+
+    Snapper = Ingredient("snapper", ing)
+    Snapper.setTaste("umami", 3)
+    Snapper.setTaste("salty", 7)
+    Snapper.setTaste("sweet", 4)
+    Snapper.setTaste("sour", 7)
+    Snapper.setTaste("bitter", 2)
+    Snapper.setTaste("hot", 1)
+    Snapper.setUnits("weight")
+    Snapper.setMeasure("6 ounces")
+
+    Sole = Ingredient("sole", ing)
+    Sole.setTaste("umami", 3)
+    Sole.setTaste("salty", 7)
+    Sole.setTaste("sweet", 4)
+    Sole.setTaste("sour", 7)
+    Sole.setTaste("bitter", 2)
+    Sole.setTaste("hot", 1)
+    Sole.setUnits("weight")
+    Sole.setMeasure("6 ounces")
+
+    Swordfish = Ingredient("swordfish", ing)
+    Swordfish.setTaste("umami", 3)
+    Swordfish.setTaste("salty", 7)
+    Swordfish.setTaste("sweet", 4)
+    Swordfish.setTaste("sour", 7)
+    Swordfish.setTaste("bitter", 2)
+    Swordfish.setTaste("hot", 1)
+    Swordfish.setUnits("weight")
+    Swordfish.setMeasure("6 ounces")
+
+
+    Tilapia = Ingredient("tilapia", ing)
+    Tilapia.setTaste("umami", 3)
+    Tilapia.setTaste("salty", 7)
+    Tilapia.setTaste("sweet", 4)
+    Tilapia.setTaste("sour", 7)
+    Tilapia.setTaste("bitter", 2)
+    Tilapia.setTaste("hot", 1)
+    Tilapia.setUnits("weight")
+    Tilapia.setMeasure("6 ounces")
+
+
+    Trout = Ingredient("trout", ing)
+    Trout.setTaste("umami", 3)
+    Trout.setTaste("salty", 7)
+    Trout.setTaste("sweet", 4)
+    Trout.setTaste("sour", 7)
+    Trout.setTaste("bitter", 2)
+    Trout.setTaste("hot", 1)
+    Trout.setUnits("weight")
+    Trout.setMeasure("6 ounces")
+
+
+    Tuna = Ingredient("tuna", ing)
+    Tuna.setTaste("umami", 3)
+    Tuna.setTaste("salty", 7)
+    Tuna.setTaste("sweet", 5)
+    Tuna.setTaste("sour", 6)
+    Tuna.setTaste("bitter", 2)
+    Tuna.setTaste("hot", 1)
+    Tuna.setUnits("weight")
+    Tuna.setMeasure("6 ounces")
+
+
+    Crab = Ingredient("crab", ing)
+    Crab.setTaste("umami", 3)
+    Crab.setTaste("salty", 7)
+    Crab.setTaste("sweet", 4)
+    Crab.setTaste("sour", 6)
+    Crab.setTaste("bitter", 2)
+    Crab.setTaste("hot", 1)
+    Crab.setUnits("weight")
+    Crab.setMeasure("6 ounces")
+
+
+    Lobster = Ingredient("lobster", ing)
+    Lobster.setTaste("umami", 3)
+    Lobster.setTaste("salty", 7)
+    Lobster.setTaste("sweet", 4)
+    Lobster.setTaste("sour", 6)
+    Lobster.setTaste("bitter", 2)
+    Lobster.setTaste("hot", 1)
+    Lobster.setUnits("weight")
+    Lobster.setMeasure("8 ounces")
+
+
+    Shrimp = Ingredient("shrimp", ing)
+    Shrimp.setTaste("umami", 3)
+    Shrimp.setTaste("salty", 7)
+    Shrimp.setTaste("sweet", 4)
+    Shrimp.setTaste("sour", 7)
+    Shrimp.setTaste("bitter", 2)
+    Shrimp.setTaste("hot", 1)
+    Shrimp.setUnits("weight")
+    Shrimp.setMeasure("6 ounces")
+
+
+    Clam = Ingredient("clam", ing)
+    Clam.setTaste("umami", 3)
+    Clam.setTaste("salty", 7)
+    Clam.setTaste("sweet", 5)
+    Clam.setTaste("sour", 7)
+    Clam.setTaste("bitter", 2)
+    Clam.setTaste("hot", 1)
+    Clam.setUnits("weight")
+    Clam.setMeasure("6 ounces")
+
+
+    Mussel = Ingredient("mussel", ing)
+    Mussel.setTaste("umami", 3)
+    Mussel.setTaste("salty", 7)
+    Mussel.setTaste("sweet", 3)
+    Mussel.setTaste("sour", 7)
+    Mussel.setTaste("bitter", 1)
+    Mussel.setTaste("hot", 1)
+    Mussel.setUnits("weight")
+    Mussel.setMeasure("6 ounces")
+
+
+    Octopus = Ingredient("octopus", ing)
+    Octopus.setTaste("umami", 3)
+    Octopus.setTaste("salty", 7)
+    Octopus.setTaste("sweet", 4)
+    Octopus.setTaste("sour", 7)
+    Octopus.setTaste("bitter", 2)
+    Octopus.setTaste("hot", 1)
+    Octopus.setUnits("weight")
+    Octopus.setMeasure("6 ounces")
+
+
+    Oyster = Ingredient("oyster", ing)
+    Oyster.setTaste("umami", 3)
+    Oyster.setTaste("salty", 7)
+    Oyster.setTaste("sweet", 4)
+    Oyster.setTaste("sour", 7)
+    Oyster.setTaste("bitter", 2)
+    Oyster.setTaste("hot", 1)
+    Oyster.setUnits("count")
+    Oyster.setMeasure(1)
+
+
+    Scallop = Ingredient("scallop", ing)
+    Scallop.setTaste("umami", 3)
+    Scallop.setTaste("salty", 7)
+    Scallop.setTaste("sweet", 4)
+    Scallop.setTaste("sour", 7)
+    Scallop.setTaste("bitter", 2)
+    Scallop.setTaste("hot", 1)
+    Scallop.setUnits("weight")
+    Scallop.setMeasure("6 ounces")
+
+    Squid = Ingredient("squid", ing)
+    Squid.setTaste("umami", 3)
+    Squid.setTaste("salty", 7)
+    Squid.setTaste("sweet", 4)
+    Squid.setTaste("sour", 7)
+    Squid.setTaste("bitter", 1)
+    Squid.setTaste("hot", 1)
+    Squid.setUnits("weight")
+    Squid.setMeasure("6 ounces")
+
+
+    # Types of poultry
+    Chicken = Ingredient("chicken", ing)
+    Chicken.setTaste("umami", 2)
+    Chicken.setTaste("salty", 4)
+    Chicken.setTaste("sweet", 3)
+    Chicken.setTaste("sour", 4)
+    Chicken.setTaste("bitter", 1)
+    Chicken.setTaste("hot", 1)
+    Chicken.setUnits("weight")
+    Chicken.setMeasure("8 ounces")
+
+
+    Duck = Ingredient("duck", ing)
+    Duck.setTaste("umami", 2)
+    Duck.setTaste("salty", 4)
+    Duck.setTaste("sweet", 3)
+    Duck.setTaste("sour", 4)
+    Duck.setTaste("bitter", 1)
+    Duck.setTaste("hot", 1)
+    Duck.setUnits("weight")
+    Duck.setMeasure("8 ounces")
+
+
+    Goose = Ingredient("goose", ing)
+    Goose.setTaste("umami", 2)
+    Goose.setTaste("salty", 4)
+    Goose.setTaste("sweet", 3)
+    Goose.setTaste("sour", 4)
+    Goose.setTaste("bitter", 1)
+    Goose.setTaste("hot", 1)
+    Goose.setUnits("weight")
+    Goose.setMeasure("8 ounces")
+
+
+    Eggs = Ingredient("eggs", ing)
+    Eggs.setTaste("umami", 1)
+    Eggs.setTaste("salty", 1)
+    Eggs.setTaste("sweet", 1)
+    Eggs.setTaste("sour", 2)
+    Eggs.setTaste("bitter", 1)
+    Eggs.setTaste("hot", 1)
+    Eggs.setUnits("count")
+    Eggs.setMeasure("1")
+
+    Pigeon = Ingredient("pigeon", ing)
+    Pigeon.setTaste("umami", 2)
+    Pigeon.setTaste("salty", 3)
+    Pigeon.setTaste("sweet", 3)
+    Pigeon.setTaste("sour", 4)
+    Pigeon.setTaste("bitter", 1)
+    Pigeon.setTaste("hot", 1)
+    Pigeon.setUnits("weight")
+    Pigeon.setMeasure("8 ounces")
+
+    Quail = Ingredient("quail", ing)
+    Quail.setTaste("umami", 2)
+    Quail.setTaste("salty", 3)
+    Quail.setTaste("sweet", 3)
+    Quail.setTaste("sour", 4)
+    Quail.setTaste("bitter", 1)
+    Quail.setTaste("hot", 1)
+    Quail.setUnits("weight")
+    Quail.setMeasure("8 ounces")
+
+
+    Turkey = Ingredient("turkey", ing)
+    Turkey.setTaste("umami", 2)
+    Turkey.setTaste("salty", 3)
+    Turkey.setTaste("sweet", 3)
+    Turkey.setTaste("sour", 4)
+    Turkey.setTaste("bitter", 1)
+    Turkey.setTaste("hot", 1)
+    Turkey.setUnits("weight")
+    Turkey.setMeasure("8 ounces")
+
+    GroundChicken = Ingredient("ground chicken", ing)
+    GroundChicken.setTaste("umami", 2)
+    GroundChicken.setTaste("salty", 5)
+    GroundChicken.setTaste("sweet", 3)
+    GroundChicken.setTaste("sour", 4)
+    GroundChicken.setTaste("bitter", 1)
+    GroundChicken.setTaste("hot", 1)
+    GroundChicken.setUnits("weight")
+    GroundChicken.setMeasure("8 ounces")
+
+    # kinds of vegetable
+    Artichokes = Ingredient("artichokes", ing)
+    Artichokes.setTaste("umami", 1)
+    Artichokes.setTaste("salty", 2)
+    Artichokes.setTaste("sweet", 5)
+    Artichokes.setTaste("sour", 2)
+    Artichokes.setTaste("bitter", 1)
+    Artichokes.setTaste("hot", 1)
+    Artichokes.setUnits("weight")
+    Artichokes.setMeasure("2 ounces")
+
+
+    Asparagus = Ingredient("asparagus", ing)
+    Asparagus.setTaste("umami", 1)
+    Asparagus.setTaste("salty", 1)
+    Asparagus.setTaste("sweet", 2)
+    Asparagus.setTaste("sour", 1)
+    Asparagus.setTaste("bitter", 2)
+    Asparagus.setTaste("hot", 1)
+    Asparagus.setUnits("weight")
+    Asparagus.setMeasure("2 ounces")
+
+    Avocado = Ingredient("avocado", ing)
+    Avocado.setTaste("umami", 1)
+    Avocado.setTaste("salty", 1)
+    Avocado.setTaste("sweet", 2)
+    Avocado.setTaste("sour", 1)
+    Avocado.setTaste("bitter", 1)
+    Avocado.setTaste("hot", 1)
+    Avocado.setUnits("weight")
+    Avocado.setMeasure("2 ounces")
+
+
+    GreenBeans = Ingredient("green beans", ing)
+    GreenBeans.setTaste("umami", 1)
+    GreenBeans.setTaste("salty", 1)
+    GreenBeans.setTaste("sweet", 3)
+    GreenBeans.setTaste("sour", 1)
+    GreenBeans.setTaste("bitter", 1)
+    GreenBeans.setTaste("hot", 1)
+    GreenBeans.setUnits("weight")
+    GreenBeans.setMeasure("2 ounces")
+
+    BlackBeans = Ingredient("black beans", ing)
+    BlackBeans.setTaste("umami", 1)
+    BlackBeans.setTaste("salty", 1)
+    BlackBeans.setTaste("sweet", 4)
+    BlackBeans.setTaste("sour", 1)
+    BlackBeans.setTaste("bitter", 2)
+    BlackBeans.setTaste("hot", 1)
+    BlackBeans.setUnits("weight")
+    BlackBeans.setMeasure("2 ounces")
+
+
+    PintoBeans = Ingredient("pinto beans", ing)
+    PintoBeans.setTaste("umami", 1)
+    PintoBeans.setTaste("salty", 1)
+    PintoBeans.setTaste("sweet", 4)
+    PintoBeans.setTaste("sour", 1)
+    PintoBeans.setTaste("bitter", 2)
+    PintoBeans.setTaste("hot", 1)
+    PintoBeans.setUnits("weight")
+    PintoBeans.setMeasure("2 ounces")
+
+    Beets = Ingredient("beets", ing)
+    Beets.setTaste("umami", 1)
+    Beets.setTaste("salty", 1)
+    Beets.setTaste("sweet", 2)
+    Beets.setTaste("sour", 1)
+    Beets.setTaste("bitter", 2)
+    Beets.setTaste("hot", 1)
+    Beets.setUnits("weight")
+    Beets.setMeasure("2 ounces")
+
+    Broccoli = Ingredient("broccoli", ing)
+    Broccoli.setTaste("umami", 1)
+    Broccoli.setTaste("salty", 1)
+    Broccoli.setTaste("sweet", 2)
+    Broccoli.setTaste("sour", 1)
+    Broccoli.setTaste("bitter", 1)
+    Broccoli.setTaste("hot", 1)
+    Broccoli.setUnits("weight")
+    Broccoli.setMeasure("2 ounces")
+
+
+    BrusselsSprouts = Ingredient("brussels sprouts", ing)
+    BrusselsSprouts.setTaste("umami", 1)
+    BrusselsSprouts.setTaste("salty", 1)
+    BrusselsSprouts.setTaste("sweet", 2)
+    BrusselsSprouts.setTaste("sour", 1)
+    BrusselsSprouts.setTaste("bitter", 2)
+    BrusselsSprouts.setTaste("hot", 1)
+    BrusselsSprouts.setUnits("weight")
+    BrusselsSprouts.setMeasure("2 ounces")
+
+    Cabbage = Ingredient("cabbage", ing)
+    Cabbage.setTaste("umami", 1)
+    Cabbage.setTaste("salty", 1)
+    Cabbage.setTaste("sweet", 3)
+    Cabbage.setTaste("sour", 1)
+    Cabbage.setTaste("bitter", 2)
+    Cabbage.setTaste("hot", 1)
+    Cabbage.setUnits("weight")
+    Cabbage.setMeasure("2 ounces")
+
+
+    Cauliflower = Ingredient("cauliflower", ing)
+    Cauliflower.setTaste("umami", 1)
+    Cauliflower.setTaste("salty", 1)
+    Cauliflower.setTaste("sweet", 2)
+    Cauliflower.setTaste("sour", 1)
+    Cauliflower.setTaste("bitter", 2)
+    Cauliflower.setTaste("hot", 1)
+    Cauliflower.setUnits("weight")
+    Cauliflower.setMeasure("2 ounces")
+
+
+    CollardGreens = Ingredient("collard greens", ing)
+    CollardGreens.setTaste("umami", 1)
+    CollardGreens.setTaste("salty", 1)
+    CollardGreens.setTaste("sweet", 2)
+    CollardGreens.setTaste("sour", 1)
+    CollardGreens.setTaste("bitter", 2)
+    CollardGreens.setTaste("hot", 1)
+    CollardGreens.setUnits("weight")
+    CollardGreens.setMeasure("3 ounces")
+
+
+    Cucumber = Ingredient("cucumber", ing)
+    Cucumber.setTaste("umami", 1)
+    Cucumber.setTaste("salty", 1)
+    Cucumber.setTaste("sweet", 3)
+    Cucumber.setTaste("sour", 1)
+    Cucumber.setTaste("bitter", 1)
+    Cucumber.setTaste("hot", 1)
+    Cucumber.setUnits("weight")
+    Cucumber.setMeasure("2 ounces")
+
+    BellPepper = Ingredient("bell pepper", ing)
+    BellPepper.setTaste("umami", 1)
+    BellPepper.setTaste("salty", 2)
+    BellPepper.setTaste("sweet", 2)
+    BellPepper.setTaste("sour", 2)
+    BellPepper.setTaste("bitter", 2)
+    BellPepper.setTaste("hot", 1)
+    BellPepper.setUnits("weight")
+    BellPepper.setMeasure("2 ounces")
+
+
+    BananaPepper = Ingredient("banana pepper", ing)
+    BananaPepper.setTaste("umami", 1)
+    BananaPepper.setTaste("salty", 2)
+    BananaPepper.setTaste("sweet", 2)
+    BananaPepper.setTaste("sour", 2)
+    BananaPepper.setTaste("bitter", 2)
+    BananaPepper.setTaste("hot", 1)
+    BananaPepper.setUnits("weight")
+    BananaPepper.setMeasure("2 ounces")
+
+
+    Carrots = Ingredient("carrots", ing)
+    Carrots.setTaste("umami", 1)
+    Carrots.setTaste("salty", 1)
+    Carrots.setTaste("sweet", 2)
+    Carrots.setTaste("sour", 1)
+    Carrots.setTaste("bitter", 2)
+    Carrots.setTaste("hot", 1)
+    Carrots.setUnits("weight")
+    Carrots.setMeasure("2 ounces")
+
+
+    Celery = Ingredient("celery", ing)
+    Celery.setTaste("umami", 1)
+    Celery.setTaste("salty", 1)
+    Celery.setTaste("sweet", 2)
+    Celery.setTaste("sour", 1)
+    Celery.setTaste("bitter", 2)
+    Celery.setTaste("hot", 1)
+    Celery.setUnits("weight")
+    Celery.setMeasure("2 ounces")
+
+
+    Corn = Ingredient("corn", ing) # should also be a grain
+    Corn.setTaste("umami", 1)
+    Corn.setTaste("salty", 1)
+    Corn.setTaste("sweet", 4)
+    Corn.setTaste("sour", 1)
+    Corn.setTaste("bitter", 2)
+    Corn.setTaste("hot", 1)
+    Corn.setUnits("weight")
+    Corn.setMeasure("2 ounces")
+
+
+    Eggplant = Ingredient("eggplant", ing)
+    Eggplant.setTaste("umami", 1)
+    Eggplant.setTaste("salty", 2)
+    Eggplant.setTaste("sweet", 1)
+    Eggplant.setTaste("sour", 1)
+    Eggplant.setTaste("bitter", 1)
+    Eggplant.setTaste("hot", 1)
+    Eggplant.setUnits("weight")
+    Eggplant.setMeasure("2 ounces")
+
+    Fennel = Ingredient("fennel", ing)
+    Fennel.setTaste("umami", 1)
+    Fennel.setTaste("salty", 1)
+    Fennel.setTaste("sweet", 2)
+    Fennel.setTaste("sour", 1)
+    Fennel.setTaste("bitter", 2)
+    Fennel.setTaste("hot", 1)
+    Fennel.setUnits("weight")
+    Fennel.setMeasure("2 ounces")
+
+
+    Garlic = Ingredient("garlic", ing) # should also be an herb
+
+    Garlic.setTaste("umami", 1)
+    Garlic.setTaste("salty", 1)
+    Garlic.setTaste("sweet", 2)
+    Garlic.setTaste("sour", 2)
+    Garlic.setTaste("bitter", 2)
+    Garlic.setTaste("hot", 2)
+    Garlic.setUnits("weight")
+    Garlic.setMeasure("2 ounces")
+
+
+    Ginger = Ingredient("ginger", ing) # should also be a spice
+    Ginger.setTaste("umami", 1)
+    Ginger.setTaste("salty", 1)
+    Ginger.setTaste("sweet", 1)
+    Ginger.setTaste("sour", 3)
+    Ginger.setTaste("bitter", 1)
+    Ginger.setTaste("hot", 6)
+    Ginger.setUnits("weight")
+    Ginger.setMeasure("2 ounces")
+
+    Horseradish = Ingredient("horseradish", ing) # should also be an herb
+    Horseradish.setTaste("umami", 1)
+    Horseradish.setTaste("salty", 1)
+    Horseradish.setTaste("sweet", 3)
+    Horseradish.setTaste("sour", 1)
+    Horseradish.setTaste("bitter", 2)
+    Horseradish.setTaste("hot", 7)
+    Horseradish.setUnits("weight")
+    Horseradish.setMeasure("2 ounces")
+
+
+    Kale = Ingredient("kale", ing)
+    Kale.setTaste("umami", 1)
+    Kale.setTaste("salty", 1)
+    Kale.setTaste("sweet", 2)
+    Kale.setTaste("sour", 1)
+    Kale.setTaste("bitter", 2)
+    Kale.setTaste("hot", 1)
+    Kale.setUnits("weight")
+    Kale.setMeasure("2 ounces")
+
+
+    Leeks = Ingredient("leeks", ing)
+    Leeks.setTaste("umami", 1)
+    Leeks.setTaste("salty", 1)
+    Leeks.setTaste("sweet", 2)
+    Leeks.setTaste("sour", 1)
+    Leeks.setTaste("bitter", 2)
+    Leeks.setTaste("hot", 1)
+    Leeks.setUnits("weight")
+    Leeks.setMeasure("2 ounces")
+
+
+    Lentils = Ingredient("lentils", ing)
+    Lentils.setTaste("umami", 1)
+    Lentils.setTaste("salty", 1)
+    Lentils.setTaste("sweet", 2)
+    Lentils.setTaste("sour", 1)
+    Lentils.setTaste("bitter", 2)
+    Lentils.setTaste("hot", 1)
+    Lentils.setUnits("weight")
+    Lentils.setMeasure("2 ounces")
+
+    Lettuce = Ingredient("lettuce", ing)
+    Lettuce.setTaste("umami", 1)
+    Lettuce.setTaste("salty", 1)
+    Lettuce.setTaste("sweet", 3)
+    Lettuce.setTaste("sour", 1)
+    Lettuce.setTaste("bitter", 1)
+    Lettuce.setTaste("hot", 1)
+    Lettuce.setUnits("weight")
+    Lettuce.setMeasure("3 ounces")
+
+
+    OysterMushrooms = Ingredient("oyster mushrooms", ing)
+    OysterMushrooms.setTaste("umami", 1)
+    OysterMushrooms.setTaste("salty", 1)
+    OysterMushrooms.setTaste("sweet", 3)
+    OysterMushrooms.setTaste("sour", 2)
+    OysterMushrooms.setTaste("bitter", 2)
+    OysterMushrooms.setTaste("hot", 1)
+    OysterMushrooms.setUnits("weight")
+    OysterMushrooms.setMeasure("2 ounces")
+
+
+    ButtonMushrooms = Ingredient("button mushrooms", ing)
+    ButtonMushrooms.setTaste("umami", 1)
+    ButtonMushrooms.setTaste("salty", 1)
+    ButtonMushrooms.setTaste("sweet", 3)
+    ButtonMushrooms.setTaste("sour", 2)
+    ButtonMushrooms.setTaste("bitter", 2)
+    ButtonMushrooms.setTaste("hot", 1)
+    ButtonMushrooms.setUnits("weight")
+    ButtonMushrooms.setMeasure("2 ounces")
+
+
+    ShiitakeMushrooms = Ingredient("shiitake mushrooms", ing)
+    ShiitakeMushrooms.setTaste("umami", 1)
+    ShiitakeMushrooms.setTaste("salty", 1)
+    ShiitakeMushrooms.setTaste("sweet", 3)
+    ShiitakeMushrooms.setTaste("sour", 2)
+    ShiitakeMushrooms.setTaste("bitter", 2)
+    ShiitakeMushrooms.setTaste("hot", 1)
+    ShiitakeMushrooms.setUnits("weight")
+    ShiitakeMushrooms.setMeasure("2 ounces")
+
+
+    CriminiMushrooms = Ingredient("crimini mushrooms", ing)
+    CriminiMushrooms.setTaste("umami", 1)
+    CriminiMushrooms.setTaste("salty", 1)
+    CriminiMushrooms.setTaste("sweet", 3)
+    CriminiMushrooms.setTaste("sour", 2)
+    CriminiMushrooms.setTaste("bitter", 2)
+    CriminiMushrooms.setTaste("hot", 1)
+    CriminiMushrooms.setUnits("weight")
+    CriminiMushrooms.setMeasure("2 ounces")
+
+
+    ChanterelleMushrooms = Ingredient("chanterelle mushrooms", ing)
+    ChanterelleMushrooms.setTaste("umami", 1)
+    ChanterelleMushrooms.setTaste("salty", 1)
+    ChanterelleMushrooms.setTaste("sweet", 3)
+    ChanterelleMushrooms.setTaste("sour", 2)
+    ChanterelleMushrooms.setTaste("bitter", 2)
+    ChanterelleMushrooms.setTaste("hot", 1)
+    ChanterelleMushrooms.setUnits("weight")
+    ChanterelleMushrooms.setMeasure("2 ounces")
+
+
+    PortabelloMushrooms = Ingredient("portabello mushrooms", ing)
+    PortabelloMushrooms.setTaste("umami", 1)
+    PortabelloMushrooms.setTaste("salty", 1)
+    PortabelloMushrooms.setTaste("sweet", 3)
+    PortabelloMushrooms.setTaste("sour", 2)
+    PortabelloMushrooms.setTaste("bitter", 2)
+    PortabelloMushrooms.setTaste("hot", 1)
+    PortabelloMushrooms.setUnits("weight")
+    PortabelloMushrooms.setMeasure("2 ounces")
+
+
+    PorciniMushrooms = Ingredient("porcini mushrooms", ing)
+    PorciniMushrooms.setTaste("umami", 1)
+    PorciniMushrooms.setTaste("salty", 1)
+    PorciniMushrooms.setTaste("sweet", 3)
+    PorciniMushrooms.setTaste("sour", 2)
+    PorciniMushrooms.setTaste("bitter", 2)
+    PorciniMushrooms.setTaste("hot", 1)
+    PorciniMushrooms.setUnits("weight")
+    PorciniMushrooms.setMeasure("2 ounces")
+
+
+    MorelMushrooms = Ingredient("morel mushrooms", ing)
+    MorelMushrooms.setTaste("umami", 1)
+    MorelMushrooms.setTaste("salty", 1)
+    MorelMushrooms.setTaste("sweet", 3)
+    MorelMushrooms.setTaste("sour", 2)
+    MorelMushrooms.setTaste("bitter", 2)
+    MorelMushrooms.setTaste("hot", 1)
+    MorelMushrooms.setUnits("weight")
+    MorelMushrooms.setMeasure("2 ounces")
+
+
+    Okra = Ingredient("okra", ing)
+    Okra.setTaste("umami", 1)
+    Okra.setTaste("salty", 1)
+    Okra.setTaste("sweet", 2)
+    Okra.setTaste("sour", 1)
+    Okra.setTaste("bitter", 6)
+    Okra.setTaste("hot", 1)
+    Okra.setUnits("weight")
+    Okra.setMeasure("2 ounces")
+
+
+    Onions = Ingredient("onions", ing)
+    Onions.setTaste("umami", 1)
+    Onions.setTaste("salty", 1)
+    Onions.setTaste("sweet", 2)
+    Onions.setTaste("sour", 3)
+    Onions.setTaste("bitter", 2)
+    Onions.setTaste("hot", 1)
+    Onions.setUnits("weight")
+    Onions.setMeasure("2 ounces")
+
+
+    Peas = Ingredient("peas", ing)
+    Peas.setTaste("umami", 1)
+    Peas.setTaste("salty", 1)
+    Peas.setTaste("sweet", 3)
+    Peas.setTaste("sour", 1)
+    Peas.setTaste("bitter", 2)
+    Peas.setTaste("hot", 1)
+    Peas.setUnits("weight")
+    Peas.setMeasure("2 ounces")
+
+
+    Radishes = Ingredient("radishes", ing)
+    Radishes.setTaste("umami", 1)
+    Radishes.setTaste("salty", 1)
+    Radishes.setTaste("sweet", 2)
+    Radishes.setTaste("sour", 1)
+    Radishes.setTaste("bitter", 2)
+    Radishes.setTaste("hot", 1)
+    Radishes.setUnits("weight")
+    Radishes.setMeasure("2 ounces")
+
+    Shallots = Ingredient("shallots", ing)
+    Shallots.setTaste("umami", 1)
+    Shallots.setTaste("salty", 1)
+    Shallots.setTaste("sweet", 2)
+    Shallots.setTaste("sour", 1)
+    Shallots.setTaste("bitter", 2)
+    Shallots.setTaste("hot", 1)
+    Shallots.setUnits("weight")
+    Shallots.setMeasure("2 ounces")
+
+
+    Spinach = Ingredient("spinach", ing)
+    Spinach.setTaste("umami", 1)
+    Spinach.setTaste("salty", 1)
+    Spinach.setTaste("sweet", 3)
+    Spinach.setTaste("sour", 1)
+    Spinach.setTaste("bitter", 1)
+    Spinach.setTaste("hot", 1)
+    Spinach.setUnits("weight")
+    Spinach.setMeasure("2 ounces")
+
+
+    AcornSquash = Ingredient("acorn squash", ing)
+    AcornSquash.setTaste("umami", 1)
+    AcornSquash.setTaste("salty", 1)
+    AcornSquash.setTaste("sweet", 2)
+    AcornSquash.setTaste("sour", 1)
+    AcornSquash.setTaste("bitter", 1)
+    AcornSquash.setTaste("hot", 1)
+    AcornSquash.setUnits("weight")
+    AcornSquash.setMeasure("2 ounces")
+
+    ButternutSquash = Ingredient("butternut squash", ing)
+    ButternutSquash .setTaste("umami", 1)
+    ButternutSquash .setTaste("salty", 1)
+    ButternutSquash .setTaste("sweet", 2)
+    ButternutSquash .setTaste("sour", 1)
+    ButternutSquash .setTaste("bitter", 1)
+    ButternutSquash.setTaste("hot", 1)
+    ButternutSquash.setUnits("weight")
+    ButternutSquash.setMeasure("3 ounces")
+
+    SpaghettiSquash = Ingredient("spaghetti squash", ing)
+    SpaghettiSquash.setTaste("umami", 1)
+    SpaghettiSquash.setTaste("salty", 1)
+    SpaghettiSquash.setTaste("sweet", 2)
+    SpaghettiSquash.setTaste("sour", 1)
+    SpaghettiSquash.setTaste("bitter", 1)
+    SpaghettiSquash.setTaste("hot", 1)
+    SpaghettiSquash.setUnits("weight")
+    SpaghettiSquash.setMeasure("3 ounces")
+
+
+    Tomatoes = Ingredient("tomatoes", ing)
+    Tomatoes.setTaste("umami", 1)
+    Tomatoes.setTaste("salty", 1)
+    Tomatoes.setTaste("sweet", 2)
+    Tomatoes.setTaste("sour", 1)
+    Tomatoes.setTaste("bitter", 1)
+    Tomatoes.setTaste("hot", 1)
+    Tomatoes.setUnits("weight")
+    Tomatoes.setMeasure("3 ounces")
+
+
+    GreenTomatoes = Ingredient("green tomatoes", ing)
+    GreenTomatoes.setTaste("umami", 1)
+    GreenTomatoes.setTaste("salty", 1)
+    GreenTomatoes.setTaste("sweet", 2)
+    GreenTomatoes.setTaste("sour", 1)
+    GreenTomatoes.setTaste("bitter", 1)
+    GreenTomatoes.setTaste("hot", 1)
+    GreenTomatoes.setUnits("weight")
+    GreenTomatoes.setMeasure("3 ounces")
+
+
+    Tomatillos = Ingredient("tomatillos", ing)
+    Tomatillos.setTaste("umami", 1)
+    Tomatillos.setTaste("salty", 1)
+    Tomatillos.setTaste("sweet", 2)
+    Tomatillos.setTaste("sour", 1)
+    Tomatillos.setTaste("bitter", 1)
+    Tomatillos.setTaste("hot", 1)
+    Tomatillos.setUnits("weight")
+    Tomatillos.setMeasure("3 ounces")
+
+
+    Turnips = Ingredient("turnips", ing)
+    Turnips.setTaste("umami", 1)
+    Turnips.setTaste("salty", 1)
+    Turnips.setTaste("sweet", 2)
+    Turnips.setTaste("sour", 1)
+    Turnips.setTaste("bitter", 1)
+    Turnips.setTaste("hot", 1)
+    Turnips.setUnits("weight")
+    Turnips.setMeasure("3 ounces")
+
+    Zucchini = Ingredient("zucchini", ing)
+    Zucchini.setTaste("umami", 1)
+    Zucchini.setTaste("salty", 1)
+    Zucchini.setTaste("sweet", 2)
+    Zucchini.setTaste("sour", 1)
+    Zucchini.setTaste("bitter", 1)
+    Zucchini.setTaste("hot", 1)
+    Zucchini.setUnits("weight")
+    Zucchini.setMeasure("3 ounces")
+
+    Potatoes = Ingredient("potatoes", ing)
+    Potatoes.setTaste("umami", 1)
+    Potatoes.setTaste("salty", 1)
+    Potatoes.setTaste("sweet", 2)
+    Potatoes.setTaste("sour", 1)
+    Potatoes.setTaste("bitter", 1)
+    Potatoes.setTaste("hot", 1)
+    Potatoes.setUnits("weight")
+    Potatoes.setMeasure("3 ounces")
+
+
+    SweetPotatoes = Ingredient("sweet potatoes", ing)
+    SweetPotatoes.setTaste("umami", 1)
+    SweetPotatoes.setTaste("salty", 1)
+    SweetPotatoes.setTaste("sweet", 5)
+    SweetPotatoes.setTaste("sour", 1)
+    SweetPotatoes.setTaste("bitter", 1)
+    SweetPotatoes.setTaste("hot", 1)
+    SweetPotatoes.setUnits("weight")
+    SweetPotatoes.setMeasure("3 ounces")
+
+
+    # kinds of herbs
+    Parsley = Ingredient("parsley", ing)
+    Parsley.setTaste("umami", 8)
+    Parsley.setTaste("salty", 4)
+    Parsley.setTaste("sweet", 2)
+    Parsley.setTaste("sour", 2)
+    Parsley.setTaste("bitter", 1)
+    Parsley.setTaste("hot", 2)
+    Parsley.setUnits("volume")
+    Parsley.setMeasure("1 teaspoon")
+
+    CurleyParsley = Ingredient("curley parsley", ing)
+    CurleyParsley.setTaste("umami", 8)
+    CurleyParsley.setTaste("salty", 4)
+    CurleyParsley.setTaste("sweet", 2)
+    CurleyParsley.setTaste("sour", 2)
+    CurleyParsley.setTaste("bitter", 1)
+    CurleyParsley.setTaste("hot", 2)
+    CurleyParsley.setUnits("volume")
+    CurleyParsley.setMeasure("1 teaspoon")
+
+
+    FlatParsley = Ingredient("flat parsley", ing)
+    FlatParsley.setTaste("umami", 8)
+    FlatParsley.setTaste("salty", 4)
+    FlatParsley.setTaste("sweet", 2)
+    FlatParsley.setTaste("sour", 2)
+    FlatParsley.setTaste("bitter", 1)
+    FlatParsley.setTaste("hot", 2)
+    FlatParsley.setUnits("volume")
+    FlatParsley.setMeasure("1 teaspoon")
+
+    Parsley.addSubType([CurleyParsley, FlatParsley])
+
+    Cilantro = Ingredient("cilantro", ing)
+    Cilantro.setTaste("umami", 8)
+    Cilantro.setTaste("salty", 5)
+    Cilantro.setTaste("sweet", 2)
+    Cilantro.setTaste("sour", 2)
+    Cilantro.setTaste("bitter", 1)
+    Cilantro.setTaste("hot", 6)
+    Cilantro.setUnits("volume")
+    Cilantro.setMeasure("1 teaspoon")
+
+
+    Basil = Ingredient("basil", ing)
+    Basil.setTaste("umami", 8)
+    Basil.setTaste("salty", 4)
+    Basil.setTaste("sweet", 2)
+    Basil.setTaste("sour", 2)
+    Basil.setTaste("bitter", 2)
+    Basil.setTaste("hot", 2)
+    Basil.setUnits("volume")
+    Basil.setMeasure("1 teaspoon")
+
+    Watercress = Ingredient("watercress", ing)
+    Watercress.setTaste("umami", 8)
+    Watercress.setTaste("salty", 2)
+    Watercress.setTaste("sweet", 1)
+    Watercress.setTaste("sour", 2)
+    Watercress.setTaste("bitter", 1)
+    Watercress.setTaste("hot", 2)
+    Watercress.setUnits("volume")
+    Watercress.setMeasure("1 teaspoon")
+
+    Dill = Ingredient("dill", ing)
+    Dill.setTaste("umami", 8)
+    Dill.setTaste("salty", 4)
+    Dill.setTaste("sweet", 2)
+    Dill.setTaste("sour", 2)
+    Dill.setTaste("bitter", 1)
+    Dill.setTaste("hot", 3)
+    Dill.setUnits("volume")
+    Dill.setMeasure("1 teaspoon")
+
+
+    Mint = Ingredient("mint", ing)
+    Mint.setTaste("umami", 8)
+    Mint.setTaste("salty", 1)
+    Mint.setTaste("sweet", 1)
+    Mint.setTaste("sour", 2)
+    Mint.setTaste("bitter", 1)
+    Mint.setTaste("hot", 1)
+    Mint.setUnits("volume")
+    Mint.setMeasure("1 teaspoon")
+
+
+    BayLeaves = Ingredient("bay leaves", ing)
+    BayLeaves.setTaste("umami", 8)
+    BayLeaves.setTaste("salty", 1)
+    BayLeaves.setTaste("sweet", 1)
+    BayLeaves.setTaste("sour", 2)
+    BayLeaves.setTaste("bitter", 2)
+    BayLeaves.setTaste("hot", 2)
+    BayLeaves.setUnits("volume")
+    BayLeaves.setMeasure("1 teaspoon")
+
+
+    Rosemary = Ingredient("rosemary", ing)
+    Rosemary.setTaste("umami", 8)
+    Rosemary.setTaste("salty", 3)
+    Rosemary.setTaste("sweet", 3)
+    Rosemary.setTaste("sour", 2)
+    Rosemary.setTaste("bitter", 1)
+    Rosemary.setTaste("hot", 1)
+    Rosemary.setUnits("volume")
+    Rosemary.setMeasure("1 teaspoon")
+
+
+    Lavender = Ingredient("lavender", ing)
+    Lavender.setTaste("umami", 8)
+    Lavender.setTaste("salty", 2)
+    Lavender.setTaste("sweet", 2)
+    Lavender.setTaste("sour", 2)
+    Lavender.setTaste("bitter", 1)
+    Lavender.setTaste("hot", 1)
+    Lavender.setUnits("volume")
+    Lavender.setMeasure("1 teaspoon")
+
+
+    Thyme = Ingredient("thyme", ing)
+    Thyme.setTaste("umami", 8)
+    Thyme.setTaste("salty", 1)
+    Thyme.setTaste("sweet", 2)
+    Thyme.setTaste("sour", 2)
+    Thyme.setTaste("bitter", 1)
+    Thyme.setTaste("hot", 2)
+    Thyme.setUnits("volume")
+    Thyme.setMeasure("1 teaspoon")
+
+
+    Chives = Ingredient("chives", ing)
+    Chives.setTaste("umami", 8)
+    Chives.setTaste("salty", 1)
+    Chives.setTaste("sweet", 2)
+    Chives.setTaste("sour", 2)
+    Chives.setTaste("bitter", 1)
+    Chives.setTaste("hot", 2)
+    Chives.setUnits("volume")
+    Chives.setMeasure("1 teaspoon")
+
+
+    Sorrel = Ingredient("sorrel", ing)
+    Sorrel.setTaste("umami", 8)
+    Sorrel.setTaste("salty", 1)
+    Sorrel.setTaste("sweet", 2)
+    Sorrel.setTaste("sour", 2)
+    Sorrel.setTaste("bitter", 1)
+    Sorrel.setTaste("hot", 2)
+    Sorrel.setUnits("volume")
+    Sorrel.setMeasure("1 teaspoon")
+
+
+
+    #UNSURE ABOUT SPICES (DIFFERENT TASTES)
+
+    # kinds of spices
+    # European
+    AllSpice = Ingredient("allspice", ing)
+
+    Anise = Ingredient("anise", ing)
+    Anise.setTaste("umami", 7)
+    Anise.setTaste("salty", 3)
+    Anise.setTaste("sweet", 1)
+    Anise.setTaste("sour", 1)
+    Anise.setTaste("bitter", 1)
+    Anise.setTaste("hot", 2)
+    Anise.setUnits("volume")
+    Anise.setMeasure("1 teaspoon")
+
+
+    Mustard = Ingredient("mustard", ing)
+    Mustard.setTaste("umami", 7)
+    Mustard.setTaste("salty", 3)
+    Mustard.setTaste("sweet", 1)
+    Mustard.setTaste("sour", 1)
+    Mustard.setTaste("bitter", 1)
+    Mustard.setTaste("hot", 2)
+    Mustard.setUnits("volume")
+    Mustard.setMeasure("1 teaspoon")
+
+    Cayenne = Ingredient("cayenne", ing) # should be in east and south asian too
+    Cayenne.setTaste("umami", 7)
+    Cayenne.setTaste("salty", 3)
+    Cayenne.setTaste("sweet", 1)
+    Cayenne.setTaste("sour", 1)
+    Cayenne.setTaste("bitter", 1)
+    Cayenne.setTaste("hot", 2)
+    Cayenne.setUnits("volume")
+    Cayenne.setMeasure("1 teaspoon")
+
+    Cinnamon = Ingredient("cinnamon", ing) # should be in all
+    Cinnamon.setTaste("umami", 7)
+    Cinnamon.setTaste("salty", 3)
+    Cinnamon.setTaste("sweet", 1)
+    Cinnamon.setTaste("sour", 1)
+    Cinnamon.setTaste("bitter", 1)
+    Cinnamon.setTaste("hot", 3)
+    Cinnamon.setUnits("volume")
+    Cinnamon.setMeasure("1 teaspoon")
+
+
+    FennelSeed = Ingredient("fennel seed", ing)
+    FennelSeed.setTaste("umami", 7)
+    FennelSeed.setTaste("salty", 3)
+    FennelSeed.setTaste("sweet", 1)
+    FennelSeed.setTaste("sour", 1)
+    FennelSeed.setTaste("bitter", 1)
+    FennelSeed.setTaste("hot", 1)
+    FennelSeed.setUnits("volume")
+    FennelSeed.setMeasure("1 teaspoon")
+
+
+    BlackPepper = Ingredient("black pepper", ing) # all
+    BlackPepper.setTaste("umami", 7)
+    BlackPepper.setTaste("salty", 9)
+    BlackPepper.setTaste("sweet", 1)
+    BlackPepper.setTaste("sour", 1)
+    BlackPepper.setTaste("bitter", 2)
+    BlackPepper.setTaste("hot", 1)
+    BlackPepper.setUnits("volume")
+    BlackPepper.setMeasure("1 teaspoon")
+
+
+    Salt = Ingredient("salt", ing) #all
+    Salt.setTaste("umami", 8)
+    Salt.setTaste("salty", 10)
+    Salt.setTaste("sweet", 1)
+    Salt.setTaste("sour", 1)
+    Salt.setTaste("bitter", 1)
+    Salt.setTaste("hot", 1)
+    Salt.setUnits("volume")
+    Salt.setMeasure("1 teaspoon")
+
+
+    Sugar = Ingredient("sugar", ing) #all
+    Sugar.setTaste("umami", 8)
+    Sugar.setTaste("salty", 1)
+    Sugar.setTaste("sweet", 10)
+    Sugar.setTaste("sour", 1)
+    Sugar.setTaste("bitter", 1)
+    Sugar.setTaste("hot", 1)
+    Sugar.setUnits("volume")
+    Sugar.setMeasure("1 teaspoon")
+
+
+    BrownSugar = Ingredient("brown sugar", ing) # all
+    BrownSugar.setTaste("umami", 8)
+    BrownSugar.setTaste("salty", 1)
+    BrownSugar.setTaste("sweet", 9)
+    BrownSugar.setTaste("sour", 1)
+    BrownSugar.setTaste("bitter", 1)
+    BrownSugar.setTaste("hot", 2)
+    BrownSugar.setUnits("volume")
+    BrownSugar.setMeasure("1 teaspoon")
+
+
+
+    Mace = Ingredient("mace", ing) # south asian too
+    Mace.setTaste("umami", 7)
+    Mace.setTaste("salty", 3)
+    Mace.setTaste("sweet", 1)
+    Mace.setTaste("sour", 1)
+    Mace.setTaste("bitter", 1)
+    Mace.setTaste("hot", 2)
+    Mace.setUnits("volume")
+    Mace.setMeasure("1 teaspoon")
+
+
+    Nutmeg = Ingredient("nutmeg", ing)
+    Nutmeg.setTaste("umami", 7)
+    Nutmeg.setTaste("salty", 3)
+    Nutmeg.setTaste("sweet", 1)
+    Nutmeg.setTaste("sour", 1)
+    Nutmeg.setTaste("bitter", 1)
+    Nutmeg.setTaste("hot", 2)
+    Nutmeg.setUnits("volume")
+    Nutmeg.setMeasure("1 teaspoon")
+
+    Paprika = Ingredient("paprika", ing) # south asian, arab
+    Paprika.setTaste("umami", 7)
+    Paprika.setTaste("salty", 3)
+    Paprika.setTaste("sweet", 1)
+    Paprika.setTaste("sour", 1)
+    Paprika.setTaste("bitter", 1)
+    Paprika.setTaste("hot", 2)
+    Paprika.setUnits("volume")
+    Paprika.setMeasure("1 teaspoon")
+
+    Saffron = Ingredient("saffron", ing) # all
+    Saffron.setTaste("umami", 7)
+    Saffron.setTaste("salty", 3)
+    Saffron.setTaste("sweet", 1)
+    Saffron.setTaste("sour", 1)
+    Saffron.setTaste("bitter", 1)
+    Saffron.setTaste("hot", 2)
+    Saffron.setUnits("volume")
+    Saffron.setMeasure("1 teaspoon")
+
+    Tarragon = Ingredient("tarragon", ing) # arab
+    Tarragon.setTaste("umami", 7)
+    Tarragon.setTaste("salty", 3)
+    Tarragon.setTaste("sweet", 1)
+    Tarragon.setTaste("sour", 1)
+    Tarragon.setTaste("bitter", 1)
+    Tarragon.setTaste("hot", 2)
+    Tarragon.setUnits("volume")
+    Tarragon.setMeasure("1 teaspoon")
+
+
+    Turmeric = Ingredient("turmeric", ing) # south asian, arab
+    Turmeric.setTaste("umami", 7)
+    Turmeric.setTaste("salty", 3)
+    Turmeric.setTaste("sweet", 1)
+    Turmeric.setTaste("sour", 1)
+    Turmeric.setTaste("bitter", 1)
+    Turmeric.setTaste("hot", 2)
+    Turmeric.setUnits("volume")
+    Turmeric.setMeasure("1 teaspoon")
+
+    Sage = Ingredient("sage", ing)
+    Sage.setTaste("umami", 7)
+    Sage.setTaste("salty", 3)
+    Sage.setTaste("sweet", 1)
+    Sage.setTaste("sour", 1)
+    Sage.setTaste("bitter", 1)
+    Sage.setTaste("hot", 2)
+    Sage.setUnits("volume")
+    Sage.setMeasure("1 teaspoon")
+
+
+    # East Asian
+
+    # South Asian
+    CaromSeeds = Ingredient("carom seeds", ing)
+    CaromSeeds.setTaste("umami", 7)
+    CaromSeeds.setTaste("salty", 3)
+    CaromSeeds.setTaste("sweet", 1)
+    CaromSeeds.setTaste("sour", 1)
+    CaromSeeds.setTaste("bitter", 1)
+    CaromSeeds.setTaste("hot", 2)
+    CaromSeeds.setUnits("volume")
+    CaromSeeds.setMeasure("1 teaspoon")
+
+    Asafoetida = Ingredient("asafoetida", ing)
+    Asafoetida.setTaste("umami", 7)
+    Asafoetida.setTaste("salty", 3)
+    Asafoetida.setTaste("sweet", 1)
+    Asafoetida.setTaste("sour", 1)
+    Asafoetida.setTaste("bitter", 1)
+    Asafoetida.setTaste("hot", 2)
+    Asafoetida.setUnits("volume")
+    Asafoetida.setMeasure("1 teaspoon")
+
+    Cardamom = Ingredient("cardamom", ing)
+    Cardamom.setTaste("umami", 7)
+    Cardamom.setTaste("salty", 3)
+    Cardamom.setTaste("sweet", 1)
+    Cardamom.setTaste("sour", 1)
+    Cardamom.setTaste("bitter", 1)
+    Cardamom.setTaste("hot", 2)
+    Cardamom.setUnits("volume")
+    Cardamom.setMeasure("1 teaspoon")
+
+    Cumin = Ingredient("cumin", ing) # should be in arab too
+    Cumin.setTaste("umami", 7)
+    Cumin.setTaste("salty", 3)
+    Cumin.setTaste("sweet", 1)
+    Cumin.setTaste("sour", 1)
+    Cumin.setTaste("bitter", 1)
+    Cumin.setTaste("hot", 1)
+    Cumin.setUnits("volume")
+    Cumin.setMeasure("1 teaspoon")
+
+
+    Curry = Ingredient("curry", ing)
+    Curry.setTaste("umami", 7)
+    Curry.setTaste("salty", 3)
+    Curry.setTaste("sweet", 1)
+    Curry.setTaste("sour", 1)
+    Curry.setTaste("bitter", 2)
+    Curry.setTaste("hot", 1)
+    Curry.setUnits("volume")
+    Curry.setMeasure("1 teaspoon")
+    Curry.setTaste("hot", 2)
+    Curry.setUnits("volume")
+    Curry.setMeasure("1 teaspoon")
+
+    Coriander = Ingredient("coriander", ing)
+    Coriander.setTaste("umami", 7)
+    Coriander.setTaste("salty", 3)
+    Coriander.setTaste("sweet", 1)
+    Coriander.setTaste("sour", 1)
+    Coriander.setTaste("bitter", 1)
+    Coriander.setTaste("hot", 2)
+    Coriander.setUnits("volume")
+    Coriander.setMeasure("1 teaspoon")
+
+    ChiliPepper = Ingredient("chili pepper", ing)
+    ChiliPepper.setTaste("umami", 7)
+    ChiliPepper.setTaste("salty", 3)
+    ChiliPepper.setTaste("sweet", 1)
+    ChiliPepper.setTaste("sour", 1)
+    ChiliPepper.setTaste("bitter", 1)
+    ChiliPepper.setTaste("hot", 5)
+    ChiliPepper.setUnits("volume")
+    ChiliPepper.setMeasure("1 teaspoon")
+
+    Fenugreek = Ingredient("fenugreek", ing)
+    Fenugreek.setTaste("umami", 7)
+    Fenugreek.setTaste("salty", 3)
+    Fenugreek.setTaste("sweet", 1)
+    Fenugreek.setTaste("sour", 1)
+    Fenugreek.setTaste("bitter", 1)
+    Fenugreek.setTaste("hot", 1)
+    Fenugreek.setUnits("volume")
+    Fenugreek.setMeasure("1 teaspoon")
+
+    KaffirLime = Ingredient("kaffir lime", ing)
+    KaffirLime.setTaste("umami", 7)
+    KaffirLime.setTaste("salty", 3)
+    KaffirLime.setTaste("sweet", 1)
+    KaffirLime.setTaste("sour", 3)
+    KaffirLime.setTaste("bitter", 1)
+    KaffirLime.setTaste("hot", 1)
+    KaffirLime.setUnits("volume")
+    KaffirLime.setMeasure("1 teaspoon")
+
+    Lemongrass = Ingredient("lemongrass", ing)
+    Lemongrass.setTaste("umami", 7)
+    Lemongrass.setTaste("salty", 3)
+    Lemongrass.setTaste("sweet", 1)
+    Lemongrass.setTaste("sour", 2)
+    Lemongrass.setTaste("bitter", 1)
+    Lemongrass.setTaste("hot", 1)
+    Lemongrass.setUnits("volume")
+    Lemongrass.setMeasure("1 teaspoon")
+
+
+    # Arab
+    Cardamom = Ingredient("cardamom", ing)
+    Cardamom.setTaste("umami", 7)
+    Cardamom.setTaste("salty", 3)
+    Cardamom.setTaste("sweet", 1)
+    Cardamom.setTaste("sour", 1)
+    Cardamom.setTaste("bitter", 1)
+    Cardamom.setTaste("hot", 2)
+    Cardamom.setUnits("volume")
+    Cardamom.setMeasure("1 teaspoon")
+
+    Baharat = Ingredient("baharat", ing)
+    Baharat.setTaste("umami", 7)
+    Baharat.setTaste("salty", 3)
+    Baharat.setTaste("sweet", 1)
+    Baharat.setTaste("sour", 1)
+    Baharat.setTaste("bitter", 1)
+    Baharat.setTaste("hot", 2)
+    Baharat.setUnits("volume")
+    Baharat.setMeasure("1 teaspoon")
+
+    Sumac = Ingredient("sumac", ing)
+    Sumac.setTaste("umami", 7)
+    Sumac.setTaste("salty", 3)
+    Sumac.setTaste("sweet", 1)
+    Sumac.setTaste("sour", 1)
+    Sumac.setTaste("bitter", 1)
+    Sumac.setTaste("hot", 2)
+    Sumac.setUnits("volume")
+    Sumac.setMeasure("1 teaspoon")
+
+    Zatar = Ingredient("zatar", ing)
+    Zatar.setTaste("umami", 7)
+    Zatar.setTaste("salty", 3)
+    Zatar.setTaste("sweet", 1)
+    Zatar.setTaste("sour", 1)
+    Zatar.setTaste("bitter", 1)
+    Zatar.setTaste("hot", 2)
+    Zatar.setUnits("volume")
+    Zatar.setMeasure("1 teaspoon")
+
+
+
+    # Grains
+    Wheat = Ingredient("wheat", ing)
+    Wheat.setTaste("umami", 3)
+    Wheat.setTaste("salty", 1)
+    Wheat.setTaste("sweet", 3)
+    Wheat.setTaste("sour", 6)
+    Wheat.setTaste("bitter", 1)
+    Wheat.setTaste("hot", 1)
+    Wheat.setUnits("weight")
+    Wheat.setMeasure("4 ounces")
+
+
+    Rice = Ingredient("rice", ing)
+    Rice.setTaste("umami", 3)
+    Rice.setTaste("salty", 1)
+    Rice.setTaste("sweet", 3)
+    Rice.setTaste("sour", 6)
+    Rice.setTaste("bitter", 1)
+    Rice.setTaste("hot", 1)
+    Rice.setUnits("weight")
+    Rice.setMeasure("4 ounces")
+
+    Quinoa = Ingredient("quinoa", ing)
+    Quinoa.setTaste("umami", 3)
+    Quinoa.setTaste("salty", 1)
+    Quinoa.setTaste("sweet", 3)
+    Quinoa.setTaste("sour", 6)
+    Quinoa.setTaste("bitter", 1)
+    Quinoa.setTaste("hot", 1)
+    Quinoa.setUnits("weight")
+    Quinoa.setMeasure("4 ounces")
+
+
+    Millet = Ingredient("millet", ing)
+    Millet.setTaste("umami", 3)
+    Millet.setTaste("salty", 1)
+    Millet.setTaste("sweet", 3)
+    Millet.setTaste("sour", 6)
+    Millet.setTaste("bitter", 1)
+    Millet.setTaste("hot", 1)
+    Millet.setUnits("weight")
+    Millet.setMeasure("4 ounces")
+
+
+    Teff = Ingredient("teff", ing)
+    Teff.setTaste("umami", 3)
+    Teff.setTaste("salty", 1)
+    Teff.setTaste("sweet", 3)
+    Teff.setTaste("sour", 6)
+    Teff.setTaste("bitter", 1)
+    Teff.setTaste("hot", 1)
+    Teff.setUnits("weight")
+    Teff.setMeasure("4 ounces")
+
+
+    Flour = Ingredient("flour", ing)
+    Flour.setTaste("umami", 3)
+    Flour.setTaste("salty", 1)
+    Flour.setTaste("sweet", 3)
+    Flour.setTaste("sour", 6)
+    Flour.setTaste("bitter", 1)
+    Flour.setTaste("hot", 1)
+    Flour.setUnits("weight")
+    Flour.setMeasure("4 ounces")
+
+
+    Buckwheat = Ingredient("buckwheat", ing)
+    Buckwheat.setTaste("umami", 3)
+    Buckwheat.setTaste("salty", 1)
+    Buckwheat.setTaste("sweet", 3)
+    Buckwheat.setTaste("sour", 6)
+    Buckwheat.setTaste("bitter", 1)
+    Buckwheat.setTaste("hot", 1)
+    Buckwheat.setUnits("weight")
+    Buckwheat.setMeasure("4 ounces")
+
+
+    Barley = Ingredient("barley", ing)
+    Barley.setTaste("umami", 3)
+    Barley.setTaste("salty", 1)
+    Barley.setTaste("sweet", 3)
+    Barley.setTaste("sour", 6)
+    Barley.setTaste("bitter", 1)
+    Barley.setTaste("hot", 1)
+    Barley.setUnits("weight")
+    Barley.setMeasure("4 ounces")
+
+
+    Bulghur = Ingredient("bulghur", ing)
+    Bulghur.setTaste("umami", 3)
+    Bulghur.setTaste("salty", 1)
+    Bulghur.setTaste("sweet", 3)
+    Bulghur.setTaste("sour", 6)
+    Bulghur.setTaste("bitter", 1)
+    Bulghur.setTaste("hot", 1)
+    Bulghur.setUnits("weight")
+    Bulghur.setMeasure("4 ounces")
+
+
+
+    WhiteFlour = Ingredient("white flour", ing)
+    WhiteFlour.setTaste("umami", 3)
+    WhiteFlour.setTaste("salty", 1)
+    WhiteFlour.setTaste("sweet", 3)
+    WhiteFlour.setTaste("sour", 6)
+    WhiteFlour.setTaste("bitter", 1)
+    WhiteFlour.setTaste("hot", 1)
+    WhiteFlour.setUnits("weight")
+    WhiteFlour.setMeasure("4 ounces")
+
+
+    WholeWheatFlour = Ingredient("whole wheat flour", ing)
+    WholeWheatFlour.setTaste("umami", 3)
+    WholeWheatFlour.setTaste("salty", 1)
+    WholeWheatFlour.setTaste("sweet", 3)
+    WholeWheatFlour.setTaste("sour", 6)
+    WholeWheatFlour.setTaste("bitter", 1)
+    WholeWheatFlour.setTaste("hot", 1)
+    WholeWheatFlour.setUnits("weight")
+    WholeWheatFlour.setMeasure("4 ounces")
+
+
+    BuckwheatFlour = Ingredient("buckwheat flour", ing)
+    BuckwheatFlour.setTaste("umami", 3)
+    BuckwheatFlour.setTaste("salty", 1)
+    BuckwheatFlour.setTaste("sweet", 3)
+    BuckwheatFlour.setTaste("sour", 6)
+    BuckwheatFlour.setTaste("bitter", 1)
+    BuckwheatFlour.setTaste("hot", 1)
+    BuckwheatFlour.setUnits("weight")
+    BuckwheatFlour.setMeasure("4 ounces")
+
+
+    CousCous = Ingredient("couscous", ing)
+    CousCous.setTaste("umami", 3)
+    CousCous.setTaste("salty", 1)
+    CousCous.setTaste("sweet", 3)
+    CousCous.setTaste("sour", 6)
+    CousCous.setTaste("bitter", 1)
+    CousCous.setTaste("hot", 1)
+    CousCous.setUnits("weight")
+    CousCous.setMeasure("4 ounces")
+
+
+    CornFlour = Ingredient("corn flour", ing)
+    CornFlour.setTaste("umami", 3)
+    CornFlour.setTaste("salty", 1)
+    CornFlour.setTaste("sweet", 3)
+    CornFlour.setTaste("sour", 6)
+    CornFlour.setTaste("bitter", 1)
+    CornFlour.setTaste("hot", 1)
+    CornFlour.setUnits("weight")
+    CornFlour.setMeasure("4 ounces")
+
+
+
+    WhiteRice = Ingredient("white rice", ing)
+    WhiteRice.setTaste("umami", 3)
+    WhiteRice.setTaste("salty", 1)
+    WhiteRice.setTaste("sweet", 3)
+    WhiteRice.setTaste("sour", 6)
+    WhiteRice.setTaste("bitter", 1)
+    WhiteRice.setTaste("hot", 1)
+    WhiteRice.setUnits("weight")
+    WhiteRice.setMeasure("4 ounces")
+
+
+    JasmineRice = Ingredient("jasmine rice", ing)
+    JasmineRice.setTaste("umami", 3)
+    JasmineRice.setTaste("salty", 1)
+    JasmineRice.setTaste("sweet", 3)
+    JasmineRice.setTaste("sour", 6)
+    JasmineRice.setTaste("bitter", 1)
+    JasmineRice.setTaste("hot", 1)
+    JasmineRice.setUnits("weight")
+    JasmineRice.setMeasure("4 ounces")
+
+
+    BrownRice = Ingredient("brown rice", ing)
+    BrownRice.setTaste("umami", 3)
+    BrownRice.setTaste("salty", 1)
+    BrownRice.setTaste("sweet", 3)
+    BrownRice.setTaste("sour", 6)
+    BrownRice.setTaste("bitter", 1)
+    BrownRice.setTaste("hot", 1)
+    BrownRice.setUnits("weight")
+    BrownRice.setMeasure("4 ounces")
+
+
+    BasmatiRice = Ingredient("basmati rice", ing)
+    BasmatiRice.setTaste("umami", 3)
+    BasmatiRice.setTaste("salty", 1)
+    BasmatiRice.setTaste("sweet", 3)
+    BasmatiRice.setTaste("sour", 6)
+    BasmatiRice.setTaste("bitter", 1)
+    BasmatiRice.setTaste("hot", 1)
+    BasmatiRice.setUnits("weight")
+    BasmatiRice.setMeasure("4 ounces")
+
+
+    SushiRice = Ingredient("sushi rice", ing)
+    SushiRice.setTaste("umami", 3)
+    SushiRice.setTaste("salty", 1)
+    SushiRice.setTaste("sweet", 3)
+    SushiRice.setTaste("sour", 6)
+    SushiRice.setTaste("bitter", 1)
+    SushiRice.setTaste("hot", 1)
+    SushiRice.setUnits("weight")
+    SushiRice.setMeasure("4 ounces")
+
+
+    WildRice = Ingredient("wild rice", ing)
+    WildRice.setTaste("umami", 3)
+    WildRice.setTaste("salty", 1)
+    WildRice.setTaste("sweet", 3)
+    WildRice.setTaste("sour", 6)
+    WildRice.setTaste("bitter", 1)
+    WildRice.setTaste("hot", 1)
+    WildRice.setUnits("weight")
+    WildRice.setMeasure("4 ounces")
+
+
+
+    # Fruit
+    Apple = Ingredient("apple", ing)
+    Apple.setTaste("umami", 1)
+    Apple.setTaste("salty", 1)
+    Apple.setTaste("sweet", 5)
+    Apple.setTaste("sour", 2)
+    Apple.setTaste("bitter", 1)
+    Apple.setTaste("hot", 1)
+    Apple.setUnits("weight")
+    Apple.setMeasure("3 ounces")
+
+    Banana = Ingredient("banana", ing)
+    Banana.setTaste("umami", 1)
+    Banana.setTaste("salty", 1)
+    Banana.setTaste("sweet", 8)
+    Banana.setTaste("sour", 2)
+    Banana.setTaste("bitter", 1)
+    Banana.setTaste("hot", 1)
+    Banana.setUnits("weight")
+    Banana.setMeasure("3 ounces")
+
+    Pear = Ingredient("pear", ing)
+    Pear.setTaste("umami", 1)
+    Pear.setTaste("salty", 1)
+    Pear.setTaste("sweet", 4)
+    Pear.setTaste("sour", 2)
+    Pear.setTaste("bitter", 1)
+    Pear.setTaste("hot", 1)
+    Pear.setUnits("weight")
+    Pear.setMeasure("3 ounces")
+
+    Grapes = Ingredient("grapes", ing)
+    Grapes.setTaste("umami", 1)
+    Grapes.setTaste("salty", 1)
+    Grapes.setTaste("sweet", 4)
+    Grapes.setTaste("sour", 3)
+    Grapes.setTaste("bitter", 1)
+    Grapes.setTaste("hot", 1)
+    Grapes.setUnits("weight")
+    Grapes.setMeasure("3 ounces")
+
+    Mango = Ingredient("mango", ing)
+    Mango.setTaste("umami", 1)
+    Mango.setTaste("salty", 1)
+    Mango.setTaste("sweet", 6)
+    Mango.setTaste("sour", 2)
+    Mango.setTaste("bitter", 1)
+    Mango.setTaste("hot", 1)
+    Mango.setUnits("weight")
+    Mango.setMeasure("3 ounces")
+
+    Peach = Ingredient("peach", ing)
+    Peach.setTaste("umami", 1)
+    Peach.setTaste("salty", 1)
+    Peach.setTaste("sweet", 6)
+    Peach.setTaste("sour", 2)
+    Peach.setTaste("bitter", 1)
+    Peach.setTaste("hot", 1)
+    Peach.setUnits("weight")
+    Peach.setMeasure("3 ounces")
+
+    Berries = Ingredient("berries", ing)
+    Berries.setTaste("umami", 1)
+    Berries.setTaste("salty", 1)
+    Berries.setTaste("sweet", 5)
+    Berries.setTaste("sour", 2)
+    Berries.setTaste("bitter", 1)
+    Berries.setTaste("hot", 1)
+    Berries.setUnits("weight")
+    Berries.setMeasure("3 ounces")
+
+    Lemon = Ingredient("lemon", ing)
+    Lemon.setTaste("umami", 1)
+    Lemon.setTaste("salty", 1)
+    Lemon.setTaste("sweet", 2)
+    Lemon.setTaste("sour", 5)
+    Lemon.setTaste("bitter", 1)
+    Lemon.setTaste("hot", 1)
+    Lemon.setUnits("weight")
+    Lemon.setMeasure("3 ounces")
+
+
+    Lime = Ingredient("lime", ing)
+    Lime.setTaste("umami", 1)
+    Lime.setTaste("salty", 1)
+    Lime.setTaste("sweet", 2)
+    Lime.setTaste("sour", 5)
+    Lime.setTaste("bitter", 1)
+    Lime.setTaste("hot", 1)
+    Lime.setUnits("weight")
+    Lime.setMeasure("3 ounces")
+
+    Orange = Ingredient("orange", ing)
+    Orange.setTaste("umami", 1)
+    Orange.setTaste("salty", 1)
+    Orange.setTaste("sweet", 3)
+    Orange.setTaste("sour", 3)
+    Orange.setTaste("bitter", 1)
+    Orange.setTaste("hot", 1)
+    Orange.setUnits("weight")
+    Orange.setMeasure("3 ounces")
+
+    Grapefruit = Ingredient("grapefruit", ing)
+    Grapefruit.setTaste("umami", 1)
+    Grapefruit.setTaste("salty", 1)
+    Grapefruit.setTaste("sweet", 3)
+    Grapefruit.setTaste("sour", 2)
+    Grapefruit.setTaste("bitter", 1)
+    Grapefruit.setTaste("hot", 1)
+    Grapefruit.setUnits("weight")
+    Grapefruit.setMeasure("3 ounces")
+
+    Apricots = Ingredient("apricots", ing)
+    Apricots.setTaste("umami", 1)
+    Apricots.setTaste("salty", 1)
+    Apricots.setTaste("sweet", 3)
+    Apricots.setTaste("sour", 2)
+    Apricots.setTaste("bitter", 1)
+    Apricots.setTaste("hot", 1)
+    Apricots.setUnits("weight")
+    Apricots.setMeasure("3 ounces")
+
+    Fig = Ingredient("fig", ing)
+    Fig.setTaste("umami", 1)
+    Fig.setTaste("salty", 1)
+    Fig.setTaste("sweet", 5)
+    Fig.setTaste("sour", 2)
+    Fig.setTaste("bitter", 1)
+    Fig.setTaste("hot", 1)
+    Fig.setUnits("weight")
+    Fig.setMeasure("3 ounces")
+
+    Pineapple = Ingredient("pineapple", ing)
+    Pineapple.setTaste("umami", 1)
+    Pineapple.setTaste("salty", 1)
+    Pineapple.setTaste("sweet", 5)
+    Pineapple.setTaste("sour", 2)
+    Pineapple.setTaste("bitter", 1)
+    Pineapple.setTaste("hot", 1)
+    Pineapple.setUnits("weight")
+    Pineapple.setMeasure("3 ounces")
+
+    Melon = Ingredient("melon", ing)
+    Melon.setTaste("umami", 1)
+    Melon.setTaste("salty", 1)
+    Melon.setTaste("sweet", 8)
+    Melon.setTaste("sour", 2)
+    Melon.setTaste("bitter", 1)
+    Melon.setTaste("hot", 1)
+    Melon.setUnits("weight")
+    Melon.setMeasure("3 ounces")
+
+    Nectarines = Ingredient("nectarines", ing)
+    Nectarines.setTaste("umami", 1)
+    Nectarines.setTaste("salty", 1)
+    Nectarines.setTaste("sweet", 6)
+    Nectarines.setTaste("sour", 2)
+    Nectarines.setTaste("bitter", 1)
+    Nectarines.setTaste("hot", 1)
+    Nectarines.setUnits("weight")
+    Nectarines.setMeasure("3 ounces")
+
+
+    Strawberries = Ingredient("strawberries", ing)
+    Strawberries.setTaste("umami", 1)
+    Strawberries.setTaste("salty", 1)
+    Strawberries.setTaste("sweet", 3)
+    Strawberries.setTaste("sour", 2)
+    Strawberries.setTaste("bitter", 1)
+    Strawberries.setTaste("hot", 1)
+    Strawberries.setUnits("weight")
+    Strawberries.setMeasure("3 ounces")
+
+    Raspberries = Ingredient("raspberries", ing)
+    Raspberries.setTaste("umami", 1)
+    Raspberries.setTaste("salty", 1)
+    Raspberries.setTaste("sweet", 3)
+    Raspberries.setTaste("sour", 2)
+    Raspberries.setTaste("bitter", 1)
+    Raspberries.setTaste("hot", 1)
+    Raspberries.setUnits("weight")
+    Raspberries.setMeasure("3 ounces")
+
+    Blueberries = Ingredient("blueberries", ing)
+    Blueberries.setTaste("umami", 1)
+    Blueberries.setTaste("salty", 1)
+    Blueberries.setTaste("sweet", 5)
+    Blueberries.setTaste("sour", 2)
+    Blueberries.setTaste("bitter", 1)
+    Blueberries.setTaste("hot", 1)
+    Blueberries.setUnits("weight")
+    Blueberries.setMeasure("3 ounces")
+
+    Blackberries = Ingredient("blackberries", ing)
+    Blackberries.setTaste("umami", 1)
+    Blackberries.setTaste("salty", 1)
+    Blackberries.setTaste("sweet", 3)
+    Blackberries.setTaste("sour", 2)
+    Blackberries.setTaste("bitter", 1)
+    Blackberries.setTaste("hot", 1)
+    Blackberries.setUnits("weight")
+    Blackberries.setMeasure("3 ounces")
+
+    Watermelon = Ingredient("watermelon", ing)
+    Watermelon.setTaste("umami", 1)
+    Watermelon.setTaste("salty", 1)
+    Watermelon.setTaste("sweet", 7)
+    Watermelon.setTaste("sour", 2)
+    Watermelon.setTaste("bitter", 1)
+    Watermelon.setTaste("hot", 1)
+    Watermelon.setUnits("weight")
+    Watermelon.setMeasure("3 ounces")
+
+    Honeydew = Ingredient("honeydew", ing)
+    Honeydew.setTaste("umami", 1)
+    Honeydew.setTaste("salty", 1)
+    Honeydew.setTaste("sweet", 8)
+    Honeydew.setTaste("sour", 1)
+    Honeydew.setTaste("bitter", 1)
+    Honeydew.setTaste("hot", 1)
+    Honeydew.setUnits("weight")
+    Honeydew.setMeasure("3 ounces")
+
+    Cantaloupe = Ingredient("cantaloupe", ing)
+    Cantaloupe.setTaste("umami", 1)
+    Cantaloupe.setTaste("salty", 1)
+    Cantaloupe.setTaste("sweet", 8)
+    Cantaloupe.setTaste("sour", 1)
+    Cantaloupe.setTaste("bitter", 1)
+    Cantaloupe.setTaste("hot", 1)
+    Cantaloupe.setUnits("weight")
+    Cantaloupe.setMeasure("3 ounces")
+
+    
+    # Nuts
+    Almonds = Ingredient("almonds", ing)
+    Almonds.setTaste("umami", 3)
+    Almonds.setTaste("salty", 2)
+    Almonds.setTaste("sweet", 2)
+    Almonds.setTaste("sour", 1)
+    Almonds.setTaste("bitter", 1)
+    Almonds.setTaste("hot", 1)
+    Almonds.setUnits("weight")
+    Almonds.setMeasure("1 ounce")
+
+    Cashews = Ingredient("cashews", ing)
+    Cashews.setTaste("umami", 3)
+    Cashews.setTaste("salty", 2)
+    Cashews.setTaste("sweet", 2)
+    Cashews.setTaste("sour", 1)
+    Cashews.setTaste("bitter", 1)
+    Cashews.setTaste("hot", 1)
+    Cashews.setUnits("weight")
+    Cashews.setMeasure("1 ounce")
+
+    Peanuts = Ingredient("peanuts", ing)
+    Peanuts.setTaste("umami", 3)
+    Peanuts.setTaste("salty", 3)
+    Peanuts.setTaste("sweet", 2)
+    Peanuts.setTaste("sour", 1)
+    Peanuts.setTaste("bitter", 1)
+    Peanuts.setTaste("hot", 1)
+    Peanuts.setUnits("weight")
+    Peanuts.setMeasure("1 ounce")
+
+    Pistachios = Ingredient("pistachios", ing)
+    Pistachios.setTaste("umami", 3)
+    Pistachios.setTaste("salty", 3)
+    Pistachios.setTaste("sweet", 2)
+    Pistachios.setTaste("sour", 1)
+    Pistachios.setTaste("bitter", 1)
+    Pistachios.setTaste("hot", 1)
+    Pistachios.setUnits("weight")
+    Pistachios.setMeasure("1 ounce")
+
+    Hazelnuts = Ingredient("hazelnuts", ing)
+    Hazelnuts.setTaste("umami", 3)
+    Hazelnuts.setTaste("salty", 3)
+    Hazelnuts.setTaste("sweet", 3)
+    Hazelnuts.setTaste("sour", 1)
+    Hazelnuts.setTaste("bitter", 1)
+    Hazelnuts.setTaste("hot", 1)
+    Hazelnuts.setUnits("weight")
+    Hazelnuts.setMeasure("1 ounce")
+
+    Walnuts = Ingredient("walnuts", ing)
+    Walnuts.setTaste("umami", 3)
+    Walnuts.setTaste("salty", 1)
+    Walnuts.setTaste("sweet", 1)
+    Walnuts.setTaste("sour", 1)
+    Walnuts.setTaste("bitter", 1)
+    Walnuts.setTaste("hot", 1)
+    Walnuts.setUnits("weight")
+    Walnuts.setMeasure("1 ounce")
+
+    Pecans = Ingredient("pecans", ing)
+    Pecans.setTaste("umami", 3)
+    Pecans.setTaste("salty", 3)
+    Pecans.setTaste("sweet", 4)
+    Pecans.setTaste("sour", 1)
+    Pecans.setTaste("bitter", 1)
+    Pecans.setTaste("hot", 1)
+    Pecans.setUnits("weight")
+    Pecans.setMeasure("1 ounce")
+
+    Chestnuts = Ingredient("chestnuts", ing)
+    Chestnuts.setTaste("umami", 3)
+    Chestnuts.setTaste("salty", 3)
+    Chestnuts.setTaste("sweet", 2)
+    Chestnuts.setTaste("sour", 1)
+    Chestnuts.setTaste("bitter", 1)
+    Chestnuts.setTaste("hot", 1)
+    Chestnuts.setUnits("weight")
+    Chestnuts.setMeasure("1 ounce")
+
+    PineNuts = Ingredient("pine nuts", ing)
+    PineNuts.setTaste("umami", 3)
+    PineNuts.setTaste("salty", 3)
+    PineNuts.setTaste("sweet", 2)
+    PineNuts.setTaste("sour", 1)
+    PineNuts.setTaste("bitter", 1)
+    PineNuts.setTaste("hot", 1)
+    PineNuts.setUnits("weight")
+    PineNuts.setMeasure("1 ounce")
+
+    Macadamia = Ingredient("macadamia nuts", ing)
+    Macadamia.setTaste("umami", 3)
+    Macadamia.setTaste("salty", 3)
+    Macadamia.setTaste("sweet", 2)
+    Macadamia.setTaste("sour", 1)
+    Macadamia.setTaste("bitter", 1)
+    Macadamia.setTaste("hot", 1)
+    Macadamia.setUnits("weight")
+    Macadamia.setMeasure("1 ounce")
+
+    #STILL NEED TO FILL IN THE SECTION BELOW THESE
+
+    # Oils
+    PeanutOil = Ingredient("peanut oil", ing)
+    PeanutOil.setTaste("umami", 3)
+    PeanutOil.setTaste("salty", 1)
+    PeanutOil.setTaste("sweet", 1)
+    PeanutOil.setTaste("sour", 1)
+    PeanutOil.setTaste("bitter", 1)
+    PeanutOil.setTaste("hot", 1)
+    PeanutOil.setUnits("volume")
+    PeanutOil.setMeasure("1 teaspoon")
+
+
+    OliveOil = Ingredient("olive oil", ing)
+    OliveOil.setTaste("umami", 3)
+    OliveOil.setTaste("salty", 1)
+    OliveOil.setTaste("sweet", 1)
+    OliveOil.setTaste("sour", 1)
+    OliveOil.setTaste("bitter", 1)
+    OliveOil.setTaste("hot", 1)
+    OliveOil.setUnits("volume")
+    OliveOil.setMeasure("1 teaspoon")
+
+    SafflowerOil = Ingredient("safflower oil", ing)
+    SafflowerOil.setTaste("umami", 3)
+    SafflowerOil.setTaste("salty", 1)
+    SafflowerOil.setTaste("sweet", 1)
+    SafflowerOil.setTaste("sour", 1)
+    SafflowerOil.setTaste("bitter", 2)
+    SafflowerOil.setTaste("hot", 1)
+    SafflowerOil.setUnits("volume")
+    SafflowerOil.setMeasure("1 teaspoon")
+
+    CanolaOil = Ingredient("canola oil", ing)
+    CanolaOil.setTaste("umami", 3)
+    CanolaOil.setTaste("salty", 1)
+    CanolaOil.setTaste("sweet", 1)
+    CanolaOil.setTaste("sour", 1)
+    CanolaOil.setTaste("bitter", 1)
+    CanolaOil.setTaste("hot", 0)
+    CanolaOil.setUnits("volume")
+    CanolaOil.setMeasure("1 teaspoon")
+
+    VegetableOil = Ingredient("vegetable oil", ing)
+    VegetableOil.setTaste("umami", 3)
+    VegetableOil.setTaste("salty", 1)
+    VegetableOil.setTaste("sweet", 1)
+    VegetableOil.setTaste("sour", 1)
+    VegetableOil.setTaste("bitter", 1)
+    VegetableOil.setTaste("hot", 0)
+    VegetableOil.setUnits("volume")
+    VegetableOil.setMeasure("1 teaspoon")
+
+    WalnutOil = Ingredient("walnut oil", ing)
+    WalnutOil.setTaste("umami", 3)
+    WalnutOil.setTaste("salty", 1)
+    WalnutOil.setTaste("sweet", 1)
+    WalnutOil.setTaste("sour", 1)
+    WalnutOil.setTaste("bitter", 1)
+    WalnutOil.setTaste("hot", 0)
+    WalnutOil.setUnits("volume")
+    WalnutOil.setMeasure("1 teaspoon")
+
+    SesameOil = Ingredient("sesame oil", ing)
+    SesameOil.setTaste("umami", 3)
+    SesameOil.setTaste("salty", 2)
+    SesameOil.setTaste("sweet", 1)
+    SesameOil.setTaste("sour", 1)
+    SesameOil.setTaste("bitter", 1)
+    SesameOil.setTaste("hot", 0)
+    SesameOil.setUnits("volume")
+    SesameOil.setMeasure("1 teaspoon")
+
+
+    # Broth
+    ChickenBoullion = Ingredient("chicken boullion", ing)
+    ChickenBoullion.setTaste("umami", 6)
+    ChickenBoullion.setTaste("salty", 1)
+    ChickenBoullion.setTaste("sweet", 3)
+    ChickenBoullion.setTaste("sour", 3)
+    ChickenBoullion.setTaste("bitter", 1)
+    ChickenBoullion.setTaste("hot", 1)
+    ChickenBoullion.setUnits("volume")
+    ChickenBoullion.setMeasure("3 cups")
+
+    ChickenBroth = Ingredient("chicken broth", ing)
+    ChickenBroth.setTaste("umami", 6)
+    ChickenBroth.setTaste("salty", 7)
+    ChickenBroth.setTaste("sweet", 3)
+    ChickenBroth.setTaste("sour", 3)
+    ChickenBroth.setTaste("bitter", 1)
+    ChickenBroth.setTaste("hot", 1)
+    ChickenBroth.setUnits("volume")
+    ChickenBroth.setMeasure("3 cups")
+
+    BeefBoullion = Ingredient("beef boullion", ing)
+    BeefBoullion.setTaste("umami", 6)
+    BeefBoullion.setTaste("salty", 7)
+    BeefBoullion.setTaste("sweet", 3)
+    BeefBoullion.setTaste("sour", 3)
+    BeefBoullion.setTaste("bitter", 1)
+    BeefBoullion.setTaste("hot", 1)
+    BeefBoullion.setUnits("volume")
+    BeefBoullion.setMeasure("3 cups")
+
+    BeefBroth = Ingredient("beef broth", ing)
+    BeefBroth.setTaste("umami", 6)
+    BeefBroth.setTaste("salty", 7)
+    BeefBroth.setTaste("sweet", 3)
+    BeefBroth.setTaste("sour", 3)
+    BeefBroth.setTaste("bitter", 1)
+    BeefBroth.setTaste("hot", 1)
+    BeefBroth.setUnits("volume")
+    BeefBroth.setMeasure("3 cups")
+
+    VegetableBoullion = Ingredient("vegetable boullion", ing)
+    VegetableBoullion.setTaste("umami", 6)
+    VegetableBoullion.setTaste("salty", 7)
+    VegetableBoullion.setTaste("sweet", 3)
+    VegetableBoullion.setTaste("sour", 3)
+    VegetableBoullion.setTaste("bitter", 1)
+    VegetableBoullion.setTaste("hot", 1)
+    VegetableBoullion.setUnits("volume")
+    VegetableBoullion.setMeasure("3 cups")
+
+    VegetableBroth = Ingredient("vegetable broth", ing)
+    VegetableBroth.setTaste("umami", 5)
+    VegetableBroth.setTaste("salty", 7)
+    VegetableBroth.setTaste("sweet", 3)
+    VegetableBroth.setTaste("sour", 3)
+    VegetableBroth.setTaste("bitter", 1)
+    VegetableBroth.setTaste("hot", 1)
+    VegetableBroth.setUnits("volume")
+    VegetableBroth.setMeasure("3 cups")
+
+    FishBoullion = Ingredient("fish boullion", ing)
+    FishBoullion.setTaste("umami", 6)
+    FishBoullion.setTaste("salty", 7)
+    FishBoullion.setTaste("sweet", 3)
+    FishBoullion.setTaste("sour", 3)
+    FishBoullion.setTaste("bitter", 1)
+    FishBoullion.setTaste("hot", 1)
+    FishBoullion.setUnits("volume")
+    FishBoullion.setMeasure("3 cups")
+
+    FishBroth = Ingredient("fish broth", ing)
+    FishBroth.setTaste("umami", 6)
+    FishBroth.setTaste("salty", 7)
+    FishBroth.setTaste("sweet", 3)
+    FishBroth.setTaste("sour", 3)
+    FishBroth.setTaste("bitter", 1)
+    FishBroth.setTaste("hot", 1)
+    FishBroth.setUnits("volume")
+    FishBroth.setMeasure("3 cups")
+
+
+    # Stock
+    ChickenStock = Ingredient("chicken stock", ing)
+    ChickenStock.setTaste("umami", 2)
+    ChickenStock.setTaste("salty", 4)
+    ChickenStock.setTaste("sweet", 3)
+    ChickenStock.setTaste("sour", 4)
+    ChickenStock.setTaste("bitter", 1)
+    ChickenStock.setTaste("hot", 1)
+    ChickenStock.setUnits("weight")
+    ChickenStock.setMeasure("8 ounces")
+
+    BeefStock = Ingredient("beef stock", ing)
+    BeefStock.setTaste("umami", 6)
+    BeefStock.setTaste("salty", 5)
+    BeefStock.setTaste("sweet", 2)
+    BeefStock.setTaste("sweet", 7)
+    BeefStock.setTaste("sour", 2)
+    BeefStock.setTaste("bitter", 1)
+    BeefStock.setTaste("hot", 1)
+    BeefStock.setUnits("weight")
+    BeefStock.setMeasure("8 ounces")
+
+    VegetableStock = Ingredient("vegetable stock", ing)
+    VegetableStock.setTaste("umami", 2)
+    VegetableStock.setTaste("salty", 3)
+    VegetableStock.setTaste("sweet", 3)
+    VegetableStock.setTaste("sour", 4)
+    VegetableStock.setTaste("bitter", 1)
+    VegetableStock.setTaste("hot", 1)
+    VegetableStock.setUnits("weight")
+    VegetableStock.setMeasure("8 ounces")
+
+    FishStock = Ingredient("fish stock", ing)
+    Fish.setTaste("umami", 3)
+    Fish.setTaste("salty", 6)
+    Fish.setTaste("sweet", 4)
+    Fish.setTaste("sour", 8)
+    Fish.setTaste("bitter", 2)
+    Fish.setTaste("hot", 1)
+    Fish.setUnits("weight")
+    Fish.setMeasure("8 ounces")
+
+    LobsterStock = Ingredient("lobster stock", ing)
+    Lobster.setTaste("umami", 3)
+    Lobster.setTaste("salty", 6)
+    Lobster.setTaste("sweet", 4)
+    Lobster.setTaste("sour", 8)
+    Lobster.setTaste("bitter", 2)
+    Lobster.setTaste("hot", 1)
+    Lobster.setUnits("weight")
+    Lobster.setMeasure("6 ounces")
+
+
+    # Wine
+    RedWine = Ingredient("red wine", ing)
+    RedWine.setTaste("umami", 1)
+    RedWine.setTaste("salty", 1)
+    RedWine.setTaste("sweet", 4)
+    RedWine.setTaste("sour", 3)
+    RedWine.setTaste("bitter", 1)
+    RedWine.setTaste("hot", 1)
+    RedWine.setUnits("volume")
+    RedWine.setMeasure("1/2 cup")
+
+
+    WhiteWine = Ingredient("white wine", ing)
+    WhiteWine.setTaste("umami", 1)
+    WhiteWine.setTaste("salty", 1)
+    WhiteWine.setTaste("sweet", 5)
+    WhiteWine.setTaste("sour", 3)
+    WhiteWine.setTaste("bitter", 1)
+    WhiteWine.setTaste("hot", 1)
+    WhiteWine.setUnits("volume")
+    WhiteWine.setMeasure("1/2 cup")
+
+
+    Cabernet = Ingredient("cabernet", ing)
+    Cabernet.setTaste("umami", 1)
+    Cabernet.setTaste("salty", 1)
+    Cabernet.setTaste("sweet", 3)
+    Cabernet.setTaste("sour", 3)
+    Cabernet.setTaste("bitter", 1)
+    Cabernet.setTaste("hot", 1)
+    Cabernet.setUnits("volume")
+    Cabernet.setMeasure("1/2 cup")
+
+    Beaujolais = Ingredient("beaujolais", ing)
+    Beaujolais.setTaste("umami", 1)
+    Beaujolais.setTaste("salty", 1)
+    Beaujolais.setTaste("sweet", 4)
+    Beaujolais.setTaste("sour", 3)
+    Beaujolais.setTaste("bitter", 1)
+    Beaujolais.setTaste("hot", 1)
+    Beaujolais.setUnits("volume")
+    Beaujolais.setMeasure("1/2 cup")
+
+    Malbec = Ingredient("malbec", ing)
+    Malbec.setTaste("umami", 1)
+    Malbec.setTaste("salty", 1)
+    Malbec.setTaste("sweet", 4)
+    Malbec.setTaste("sour", 3)
+    Malbec.setTaste("bitter", 1)
+    Malbec.setTaste("hot", 1)
+    Malbec.setUnits("volume")
+    Malbec.setMeasure("1/2 cup")
+
+    Merlot = Ingredient("merlot", ing)
+    Merlot.setTaste("umami", 1)
+    Merlot.setTaste("salty", 1)
+    Merlot.setTaste("sweet", 4)
+    Merlot.setTaste("sour", 3)
+    Merlot.setTaste("bitter", 1)
+    Merlot.setTaste("hot", 1)
+    Merlot.setUnits("volume")
+    Merlot.setMeasure("1/2 cup")
+
+    PinotNoir = Ingredient("pinot noir", ing)
+    PinotNoir.setTaste("umami", 1)
+    PinotNoir.setTaste("salty", 1)
+    PinotNoir.setTaste("sweet", 4)
+    PinotNoir.setTaste("sour", 3)
+    PinotNoir.setTaste("bitter", 1)
+    PinotNoir.setTaste("hot", 1)
+    PinotNoir.setUnits("volume")
+    PinotNoir.setMeasure("1/2 cup")
+
+    Syrah = Ingredient("syrah", ing)
+    Syrah.setTaste("umami", 1)
+    Syrah.setTaste("salty", 1)
+    Syrah.setTaste("sweet", 4)
+    Syrah.setTaste("sour", 3)
+    Syrah.setTaste("bitter", 1)
+    Syrah.setTaste("hot", 1)
+    Syrah.setUnits("volume")
+    Syrah.setMeasure("1/2 cup")
+
+    Shiraz = Ingredient("shiraz", ing)
+    Shiraz.setTaste("umami", 1)
+    Shiraz.setTaste("salty", 1)
+    Shiraz.setTaste("sweet", 4)
+    Shiraz.setTaste("sour", 3)
+    Shiraz.setTaste("bitter", 1)
+    Shiraz.setTaste("hot", 1)
+    Shiraz.setUnits("volume")
+    Shiraz.setMeasure("1/2 cup")
+
+    Zinfandel = Ingredient("zinfandel", ing)
+    Zinfandel.setTaste("umami", 1)
+    Zinfandel.setTaste("salty", 1)
+    Zinfandel.setTaste("sweet", 4)
+    Zinfandel.setTaste("sour", 3)
+    Zinfandel.setTaste("bitter", 1)
+    Zinfandel.setTaste("hot", 1)
+    Zinfandel.setUnits("volume")
+    Zinfandel.setMeasure("1/2 cup")
+
+
+    Chardonnay = Ingredient("chardonnay", ing)
+    Chardonnay.setTaste("umami", 1)
+    Chardonnay.setTaste("salty", 1)
+    Chardonnay.setTaste("sweet", 4)
+    Chardonnay.setTaste("sour", 3)
+    Chardonnay.setTaste("bitter", 1)
+    Chardonnay.setTaste("hot", 1)
+    Chardonnay.setUnits("volume")
+    Chardonnay.setMeasure("1/2 cup")
+
+    Muscat = Ingredient("muscat", ing)
+    Muscat.setTaste("umami", 1)
+    Muscat.setTaste("salty", 1)
+    Muscat.setTaste("sweet", 4)
+    Muscat.setTaste("sour", 3)
+    Muscat.setTaste("bitter", 1)
+    Muscat.setTaste("hot", 1)
+    Muscat.setUnits("volume")
+    Muscat.setMeasure("1/2 cup")
+
+    PinotBlanc = Ingredient("pinot blanc", ing)
+    PinotBlanc.setTaste("umami", 1)
+    PinotBlanc.setTaste("salty", 1)
+    PinotBlanc.setTaste("sweet", 4)
+    PinotBlanc.setTaste("sour", 3)
+    PinotBlanc.setTaste("bitter", 1)
+    PinotBlanc.setTaste("hot", 1)
+    PinotBlanc.setUnits("volume")
+    PinotBlanc.setMeasure("1/2 cup")
+
+    PinotGrigio = Ingredient("pinot grigio", ing)
+    PinotGrigio.setTaste("umami", 1)
+    PinotGrigio.setTaste("salty", 1)
+    PinotGrigio.setTaste("sweet", 4)
+    PinotGrigio.setTaste("sour", 3)
+    PinotGrigio.setTaste("bitter", 1)
+    PinotGrigio.setTaste("hot", 1)
+    PinotGrigio.setUnits("volume")
+    PinotGrigio.setMeasure("1/2 cup")
+
+    Riesling = Ingredient("riesling", ing)
+    Riesling.setTaste("umami", 1)
+    Riesling.setTaste("salty", 1)
+    Riesling.setTaste("sweet", 4)
+    Riesling.setTaste("sour", 3)
+    Riesling.setTaste("bitter", 1)
+    Riesling.setTaste("hot", 1)
+    Riesling.setUnits("volume")
+    Riesling.setMeasure("1/2 cup")
+
+    Sauvignon = Ingredient("sauvignon", ing)
+    Sauvignon.setTaste("umami", 1)
+    Sauvignon.setTaste("salty", 1)
+    Sauvignon.setTaste("sweet", 4)
+    Sauvignon.setTaste("sour", 3)
+    Sauvignon.setTaste("bitter", 1)
+    Sauvignon.setTaste("hot", 1)
+    Sauvignon.setUnits("volume")
+    Sauvignon.setMeasure("1/2 cup")
+
+
+    # Dairy
+    Milk = Ingredient("milk", ing)
+    Milk.setTaste("umami", 1)
+    Milk.setTaste("salty", 1)
+    Milk.setTaste("sweet", 4)
+    Milk.setTaste("sour", 1)
+    Milk.setTaste("bitter", 1)
+    Milk.setTaste("hot", 1)
+    Milk.setUnits("volume")
+    Milk.setMeasure("1 cup")
+
+
+    Cream = Ingredient("cream", ing)
+    Cream.setTaste("umami", 1)
+    Cream.setTaste("salty", 1)
+    Cream.setTaste("sweet", 2)
+    Cream.setTaste("sour", 2)
+    Cream.setTaste("bitter", 1)
+    Cream.setTaste("hot", 1)
+    Cream.setUnits("weight")
+    Cream.setMeasure("3 ounces")
+
+    Cheese = Ingredient("cheese", ing)
+    Cheese.setTaste("umami", 1)
+    Cheese.setTaste("salty", 2)
+    Cheese.setTaste("sweet", 2)
+    Cheese.setTaste("sour", 2)
+    Cheese.setTaste("bitter", 1)
+    Cheese.setTaste("hot", 1)
+    Cheese.setUnits("weight")
+    Cheese.setMeasure("3 ounces")
+
+    Butter = Ingredient("butter", ing)
+    Butter.setTaste("umami", 1)
+    Butter.setTaste("salty", 2)
+    Butter.setTaste("sweet", 1)
+    Butter.setTaste("sour", 2)
+    Butter.setTaste("bitter", 1)
+    Butter.setTaste("hot", 1)
+    Butter.setUnits("weight")
+    Butter.setMeasure("2 ounces")
+
+    Ghee = Ingredient("ghee", ing)
+    Ghee.setTaste("umami", 1)
+    Ghee.setTaste("salty", 1)
+    Ghee.setTaste("sweet", 3)
+    Ghee.setTaste("sour", 1)
+    Ghee.setTaste("bitter", 1)
+    Ghee.setTaste("hot", 1)
+    Ghee.setUnits("weight")
+    Ghee.setMeasure("2 ounces")
+
+    Yogurt = Ingredient("yogurt", ing)
+    Yogurt.setTaste("umami", 1)
+    Yogurt.setTaste("salty", 1)
+    Yogurt.setTaste("sweet", 4)
+    Yogurt.setTaste("sour", 3)
+    Yogurt.setTaste("bitter", 1)
+    Yogurt.setTaste("hot", 1)
+    Yogurt.setUnits("weight")
+    Yogurt.setMeasure("3 ounces")
+
+
+    GreekYogurt = Ingredient("greek yogurt", ing)
+    GreekYogurt.setTaste("umami", 1)
+    GreekYogurt.setTaste("salty", 1)
+    GreekYogurt.setTaste("sweet", 3)
+    GreekYogurt.setTaste("sour", 3)
+    GreekYogurt.setTaste("bitter", 1)
+    GreekYogurt.setTaste("hot", 1)
+    GreekYogurt.setUnits("weight")
+    GreekYogurt.setMeasure("3 ounces")
+
+    PlainYogurt = Ingredient("plain yogurt", ing)
+    PlainYogurt.setTaste("umami", 1)
+    PlainYogurt.setTaste("salty", 1)
+    PlainYogurt.setTaste("sweet", 4)
+    PlainYogurt.setTaste("sour", 3)
+    PlainYogurt.setTaste("bitter", 1)
+    PlainYogurt.setTaste("hot", 1)
+    PlainYogurt.setUnits("weight")
+    PlainYogurt.setMeasure("3 ounces")
+
+    FlavoredYogurt = Ingredient("flavored yogurt", ing)
+    FlavoredYogurt.setTaste("umami", 1)
+    FlavoredYogurt.setTaste("salty", 1)
+    FlavoredYogurt.setTaste("sweet", 6)
+    FlavoredYogurt.setTaste("sour", 3)
+    FlavoredYogurt.setTaste("bitter", 1)
+    FlavoredYogurt.setTaste("hot", 1)
+    FlavoredYogurt.setUnits("weight")
+    FlavoredYogurt.setMeasure("3 ounces")
+
+    Kefir = Ingredient("kefir", ing)
+    Kefir.setTaste("umami", 1)
+    Kefir.setTaste("salty", 1)
+    Kefir.setTaste("sweet", 6)
+    Kefir.setTaste("sour", 3)
+    Kefir.setTaste("bitter", 1)
+    Kefir.setTaste("hot", 1)
+    Kefir.setUnits("weight")
+    Kefir.setMeasure("2 ounces")
+
+
+    BlueCheese = Ingredient("blue cheese", ing)
+    BlueCheese.setTaste("umami", 1)
+    BlueCheese.setTaste("salty", 3)
+    BlueCheese.setTaste("sweet", 2)
+    BlueCheese.setTaste("sour", 2)
+    BlueCheese.setTaste("bitter", 1)
+    BlueCheese.setTaste("hot", 1)
+    BlueCheese.setUnits("weight")
+    BlueCheese.setMeasure("3 ounces")
+
+    GoatCheese = Ingredient("goat cheese", ing)
+    GoatCheese.setTaste("umami", 1)
+    GoatCheese.setTaste("salty", 2)
+    GoatCheese.setTaste("sweet", 2)
+    GoatCheese.setTaste("sour", 2)
+    GoatCheese.setTaste("bitter", 1)
+    GoatCheese.setTaste("hot", 1)
+    GoatCheese.setUnits("weight")
+    GoatCheese.setMeasure("3 ounces")
+
+    Cheddar = Ingredient("cheddar", ing)
+    Cheddar.setTaste("umami", 1)
+    Cheddar.setTaste("salty", 2)
+    Cheddar.setTaste("sweet", 2)
+    Cheddar.setTaste("sour", 2)
+    Cheddar.setTaste("bitter", 1)
+    Cheddar.setTaste("hot", 1)
+    Cheddar.setUnits("weight")
+    Cheddar.setMeasure("3 ounces")
+
+    Mozzarella = Ingredient("mozarella", ing)
+    Mozzarella.setTaste("umami", 1)
+    Mozzarella.setTaste("salty", 2)
+    Mozzarella.setTaste("sweet", 2)
+    Mozzarella.setTaste("sour", 2)
+    Mozzarella.setTaste("bitter", 1)
+    Mozzarella.setTaste("hot", 1)
+    Mozzarella.setUnits("weight")
+    Mozzarella.setMeasure("3 ounces")
+
+    Swiss = Ingredient("swiss cheese", ing)
+    Swiss.setTaste("umami", 1)
+    Swiss.setTaste("salty", 3)
+    Swiss.setTaste("sweet", 2)
+    Swiss.setTaste("sour", 2)
+    Swiss.setTaste("bitter", 1)
+    Swiss.setTaste("hot", 1)
+    Swiss.setUnits("weight")
+    Swiss.setMeasure("3 ounces")
+
+    Parmesan = Ingredient("parmesan", ing)
+    Parmesan.setTaste("umami", 1)
+    Parmesan.setTaste("salty", 3)
+    Parmesan.setTaste("sweet", 2)
+    Parmesan.setTaste("sour", 2)
+    Parmesan.setTaste("bitter", 1)
+    Parmesan.setTaste("hot", 1)
+    Parmesan.setUnits("weight")
+    Parmesan.setMeasure("3 ounces")
+
+    Asiago = Ingredient("asiago", ing)
+    Asiago.setTaste("umami", 1)
+    Asiago.setTaste("salty", 2)
+    Asiago.setTaste("sweet", 2)
+    Asiago.setTaste("sour", 2)
+    Asiago.setTaste("bitter", 1)
+    Asiago.setTaste("hot", 1)
+    Asiago.setUnits("weight")
+    Asiago.setMeasure("3 ounces")
+
+    Gorgonzola = Ingredient("gorgonzola", ing)
+    Gorgonzola.setTaste("umami", 1)
+    Gorgonzola.setTaste("salty", 2)
+    Gorgonzola.setTaste("sweet", 2)
+    Gorgonzola.setTaste("sour", 2)
+    Gorgonzola.setTaste("bitter", 1)
+    Gorgonzola.setTaste("hot", 1)
+    Gorgonzola.setUnits("weight")
+    Gorgonzola.setMeasure("3 ounces")
+
+    CreamCheese = Ingredient("cream cheese", ing)
+    CreamCheese.setTaste("umami", 1)
+    CreamCheese.setTaste("salty", 2)
+    CreamCheese.setTaste("sweet", 3)
+    CreamCheese.setTaste("sour", 2)
+    CreamCheese.setTaste("bitter", 1)
+    CreamCheese.setTaste("hot", 1)
+    CreamCheese.setUnits("weight")
+    CreamCheese.setMeasure("3 ounces")
+
+    # putting together heirarchy
+
+    # PROTEIN #######################################################
+
+    Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet, GroundBeef])
+
+    Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet])
+
+    Lamb.addSubType([LambChops, LambLeg, LambRoast, GroundLamb])
+
+    Meat.addSubType([Beef, Pork, Lamb])
+
+    VegProtein.addSubType([Tofu, Seitan, Tempeh])
+
+    Molluscs.addSubType([Clam, Mussel, Octopus, Oyster, Scallop, Squid])
+
+    Crustaceans.addSubType([Crab, Lobster, Shrimp])
+
+    Fish.addSubType([BlueFish, Salmon, WhiteFish, Catfish, Cod, Eel, Haddock, Halibut, Mackerel, Pike,
+                     Pollock, Skate, Snapper, Sole, Swordfish, Tilapia, Trout, Tuna])
+
+    Seafood.addSubType([Molluscs, Crustaceans, Fish])
+
+    Poultry.addSubType([Chicken, Duck, Goose, Eggs, Pigeon, Quail, Turkey, GroundChicken])
+
+    Protein.addSubType([Meat, VegProtein, Seafood, Poultry])
+
+    # PLANTS ######################################
+    Veg.addSubType([Artichokes, Asparagus, GreenBeans, Beets, Broccoli, BrusselsSprouts, Cabbage, CollardGreens, BellPepper,
+                    BananaPepper, Carrots, Celery, Corn, Eggplant, Garlic, Ginger, Horseradish, Kale, Leeks, Lettuce, OysterMushrooms,
+                    ButtonMushrooms, ShiitakeMushrooms, CriminiMushrooms, ChanterelleMushrooms, PortabelloMushrooms, PorciniMushrooms,
+                    MorelMushrooms, Okra, Onions, Peas, Radishes, Shallots, Spinach, AcornSquash, ButternutSquash, SpaghettiSquash,
+                    Tomatoes, GreenTomatoes, Tomatillos, Turnips, Zucchini, Fennel, Avocado, Cauliflower, Cucumber, Potatoes,
+                    SweetPotatoes, Lentils, BlackBeans, PintoBeans])
+
+    Herbs.addSubType([Parsley, Cilantro, Basil, Watercress, Dill, Mint, BayLeaves,
+                      Rosemary, Lavender, Thyme, Chives, Sorrel, Garlic, Horseradish])
+
+    Rice.addSubType([WhiteRice, JasmineRice, BrownRice, BasmatiRice, SushiRice, WildRice])
+    Flour.addSubType([WhiteFlour, WholeWheatFlour, BuckwheatFlour, CousCous, CornFlour])
+    Grain.addSubType([Wheat, Rice, Quinoa, Millet, Teff, Flour, Buckwheat, Barley, Bulghur])
+
+    Berries.addSubType([Strawberries, Raspberries, Blueberries, Blackberries])
+    Melon.addSubType([Watermelon, Honeydew, Cantaloupe])
+    Fruit.addSubType([Apple, Banana, Pear, Grapes, Mango, Peach, Berries, Lemon, Lime, Orange,
+                      Grapefruit, Apricots, Fig, Pineapple, Melon, Nectarines])
+
+    Nuts.addSubType([Almonds, Cashews, Peanuts, Pistachios, Hazelnuts, Walnuts, Pecans, Chestnuts, PineNuts, Macadamia])
+
+    Plants.addSubType([Veg, Herbs, Fruit, Grain, Nuts])
+
+    # SPICES ########################################################
+    ArabSpices.addSubType([Cumin, Cinnamon, Cayenne, BlackPepper, Salt, Sugar, BrownSugar, Paprika, Saffron, Tarragon,
+                           Turmeric, Cardamom, Baharat, Sumac, Zatar])
+    SouthAsianSpices.addSubType([Cayenne, Cinnamon, BlackPepper, Ginger, Salt, Sugar, BrownSugar, Mace, Paprika, Saffron,
+                                 Turmeric, CaromSeeds, Asafoetida, Cardamom, Cumin, Curry, Coriander, ChiliPepper,
+                                 Fenugreek, KaffirLime, Lemongrass])
+    EuroSpices.addSubType([AllSpice, Anise, Mustard, Cayenne, Cinnamon, FennelSeed, BlackPepper, BlackPepper, Salt,
+                           Sugar, BrownSugar, Mace, Nutmeg, Paprika, Paprika, Saffron, Tarragon, Turmeric, Sage, Ginger])
+
+    Spices.addSubType([EuroSpices, EastAsianSpices, SouthAsianSpices, ArabSpices]) # not done with EastAsia; done with others?
+
+    # DAIRY #################################################################
+    Cheese.addSubType([BlueCheese, GoatCheese, Cheddar, Mozzarella, Swiss, Parmesan, Asiago, Gorgonzola, CreamCheese])
+    Yogurt.addSubType([GreekYogurt, PlainYogurt, FlavoredYogurt])
+    Dairy.addSubType([Milk, Cream, Cheese, Butter, Ghee, Yogurt])
+
+    # COOKING MEDIA ######################################################
+    Oils.addSubType([PeanutOil, OliveOil, SafflowerOil, CanolaOil, VegetableOil, WalnutOil, SesameOil])
+
+    Broth.addSubType([ChickenBoullion, ChickenBroth, BeefBoullion, BeefBroth, VegetableBoullion, VegetableBroth, FishBoullion, FishBroth])
+
+    Stock.addSubType([ChickenStock, BeefStock, VegetableStock, FishStock, LobsterStock])
+
+    RedWine.addSubType([Cabernet, Beaujolais, Malbec, Merlot, PinotNoir, Syrah, Shiraz, Zinfandel])
+    WhiteWine.addSubType([Chardonnay, Muscat, PinotBlanc, PinotGrigio, Riesling, Sauvignon])
+    Wine.addSubType([RedWine, WhiteWine])
+
+    CookingMedia.addSubType([Oils, Broth, Stock, Wine, Butter, Ghee])
+    ###########################################
+
+    Ingredients.addSubType([Protein, Plants, Spices, Dairy, CookingMedia])
+    return ing
