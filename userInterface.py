@@ -3,18 +3,19 @@ from parse import *
 from transformer import *
 from ingredientMatcher import *
 from sets import Set
+import pprint
 
 def SwapRecipes():
 
     measures = Set(['tsp', 'teaspoon', 'teaspoons', 'tbsp', 'tbs', 'tablespoon', 'tablespoons',
                     'pinch', 'dash', 'lb', 'lbs', 'pound', 'pounds', 'kg', 'kilo',
-                    'kilos', 'kilograms', 'g', 'gs', 'grams', 'oz', 'ozs', 'ounces',
+                    'kilos', 'kilograms', 'g', 'gs', 'grams', 'oz', 'ozs', "ounce", 'ounces',
                     'c', 'cup', 'cups', 'pint', 'pt', 'pints', 'quart', 'quarts', 'qt',
                     'gal', 'gallon', 'gallons'])
 
     print "so you'd like to mix up a recipe, eh? \n \n \n"
 
-    IngreDict = collectIngredients()
+    IngreDict, implements, methods = collectIngredients()
     
     ingredInput = raw_input("Please give me the ingredients:")
     ingredients = processIngredients(ingredInput, IngreDict, measures)
@@ -25,6 +26,8 @@ def SwapRecipes():
 
     print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
     transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options")
+    while transformation != "veg" and transformation != "style" and transformation != "scale" and transformation != "swap":
+        transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options")
 
     originalFlavor = calculateFlavorScore(ingredients, IngreDict)
     spiceType = "Spices"
@@ -47,10 +50,9 @@ def SwapRecipes():
     #newRecipe, newIngredients = balanceOut(newRecipe, newIngredients, originalFlavor, IngreDict, spiceType)
 
     # we need something to print the recipe...
+    print "here are your new ingredients"
+    pprint.pprint(newIng)
+    print "and your recipe is "
+    print newRecipe
 
     return
-
-def removeKey(d, key):
-    r = dict(d)
-    del r[key]
-    return r

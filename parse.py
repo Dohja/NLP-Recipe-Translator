@@ -1,5 +1,6 @@
 import nltk
 import fractions
+from CookingTerms import Ingredient
 
 def processIngredients(ingText, ingDict, measures):
     ingredients = {}
@@ -27,11 +28,10 @@ def processOneIngredient(ing, ingDict, allIng, measures):
     tokens = nltk.PunktWordTokenizer().tokenize(ing)
     if tokens == []: return allIng
     else:
-        
-        desc, name, prep = extractIngredient(tokens, ingDict)
         num, units = extractQM(tokens, ingDict, measures)
+        desc, name, prep = extractIngredient(tokens, ingDict, units)
         weight = calculateWeight(name, ingDict, num, units)
-
+        
     allIng[name] = {"name": name,
                     "weight": weight,
                     "quantity": num,
@@ -45,11 +45,12 @@ def extractQM(words, inDict, measures):
     quantity = None
     measurement = None
     for i in range(len(words)):
-        if type(words[i]) == int or type(words[i]) == float:
-            quantity = words[i]
-        if words[i] in measures and words[i-1] == quantity:
-            measurement = words[i]
-            break
+        if isNumber(words[i]):
+            quantity = convertToNum(words[i])
+        if words[i] in measures:
+            if isNumber(words[i-1]) and quantity == convertToNum(words[i-1]):
+                measurement = words[i]
+                break
 
             ### this allows us to account for parentheticals, such that 1 (4.5 ounce) can mushrooms
             ### outputs 4.5 ounce as its amount and unit, and can becomes part of the description
@@ -57,9 +58,30 @@ def extractQM(words, inDict, measures):
         
     return [quantity, measurement]
 
-def extractIngredient(tokens, ingDict):
+def isNumber(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        try:
+            float(string[0])
+            return True
+        except ValueError:
+            return False
+
+def convertToNum(string):
+    try:
+        num = float(string)
+        return num
+    except ValueError:
+        return float(string[0]) / float(string[2])
+
+def extractIngredient(tokens, ingDict, units):
     descriptor = None
     prep = None
+    if units != None:
+        tokens = tokens[tokens.index(units) + 1:]
+        if tokens[0] == ')': tokens = tokens[1:]
     name = " ".join(tokens)
     for i in range(len(tokens)):
         descriptor = " ".join(tokens[:i])
@@ -83,11 +105,15 @@ def substringer(words):
     return out
 
 def calculateWeight(name, ingDict, amount, unit):
-    std = ingDict[name].stdMeasure.split()
-    stdAmt = float(std[0])
-    stdU = std[1]
-    if stdU == unit: return amount/std
-    else: return convertWeight(amount, unit, std, stdU)
+    if name in ingDict.keys():
+        std = ingDict[name].stdMeasure.split()
+        stdAmt = convertToNum(std[0])
+        stdU = " ".join(std[1:])
+        if stdU == unit: return amount/stdAmt
+        else: return convertWeight(amount, unit, stdAmt, stdU)
+    else:
+        new = Ingredient(name, ingDict)
+        return 1
 
 def convertWeight(amount, unit, stdAmt, stdUnit):
     if amount == 0: return 0
@@ -150,7 +176,7 @@ def convertWeight(amount, unit, stdAmt, stdUnit):
             return 35.274 * amount / stdAmt
         elif unit in ['g', 'gs', 'grams']:
             return 0.35 * amount / stdAmt
-        elif unit in ['oz', 'ozs', 'ounces']:
+        elif unit in ['oz', 'ozs', "ounce", 'ounces']:
             return amount/stdAmt
         else:
             print "we can't easily convert from " + unit + " to " + stdUnit
@@ -162,7 +188,7 @@ def convertWeight(amount, unit, stdAmt, stdUnit):
             return 2.2 * amount / stdAmt
         elif unit in ['g', 'gs', 'grams']:
             return 0.0035 * amount / stdAmt
-        elif unit in ['oz', 'ozs', 'ounces']:
+        elif unit in ['oz', 'ozs', "ounce", 'ounces']:
             return (amount/stdAmt) / 16
         else:
             print "we can't easily convert from " + unit + " to " + stdUnit
@@ -174,7 +200,7 @@ def convertWeight(amount, unit, stdAmt, stdUnit):
             return amount / stdAmt
         elif unit in ['g', 'gs', 'grams']:
             return (amount / stdAmt) / 1000
-        elif unit in ['oz', 'ozs', 'ounces']:
+        elif unit in ['oz', 'ozs', "ounce", 'ounces']:
             return 0.028 * amount / stdAmt
         else:
             print "we can't easily convert from " + unit + " to " + stdUnit
@@ -186,8 +212,9 @@ def convertWeight(amount, unit, stdAmt, stdUnit):
             return 1000 * amount / stdAmt
         elif unit in ['g', 'gs', 'grams']:
             return amount / stdAmt
-        elif unit in ['oz', 'ozs', 'ounces']:
+        elif unit in ['oz', 'ozs', "ounce", 'ounces']:
             return 28.35 * amount / stdAmt
         else:
             print "we can't easily convert from " + unit + " to " + stdUnit
             return 1
+    else: return 1

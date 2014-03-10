@@ -1,20 +1,18 @@
 from sets import Set
 
-
-
 class Ingredient():
     def __init__(self, name, dict):
         self.name = name
         self.subTypes = []
         self.superTypes = []
-        self.stdMeasure = None
+        self.stdMeasure = "1 count"
         self.sweet = None
         self.sour = None
         self.bitter = None
         self.salty = None
         self.umami = None
         self.hot = None # hot meaning spicy
-        self.units = None # is this a measured ingredient or a counted ingredient?
+        self.units = "count" # is this a measured ingredient or a counted ingredient?
         dict[name] = self
 
     def addSubType(self, group):
@@ -107,7 +105,25 @@ def collectIngredients():
 
     # types of meat
     Beef = Ingredient("beef", ing)
+    Beef.setTaste("umami", 6)
+    Beef.setTaste("salty", 5)
+    Beef.setTaste("sweet", 2)
+    Beef.setTaste("sour", 3)
+    Beef.setTaste("bitter", 1)
+    Beef.setTaste("hot", 1)
+    Beef.setUnits("weight")
+    Beef.setMeasure("8 ounces")
+    
     Pork = Ingredient("pork", ing)
+    Pork.setTaste("umami", 7)
+    Pork.setTaste("salty", 4)
+    Pork.setTaste("sweet", 2)
+    Pork.setTaste("sour", 2)
+    Pork.setTaste("bitter", 1)
+    Pork.setTaste("hot", 1)
+    Pork.setUnits("weight")
+    Pork.setMeasure("8 ounces")
+    
     Lamb = Ingredient("lamb", ing)
 
     # types of beef
@@ -164,7 +180,17 @@ def collectIngredients():
     VealCutlet.setMeasure("8 ounces")
 
 
-    GroundBeef = Ingredient("hamburger", ing)
+    Hamburger = Ingredient("hamburger", ing)
+    Hamburger.setTaste("umami", 7)
+    Hamburger.setTaste("salty", 6)
+    Hamburger.setTaste("sweet", 1)
+    Hamburger.setTaste("sour", 2)
+    Hamburger.setTaste("bitter", 2)
+    Hamburger.setTaste("hot", 1)
+    Hamburger.setUnits("weight")
+    Hamburger.setMeasure("8 ounces")
+
+    GroundBeef = Ingredient("ground beef", ing)
     GroundBeef.setTaste("umami", 7)
     GroundBeef.setTaste("salty", 6)
     GroundBeef.setTaste("sweet", 1)
@@ -193,8 +219,7 @@ def collectIngredients():
     PorkChops.setTaste("bitter", 1)
     PorkChops.setTaste("hot", 1)
     PorkChops.setUnits("count")
-    PorkChops.setMeasure(1)
-
+    PorkChops.setMeasure("1 pork chop")
 
     PorkRoast = Ingredient("pork roast", ing)
     PorkRoast.setTaste("umami", 7)
@@ -215,7 +240,7 @@ def collectIngredients():
     PorkCutlet.setTaste("bitter", 1)
     PorkCutlet.setTaste("hot", 1)
     PorkCutlet.setUnits("count")
-    PorkCutlet.setMeasure(1) 
+    PorkCutlet.setMeasure("1 pork cutlet") 
 
     # types of lamb
     LambChops = Ingredient("lamb chops", ing)
@@ -580,7 +605,7 @@ def collectIngredients():
     Oyster.setTaste("bitter", 2)
     Oyster.setTaste("hot", 1)
     Oyster.setUnits("count")
-    Oyster.setMeasure(1)
+    Oyster.setMeasure("1 oyster")
 
 
     Scallop = Ingredient("scallop", ing)
@@ -2823,6 +2848,9 @@ def collectIngredients():
     # putting together heirarchy
 
     # PROTEIN #######################################################
+    Protein.addSubType([Meat, VegProtein, Seafood, Poultry])
+
+    Meat.addSubType([Beef, Pork, Lamb, Poultry])
 
     Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet, GroundBeef])
 
@@ -2830,9 +2858,9 @@ def collectIngredients():
 
     Lamb.addSubType([LambChops, LambLeg, LambRoast, GroundLamb])
 
-    Meat.addSubType([Beef, Pork, Lamb])
-
     VegProtein.addSubType([Tofu, Seitan, Tempeh])
+
+    Seafood.addSubType([Molluscs, Crustaceans, Fish])
 
     Molluscs.addSubType([Clam, Mussel, Octopus, Oyster, Scallop, Squid])
 
@@ -2842,11 +2870,7 @@ def collectIngredients():
                      Halibut, Mackerel, Pike, Pollock, Skate, Snapper, Sole,
                      Swordfish, Tilapia, Trout, Tuna])
 
-    Seafood.addSubType([Molluscs, Crustaceans, Fish])
-
     Poultry.addSubType([Chicken, Duck, Goose, Eggs, Pigeon, Quail, Turkey, GroundChicken])
-
-    Protein.addSubType([Meat, VegProtein, Seafood, Poultry])
 
     # PLANTS ######################################
 
@@ -2888,6 +2912,9 @@ def collectIngredients():
     Spices.addSubType([BlackPepper, Cumin, Cinnamon, Cayenne, Salt, Sugar, BrownSugar, Paprika, Saffron, Tarragon,
                        Turmeric, Cardamom, Baharat, Sumac, Zatar, Ginger, Mace, Saffron, CaromSeeds, Asafoetida, Curry, Coriander,
                        ChiliPepper,Fenugreek, KaffirLime, Lemongrass, AllSpice, Anise, Mustard, FennelSeed, Nutmeg, Sage]) # not done with EastAsia; done with others?
+    Flavors = Ingredient("Flavors", ing)
+    Flavors.addSubType([ArabFlavors, SouthAsianFlavors, EastAsianFlavors, EuroFlavors])
+
 
     HerbsAndSpices = Ingredient("HerbsAndSpices", ing)
     HerbsAndSpices.addSubType([Spices, Herbs])
@@ -2912,4 +2939,8 @@ def collectIngredients():
     ###########################################
 
     Ingredients.addSubType([Protein, Plants, Spices, Dairy, CookingMedia])
-    return ing
+
+    implements = ["whisk", "frying pan"] ## TED FILL THIS OUT
+    methods = [] # TED FILL THIS OUT
+    
+    return [ing, implements, methods]
