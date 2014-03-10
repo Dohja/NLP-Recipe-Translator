@@ -2,13 +2,17 @@ import random
 import CookingTerms
 from math import fabs
 
-def calculateFlavorScore(ingredients):
+def calculateFlavorScore(ingredients, ingreDict):
 
     score = {"sweet": 0, "salty": 0, "sour": 0, "bitter": 0, "umami": 0, "hot": 0}
 
     for ing in ingredients:
-        for taste in ["sweet", "salty", "sour", "bitter", "umami", "hot"]:
-            score[taste] += ing.taste * ingredients[ing]["weight"]
+        score["sweet"] += ingreDict[ing].sweet * ingredients[ing]["weight"]
+        score["salty"] += ingreDict[ing].salty * ingredients[ing]["weight"]
+        score["sour"] += ingreDict[ing].sour * ingredients[ing]["weight"]
+        score["bitter"] += ingreDict[ing].bitter * ingredients[ing]["weight"]
+        score["umami"] += ingreDict[ing].umami * ingredients[ing]["weight"]
+        score["hot"] += ingreDict[ing].hot * ingredients[ing]["weight"]
 
     return score
 

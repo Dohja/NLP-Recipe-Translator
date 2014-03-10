@@ -3,66 +3,95 @@ import fractions
 
 def processIngredients(ingText, ingDict, measures):
     ingredients = {}
-    ### ingredients will come in looking something like:
-        ##"""1 tablespoon soy sauce
-        ##2 tablespoons vegetable oil
-        ##1 tablespoon Worcestershire sauce
-        ##1 teaspoon lemon juice
-        ##2 tablespoons brown sugar
-        ##2 tablespoons ketchup
-        ##6 pork chops, trimmed"""
+    # Ingredients will look something like this
+##    4 skinless, boneless chicken breast halves
+##    cayenne pepper, or to taste
+##    salt
+##    ground black pepper to taste
+##    all-purpose flour for dredging
+##    2 tablespoons olive oil
+##    1 tablespoon capers, drained
+##    1/2 cup white wine
+##    1/4 cup fresh lemon juice
+##    1/4 cup water
+##    3 tablespoons cold unsalted butter, cut in
+##    1/4-inch slices
+##    2 tablespoons fresh Italian parsley, chopped
     ingList = ingText.split('\n')
     for ingredient in ingList:
         ingredients = processOneIngredient(ingredient, ingDict, ingredients, measures)
     return ingredients
 
 def processOneIngredient(ing, ingDict, allIng, measures):
+    solution = {}
     tokens = nltk.PunktWordTokenizer().tokenize(ing)
     if tokens == []: return allIng
-    if tokens[1] == '(':
-        closeParen = tokens.index(')')# for parenthetical measures, which we prefer over the count measure
-        tokens = tokens[2:closeParen] + tokens[closeParen + 1:] # just remove the parens and the things immediately around them
-        # 1 (15 ounce) can artichoke hearts therefore becomes simply 15 ounce artichoke hearts
-    number = float(fractions.Fraction(tokens[0])) # float-enize everything, including fractions such as 2/3
-    units = "count" # default; if it's not a measure, it's a count
-    if tokens[1] in measures:
-        units = tokens[1]
-    preparation = "" # default: no prep
-    if ',' in tokens:
-        index = tokens.index(',')
-        preparation = " ".join(tokens[i] for i in range(index + 1, len(tokens)))
-    else: index = len(tokens)-1
-
-    if units == "count": startAt = 1
-    else: startAt = 2
-    descriptor, name = extractIngredient(tokens[startAt:index], ingDict)
-
-    weight = calculateWeight(name, ingDict, number, units)
+    else:
+        
+        desc, name, prep = extractIngredient(tokens, ingDict)
+        num, units = extractQM(tokens, ingDict, measures)
+        weight = calculateWeight(name, ingDict, num, units)
 
     allIng[name] = {"name": name,
                     "weight": weight,
-                    "quantity": number,
+                    "quantity": num,
                     "measurement": units,
-                    "descriptor": descriptor,
-                    "preparation": preparation}
+                    "description": desc,
+                    "preparation": prep}
     return allIng
 
+
+def extractQM(words, inDict, measures):
+    quantity = None
+    measurement = None
+    for i in range(len(words)):
+        if type(words[i]) == int or type(words[i]) == float:
+            quantity = words[i]
+        if words[i] in measures and words[i-1] == quantity:
+            measurement = words[i]
+            break
+
+            ### this allows us to account for parentheticals, such that 1 (4.5 ounce) can mushrooms
+            ### outputs 4.5 ounce as its amount and unit, and can becomes part of the description
+            ### it will also cut off the program after 1 tbsp but not the above
+        
+    return [quantity, measurement]
+
 def extractIngredient(tokens, ingDict):
-    descriptor = ""
-    name = ""
+    descriptor = None
+    prep = None
+    name = " ".join(tokens)
     for i in range(len(tokens)):
         descriptor = " ".join(tokens[:i])
-        name = " ".join(tokens[i:])
-        if name in ingDict.keys(): break
-    return [descriptor, name]
+        nameables = substringer(tokens[i:]) # ingredients that start with this word
+        matches = [names for names in nameables if names in ingDict.keys()]
+        if len(matches) > 0:
+            name = matches.pop()
+            lastNameable = nameables.pop()
+            if lastNameable != name:
+                prep = lastNameable[len(name):]
+                if prep[0] == ',': prep = prep[2:]
+            break
+    return [descriptor, name, prep]
+
+def substringer(words):
+    substring = words[0]
+    out = [words[0]]
+    for i in words[1:]:
+        substring = substring + " " + i
+        out.append(substring)
+    return out
 
 def calculateWeight(name, ingDict, amount, unit):
-    std = ingDict[name].stdMeasure
-    stdU = ingDict[name].units
+    std = ingDict[name].stdMeasure.split()
+    stdAmt = float(std[0])
+    stdU = std[1]
     if stdU == unit: return amount/std
     else: return convertWeight(amount, unit, std, stdU)
 
 def convertWeight(amount, unit, stdAmt, stdUnit):
+    if amount == 0: return 0
+    if unit == None or stdUnit == None or stdAmt == None: return 1
     if stdUnit == 'teaspoon':
         if unit in ['tsp', 'teaspoon', 'teaspoons']:
             return amount / stdAmt

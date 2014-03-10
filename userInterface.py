@@ -17,28 +17,29 @@ def SwapRecipes():
     IngreDict = collectIngredients()
     
     ingredInput = raw_input("Please give me the ingredients:")
-    ingredients = processIngredients(ingredInput, IngreDict, measures) 
-
+    ingredients = processIngredients(ingredInput, IngreDict, measures)
+    
     recipeInput = raw_input("Please give me the sequence of operations")
-    recipe = processRecipe(ingredients, steps) # OBV NOT DONE YET
+    recipe = recipeInput
+    #recipe = processRecipe(ingredients, steps) # NOT DONE YET
 
     print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
     transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options")
 
-    originalFlavor = calculateFlavorScore(ingredients)
+    originalFlavor = calculateFlavorScore(ingredients, IngreDict)
     spiceType = "Spices"
 
     if transformation == "veg":
         newIng, newRecipe = veggify(ingredients, recipe, originalFlavor, IngreDict) 
     elif transformation == "style":
-        newType = raw_input("what spice palate do you want: you can choose European, Arab, South Asian, or East Asian")
-        while newType != 'european' or newType != 'arab' or newType != 'south asian' or newType != 'east asian':
+        newType = raw_input("what flavor palate do you want: you can choose European, Arab, South Asian, or East Asian")
+        while newType != 'european' and newType != 'arab' and newType != 'south asian' and newType != 'east asian':
             newType = raw_input("sorry, try again: what spice palate do you want? please type, in lower case, european, arab, south asian, or east asian.")
         spiceType = typeConverter(newType)
         newIng, newRecipe = changeStyle(ingredients, recipe, originalFlavor, IngreDict, spiceType)
     elif transformation == "scale":
         newIng = scaleRecipe(ingredients)
-        newRecipe = recipe.copy ## what does this look like
+        newRecipe = recipe
     elif transformation == "swap":
         newIng, newRecipe = swapOut(ingredients, recipe, originalFlavor, IngreDict)
 

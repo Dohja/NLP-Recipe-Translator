@@ -18,7 +18,7 @@ def veggify(ingredients, recipe, originalFlavor, IngredientsDict):
         
     toSwap = []
     newIng = dict(ingredients)
-    newRecipe = recipe.copy ### WHAT DOES THIS LOOK LIKE
+    newRecipe = recipe
     for i in ingredients.keys():
         if cat in IngredientsDict[i].superTypes:
             toSwap.append(i)
@@ -31,17 +31,24 @@ def veggify(ingredients, recipe, originalFlavor, IngredientsDict):
     return [newIng, newRecipe]
 
 def changeStyle(ingredients, recipe, originalFlavor, IngredientsDict, swapSpice):
-    spices = gatherSpices(ingredients)
+    spices = gatherSpices(ingredients, IngredientsDict)
     spiceFlavors = calculateFlavorScore(spices)
-    newRecipe = recipe.copy ### WHAT DOES THIS LOOK LIKE
+    newRecipe = recipe
     newIngredients = dict(ingredients)
-    newSpices = collectSubTypes(IngredientsDict[swapSpice])
     for i in spices:
-        newSpice = findBestMatch(i, newSpices)
+        newSpice = findBestMatch(i, swapSpice)
         newWeight = weightFactor(newSpice, ingredients[i]["weight"], i, IngredientsDict)
         newIngredients = swapIngredients(newIngredients, i, newSpice, newWeight)
         newRecipe = swapInRecipe(newRecipe, i, newSpice)
     return [newIngredients, newRecipe]
+
+def gatherSpices(ingredients, dicto):
+    spices = []
+    for i in ingredients:
+        ### how to access ingredient dictionary
+        if i in dicto["Herbs"].subTypes or i in dictor["Spices"].subTypes:
+            spices.append(i)
+    return spices
 
 def scaleRecipe(ingredients):
     ## NOTE: THIS DOES NOT ACCOUNT FOR FOODSTUFFS THAT SCALE DIFFERENTLY, I.E., SALT
@@ -88,15 +95,15 @@ def balanceOut(recipe, ingredients, originalFlavor, IngreDict, spices):
 
 def typeConverter(spices):
     if spices == "all":
-        return "Spices"
+        return "HerbsAndSpices"
     elif spices == "european":
-        return "EuroSpices"
+        return "EuroFlavors"
     elif spices == "arab":
-        return "ArabSpices"
+        return "ArabFlavors"
     elif spices == "south asian":
-        return "SouthAsianSpices"
+        return "SouthAsianFlavors"
     elif spices == "east asian":
-        return "EastAsianSpices"
+        return "EastAsianFlavors"
 
 def swapIngredients(ingredients, old, new, newWeight):
     newIng = removeKey(ingredients, old)
