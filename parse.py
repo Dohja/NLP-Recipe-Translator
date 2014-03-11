@@ -29,7 +29,7 @@ def processOneIngredient(ing, ingDict, allIng, measures):
     if tokens == []: return allIng
     else:
         num, units = extractQM(tokens, ingDict, measures)
-        desc, name, prep = extractIngredient(tokens, ingDict, units)
+        desc, name, prep = extractIngredient(tokens, ingDict, units, num)
         weight = calculateWeight(name, ingDict, num, units)
         
     allIng[name] = {"name": name,
@@ -45,12 +45,12 @@ def extractQM(words, inDict, measures):
     quantity = None
     measurement = None
     for i in range(len(words)):
-        if isNumber(words[i]):
+        if quantity == None and isNumber(words[i]): # only initialize the first number to quantity
             quantity = convertToNum(words[i])
-        if words[i] in measures:
-            if isNumber(words[i-1]) and quantity == convertToNum(words[i-1]):
-                measurement = words[i]
-                break
+        if isNumber(words[i]) and words[i+1] in measures: # UNLESS there is a measure after. This avoids putting a number in "prep" as the quantity
+            quantity = convertToNum(words[i])
+            measurement = words[i+1]
+            break
 
             ### this allows us to account for parentheticals, such that 1 (4.5 ounce) can mushrooms
             ### outputs 4.5 ounce as its amount and unit, and can becomes part of the description
@@ -76,12 +76,19 @@ def convertToNum(string):
     except ValueError:
         return float(string[0]) / float(string[2])
 
-def extractIngredient(tokens, ingDict, units):
+def extractIngredient(tokens, ingDict, units, num):
     descriptor = None
     prep = None
     if units != None:
         tokens = tokens[tokens.index(units) + 1:]
         if tokens[0] == ')': tokens = tokens[1:]
+    elif num != None:
+        for i in tokens:
+            check = convertToNum(i)
+            if check == num:
+                index = tokens.index(i)
+                break
+        tokens = tokens[index+ 1:]
     name = " ".join(tokens)
     for i in range(len(tokens)):
         descriptor = " ".join(tokens[:i])

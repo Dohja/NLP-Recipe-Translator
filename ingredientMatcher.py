@@ -48,11 +48,12 @@ def weightFactor(newIngredient, origWeight, swap, IngredientDict):
     weightFactor += IngredientDict[swap].hot / IngredientDict[newIngredient].hot
     return weightFactor / 6.0
 
-def findBestMatch(ing, replacements):
+def findBestMatch(ing, replacements, replaceWithSelf=False):
     bestMatch = None
     bestScore = 1000000000
     for i in replacements:
         if i.sweet == None: continue
+        if i == ing and replaceWithSelf == False: continue
         else:
             score = 0
             diff = calculateFlavorDiff(ing, i)

@@ -63,22 +63,25 @@ def scaleRecipe(ingredients):
     scale = float(scale)
     for i in ingredients.keys():
         ingredients[i]["weight"] *= scale
+        ingredients[i]["quantity"] *= scale
     return ingredients
 
 def swapOut(ingredients, recipe, originalFlavor, IngreDict, swap = "", fromGroup = "Ingredients"):
+    replaceWithSelf = True
     if swap == "":
-        swap = raw_input("did you have an ingredient in mind? if so, please type it here.")
+        replaceWithSelf = False
+        swap = raw_input("did you have an ingredient in mind? if so, please type it here. Type 'you pick' to have me pick")
         while swap not in ingredients.keys() and swap != "":
             swap = raw_input("I didn't see that in my ingredients; here's what you can pick from:" + str(ingredients.keys()) + " or if you prefer, type 'you pick' to have me pick.")
-    target = raw_input("did you want to switch " + swap + " with anything in particular?")
+    target = raw_input("did you want to switch " + swap + " with anything in particular? type 'you pick' to have me pick")
     while target not in IngreDict.keys() and target != "you pick":
-        target = raw_input("I don't know how to use that ingredient... either try again, lower case, or type 'you pick' if you trust me")
+        target = raw_input("I don't know how to use that ingredient... either try again, or type 'you pick' if you trust me")
     if swap == "you pick":
         swap = findSwap(ingredients)
     else: swap = IngreDict[swap]
     if target == "you pick":
         targetOptions = collectSubTypes(IngreDict[fromGroup])
-        target = findBestMatch(swap, targetOptions)
+        target = findBestMatch(swap, targetOptions, replaceWithSelf)
     else: target = IngreDict[target]
     targetWeighted = weightFactor(target.name, ingredients[swap.name]["weight"], swap.name, IngreDict)
     newIngredients = swapIngredients(ingredients, swap.name, target.name, targetWeighted, IngreDict)
@@ -121,7 +124,8 @@ def swapIngredients(ingredients, old, new, newWeight, IngreDict):
                    "quantity": newAmt,
                    "measurement": newUnits,
                    "description": None,
-                   "preparation": None}
+                   "preparation": None,
+                   "weight": newWeight}
     return newIng
 
 def swapInRecipe(recipe, old, new):
