@@ -1,9 +1,10 @@
-from CookingTerms import collectIngredients # or whatever it is called
+from CookingTerms import *
 from parse import *
 from transformer import *
 from ingredientMatcher import *
 from sets import Set
 import pprint
+import json
 
 def SwapRecipes():
 
@@ -21,8 +22,11 @@ def SwapRecipes():
     ingredients = processIngredients(ingredInput, IngreDict, measures)
     
     recipeInput = raw_input("Please give me the sequence of operations")
-    recipe = recipeInput
+    recipe = recipeInput.lower()
     #recipe = processRecipe(ingredients, steps) # NOT DONE YET
+
+    meths = [x for x in methods if x in recipe]
+    impls = [x for x in implements if x in recipe]
 
     print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
     transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options")
@@ -54,5 +58,10 @@ def SwapRecipes():
     pprint.pprint(newIng)
     print "and your recipe is "
     print newRecipe
+    print "Here are the primary cooking methods for this recipe" + str(meths)
+    print "Here are the implements" + str(impls)
+    ingredientList = [newIng[ing] for ing in newIng]
 
-    return
+    output = json.dumps({"ingredients": ingredientList, "cooking method": meths, "cooking tools": impls})
+
+    return output
