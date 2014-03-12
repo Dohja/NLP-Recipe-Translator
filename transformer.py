@@ -58,8 +58,8 @@ def gatherSpices(ingredients, dicto):
 def scaleRecipe(ingredients):
     ## NOTE: THIS DOES NOT ACCOUNT FOR FOODSTUFFS THAT SCALE DIFFERENTLY, I.E., SALT
     ## ALSO DOES NOT ACCOUNT FOR SCALED COOKING TIME
-    print "what would you like to scale by a factor of?"
-    scale = raw_input("1 leaves the recipe unchanged; 0.5 would halve it; 2 would double it; etc")
+    print "what would you like to scale by a factor of? "
+    scale = raw_input("1 leaves the recipe unchanged; 0.5 would halve it; 2 would double it; etc ")
     scale = float(scale)
     for i in ingredients.keys():
         ingredients[i]["weight"] *= scale
@@ -70,12 +70,12 @@ def swapOut(ingredients, recipe, originalFlavor, IngreDict, swap = "", fromGroup
     replaceWithSelf = True
     if swap == "":
         replaceWithSelf = False
-        swap = raw_input("did you have an ingredient in mind? if so, please type it here. Type 'you pick' to have me pick")
+        swap = raw_input("did you have an ingredient in mind? if so, please type it here. Type 'you pick' to have me pick: ")
         while swap not in ingredients.keys() and swap != "":
-            swap = raw_input("I didn't see that in my ingredients; here's what you can pick from:" + str(ingredients.keys()) + " or if you prefer, type 'you pick' to have me pick.")
-    target = raw_input("did you want to switch " + swap + " with anything in particular? type 'you pick' to have me pick")
+            swap = raw_input("I didn't see that in my ingredients; here's what you can pick from:" + str(ingredients.keys()) + " or if you prefer, type 'you pick' to have me pick: ")
+    target = raw_input("did you want to switch " + swap + " with anything in particular? type 'you pick' to have me pick: ")
     while target not in IngreDict.keys() and target != "you pick":
-        target = raw_input("I don't know how to use that ingredient... either try again, or type 'you pick' if you trust me")
+        target = raw_input("I don't know how to use that ingredient... either try again, or type 'you pick' if you trust me: ")
     if swap == "you pick":
         swap = findSwap(ingredients)
     else: swap = IngreDict[swap]

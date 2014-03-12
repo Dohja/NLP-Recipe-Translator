@@ -2942,16 +2942,18 @@ def collectIngredients():
 
     CookImplements = ['blender', 'bowl', 'can opener', 'cookie cutter', 'cutting board',
                   'frying pan', 'pan', 'fork', 'grill', 'grater', 'knife', 'ladle', 'squeezer', 'measuring cup',
-                  'measuring spoon', 'mixing bowl', 'peeler', 'nutcracker', 'pie pan', 'pizza cutter', 'pot',
+                  'measuring spoon', 'mixing bowl', 'peeler', 'nutcracker', 'pie pan', 'pizza cutter', 'pot', 'crockpot',
                   'potato masher', 'salt shaker', 'flipper', 'spoon', 'bottle opener', 'peeler',
                   'splatter','whisks', 'graters', 'tongs', 'timer','colander', 'shears',
                   'steamer', 'garlic press','slicer','strainer', 'thermometer', 'salad spinner',
                   'spatula','funnel','mixer', 'tenderizer', 'squeezer', 'corkscrew', 'trivet', 'tava',
                   'tamis', 'mandoline','diffuser','churckey', 'casserole', 'skewer', 'saran', 'shaker',
                   'chinois', 'skimmer', 'juicer', 'cookie press', 'cheesecloth', 'parchment paper',
-                  'dutch oven', 'baking sheet', 'cast iron', 'griddle', 'grill', 'baking dish'] 
+                  'oven', 'dutch oven', 'microwave' 'baking sheet', 'cast iron', 'griddle', 'grill', 'baking dish', 'wok','deep fryer','baster'] 
     CookMethods = ['bake', 'broil', 'blanch', 'braise', 'barbecue', 'boil', 'roast', 'brine', 'fry', 'poach',
                'griddle', 'steam', 'stew', 'grill', 'stir fry', 'deep fry', 'poach', 'sauteing', 'pan fry',
-               'sweat', 'torch', 'scald', 'simmer', 'blanch', 'chop', 'mince', 'crush', 'squeeze', 'shake', 'mix']
+               'sweat', 'torch', 'scald', 'simmer', 'blanch', 'chop', 'mince', 'crush', 'squeeze', 'shake', 'mix', 'baste', 'basting', 'stir']
+
+    assocTools = {'bake':'oven', 'broil':'oven', 'blanch':'pot', 'braise':'crockpot', 'barbecue':'grill', 'boil':'pot', 'roast':'oven', 'fry':'pan', 'poach':'pot', 'steam':'pot', 'stew':'pot', 'grill':'grill', 'stir fry':'wok', 'deep fry':'deep fryer', 'sauteing':'pan', 'pan fry':'pan','simmer':'pot', 'blanch':'pot', 'chop':'knife', 'mince':'knife', 'mix':'spoon', 'baste':'baster', 'basting':'baster', 'stir':'spoon'}
     
-    return [ing, CookImplements, CookMethods]
+    return [ing, CookImplements, CookMethods, assocTools]

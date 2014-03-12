@@ -2,7 +2,7 @@ import nltk
 import fractions
 from CookingTerms import Ingredient
 
-def processIngredients(ingText, ingDict, measures):
+def processIngredients(ingList, ingDict, measures):
     ingredients = {}
     # Ingredients will look something like this
 ##    4 skinless, boneless chicken breast halves
@@ -18,9 +18,8 @@ def processIngredients(ingText, ingDict, measures):
 ##    3 tablespoons cold unsalted butter, cut in
 ##    1/4-inch slices
 ##    2 tablespoons fresh Italian parsley, chopped
-    ingList = ingText.split('\n')
     for ingredient in ingList:
-        ingredients = processOneIngredient(ingredient, ingDict, ingredients, measures)
+	    ingredients = processOneIngredient(ingredient, ingDict, ingredients, measures)
     return ingredients
 
 def processOneIngredient(ing, ingDict, allIng, measures):
@@ -69,12 +68,18 @@ def isNumber(string):
         except ValueError:
             return False
 
-def convertToNum(string):
-    try:
-        num = float(string)
-        return num
-    except ValueError:
-        return float(string[0]) / float(string[2])
+def convertToNum(fraction):
+	if "/" not in fraction:
+		return float(fraction)
+	frac = fraction.split("/")
+	answer = 0
+	if " " in frac[0]:
+		mixed = frac[0].split()
+		answer = float(mixed[0])
+		answer += float(mixed[1]) / float(frac[1])
+	else:
+		answer += float(frac[0]) / float(frac[1])
+	return answer
 
 def extractIngredient(tokens, ingDict, units, num):
     descriptor = None
