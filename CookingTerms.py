@@ -1,5 +1,3 @@
-from sets import Set
-
 class Ingredient():
     def __init__(self, name, dict):
         self.name = name

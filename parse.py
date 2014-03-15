@@ -4,20 +4,6 @@ from CookingTerms import Ingredient
 
 def processIngredients(ingList, ingDict, measures):
     ingredients = {}
-    # Ingredients will look something like this
-##    4 skinless, boneless chicken breast halves
-##    cayenne pepper, or to taste
-##    salt
-##    ground black pepper to taste
-##    all-purpose flour for dredging
-##    2 tablespoons olive oil
-##    1 tablespoon capers, drained
-##    1/2 cup white wine
-##    1/4 cup fresh lemon juice
-##    1/4 cup water
-##    3 tablespoons cold unsalted butter, cut in
-##    1/4-inch slices
-##    2 tablespoons fresh Italian parsley, chopped
     for ingredient in ingList:
 	    ingredients = processOneIngredient(ingredient, ingDict, ingredients, measures)
     return ingredients

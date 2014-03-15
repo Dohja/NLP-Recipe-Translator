@@ -39,11 +39,7 @@ def changeStyle(ingredients, recipe, originalFlavor, IngredientsDict, swapSpice)
     newRecipe = recipe
     newIngredients = dict(ingredients)
     for i in spices:
-    #    newSpice = findBestMatch(i, swapSpice)
         newIngredients, newRecipe = swapOut(newIngredients, newRecipe, originalFlavor, IngredientsDict, i, swapSpice)
-    #    newWeight = weightFactor(newSpice, ingredients[i]["weight"], i, IngredientsDict)
-    #    newIngredients = swapIngredients(newIngredients, i, newSpice, newWeight, IngredientsDict)
-    #    newRecipe = swapInRecipe(newRecipe, i, newSpice)
     return [newIngredients, newRecipe]
 
 def gatherSpices(ingredients, dicto):
@@ -88,21 +84,6 @@ def swapOut(ingredients, recipe, originalFlavor, IngreDict, swap = "", fromGroup
     newRecipe = swapInRecipe(recipe, swap.name, target.name)
     return [newIngredients, newRecipe]
 
-def balanceOut(recipe, ingredients, originalFlavor, IngreDict, spices):
-    ## maybe leave this out entirely?
-    newFlavor = calculateFlavorScore(ingredients)
-    flavorDiff = calculateFlavorDiff(originalFlavor, newFlavor)
-
-    herbsAndSpices = collectSubTypes(spices)
-    herbsAndSpices.extend(collectSubTypes(herbs))
-
-    options = gatherOptions(flavorDiff, herbsAndSpices, {0: {}}, 1) ### to do
-    bestOption = findBestOption(options, flavorDiff) ### to do
-    recipe.addToRecipe(bestOption) #### STILL TO DO
-    for ing in bestOption:
-        ingredients[ing] = bestOption[ing]
-    return [recipe, ingredients]
-
 def typeConverter(spices):
     if spices == "all":
         return "HerbsAndSpices"
@@ -131,13 +112,6 @@ def swapIngredients(ingredients, old, new, newWeight, IngreDict):
 def swapInRecipe(recipe, old, new):
     newRecipe = recipe.replace(old, new)
     return newRecipe
-
-def addToRecipe(ingredientsAndWeights):
-    ## this will be a dictionary of ingredients and their weights to be added to the recipe.
-    ## this is NOT swapping or replacing, but rather adding something entirely new.
-    ## should we even do this? it's only used in balanceOut, which we should maybe not include
-    ## ideas?
-    return
 
 def removeKey(d, key):
     r = dict(d)

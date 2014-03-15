@@ -17,15 +17,11 @@ def SwapRecipes(url):
 
     print "so you'd like to mix up a recipe, eh? \n \n \n"
     IngreDict, implements, methods, assocTools = collectIngredients()
-#    ingredInput = raw_input("Please give me the ingredients: ")
     ingredInput = parseHTML(url)[0]
     ingredients = processIngredients(ingredInput, IngreDict, measures)
-#    recipeInput = raw_input("Please give me the sequence of operations: ")
     ingredList, recipeInput = parseHTML(url)
-    #ingredList = newProcessIngredients(ingredList, IngreDict, measures)
 
     recipe = recipeInput.lower()
-    #recipe = processRecipe(ingredients, steps) # NOT DONE YET
 
     meths = [x for x in methods if x in recipe]
     impls = [x for x in implements if x in recipe]
@@ -53,9 +49,6 @@ def SwapRecipes(url):
         newRecipe = recipe
     elif transformation == "swap":
         newIng, newRecipe = swapOut(ingredients, recipe, originalFlavor, IngreDict)
-
-    # we should maybe not even do this next line:
-    #newRecipe, newIngredients = balanceOut(newRecipe, newIngredients, originalFlavor, IngreDict, spiceType)
 
     # we need something to print the recipe...
     print "here are your new ingredients"
