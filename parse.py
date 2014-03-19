@@ -1,6 +1,21 @@
+#NEED TO REWORK PARSING TO BETTER FIGURE OUT PARSING - IS NOT WORKING ALL THAT GREAT AFTER ALL
+#BETTER DEFINE 'TO TASTE'
+
+
 import nltk
 import fractions
 from CookingTerms import Ingredient
+
+def stripChars(x):
+    if x!=None and len(x)>0:
+        x=x.lstrip().rstrip()
+        if x[0] == ',' or x[0] == '-':
+            x = x[1:]
+        if x[:-1] == ',':
+            x = x[:-1]
+        x=x.lstrip().rstrip()
+    return x
+
 
 def processIngredients(ingList, ingDict, measures):
     ingredients = {}
@@ -16,7 +31,10 @@ def processOneIngredient(ing, ingDict, allIng, measures):
         num, units = extractQM(tokens, ingDict, measures)
         desc, name, prep = extractIngredient(tokens, ingDict, units, num)
         weight = calculateWeight(name, ingDict, num, units)
-        
+        units = stripChars(units)
+        desc = stripChars(desc)
+        name = stripChars(name)
+        prep = stripChars(prep)    
     allIng[name] = {"name": name,
                     "weight": weight,
                     "quantity": num,
@@ -40,7 +58,7 @@ def extractQM(words, inDict, measures):
             ### this allows us to account for parentheticals, such that 1 (4.5 ounce) can mushrooms
             ### outputs 4.5 ounce as its amount and unit, and can becomes part of the description
             ### it will also cut off the program after 1 tbsp but not the above
-        
+
     return [quantity, measurement]
 
 def isNumber(string):
@@ -80,7 +98,7 @@ def extractIngredient(tokens, ingDict, units, num):
                 index = tokens.index(i)
                 break
         tokens = tokens[index+ 1:]
-    name = " ".join(tokens)
+    name = ''
     for i in range(len(tokens)):
         descriptor = " ".join(tokens[:i])
         nameables = substringer(tokens[i:]) # ingredients that start with this word
@@ -88,11 +106,49 @@ def extractIngredient(tokens, ingDict, units, num):
         if len(matches) > 0:
             name = matches.pop()
             lastNameable = nameables.pop()
-            if lastNameable != name:
-                prep = lastNameable[len(name):]
-                if prep[0] == ',': prep = prep[2:]
+            if name in lastNameable and name != lastNameable:
+                split = lastNameable.split(name)
+                prep = split[1]
+                descriptor = split[0]
+                if len(prep)>0 and prep[0] == ',': prep = prep[2:]
             break
+    if name == '':
+        #This is an ugly way to see if the ingredient is something like 'red onion' or 'potato' when all we have stored is 'red onions' or 'potatoes'
+        nameables = substringer(tokens)
+        matches = checkForPlurals(nameables, ingDict)
+        if len(matches) > 0:
+            name = matches.pop()            
+            lastNameable = nameables.pop()
+            if name in lastNameable and name != lastNameable:
+                split = lastNameable.split(name)
+                prep = split[1]
+                descriptor = split[0]
+                if len(prep)>0 and prep[0] == ',': prep = prep[2:]
+                if name+'s' in ingDict.keys():
+                    name +='s'
+                elif name+'es' in ingDict.keys():
+                    name+='es'
+        else:
+            name = " ".join(tokens)
+            descriptor = ''
+#            print 'failed'
+    if descriptor!='':
+		repl = descriptor+' '
+		name = name.replace(repl, '')
+		for x in name.split():
+			descriptor = descriptor.replace(x, '')
+#    print '    final choice: '+str([descriptor, name, prep])
     return [descriptor, name, prep]
+
+def checkForPlurals(nameables, ingDict):
+	matches = []
+	for names in nameables:
+		for key in ingDict.keys():
+			pluralCheck = key.replace(names,"")
+			if pluralCheck == 's' or pluralCheck == 'es':
+				matches.append(names)
+	return matches
+		
 
 def substringer(words):
     substring = words[0]
@@ -216,3 +272,7 @@ def convertWeight(amount, unit, stdAmt, stdUnit):
             print "we can't easily convert from " + unit + " to " + stdUnit
             return 1
     else: return 1
+
+
+#lemon pepper, garlic powder
+

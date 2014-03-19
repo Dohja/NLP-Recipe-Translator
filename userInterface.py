@@ -17,16 +17,15 @@ def SwapRecipes(url):
 
     print "so you'd like to mix up a recipe, eh? \n \n \n"
     IngreDict, implements, methods, assocTools = collectIngredients()
-    ingredInput = parseHTML(url)[0]
+    ingredInput, recipeInput = parseHTML(url)
     ingredients = processIngredients(ingredInput, IngreDict, measures)
-    ingredList, recipeInput = parseHTML(url)
 
     recipe = recipeInput.lower()
 
     meths = [x for x in methods if x in recipe]
     impls = [x for x in implements if x in recipe]
     for method, tool in assocTools.iteritems():
-	    if method in meths:
+	    if method in meths and tool not in impls:
 		    impls.append(tool)
     print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
     transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options: ")
@@ -48,7 +47,7 @@ def SwapRecipes(url):
         newIng = scaleRecipe(ingredients)
         newRecipe = recipe
     elif transformation == "swap":
-        newIng, newRecipe = swapOut(ingredients, recipe, originalFlavor, IngreDict)
+        newIng, newRecipe = swapOut(ingredients, recipe, originalFlavor, IngreDict, 'swap')
 
     # we need something to print the recipe...
     print "here are your new ingredients"
@@ -63,4 +62,53 @@ def SwapRecipes(url):
 
     return output
 
-SwapRecipes('http://allrecipes.com/Recipe/Paella/Detail.aspx?event8=1&prop24=SR_Thumb&e11=paella&e8=Quick%20Search&event10=1&soid=sr_results_p1i1')
+
+def JSONOutput(url):
+	measures = Set(['tsp', 'teaspoon', 'teaspoons', 'tbsp', 'tbs', 'tablespoon', 'tablespoons',
+                    'pinch', 'dash', 'lb', 'lbs', 'pound', 'pounds', 'kg', 'kilo',
+                    'kilos', 'kilograms', 'g', 'gs', 'grams', 'oz', 'ozs', "ounce", 'ounces',
+                    'c', 'cup', 'cups', 'pint', 'pt', 'pints', 'quart', 'quarts', 'qt',
+                    'gal', 'gallon', 'gallons', 'to taste'])
+	IngreDict, implements, methods, assocTools = collectIngredients()
+	ingredInput, recipeInput = parseHTML(url)
+	ingredients = processIngredients(ingredInput, IngreDict, measures)
+	recipe = recipeInput.lower()
+	meths = [x for x in methods if x in recipe]
+	impls = [x for x in implements if x in recipe]
+	for method, tool in assocTools.iteritems():
+		if method in meths and tool not in impls:
+			impls.append(tool)
+	response = []
+	for key, row in ingredients.iteritems():
+		if row['name']==None:
+			print 'ERROR: NO NAME'
+			return -1
+		if row['quantity'] ==None:
+			row['quantity']= 1.0
+		if row['measurement'] == None:
+			row['measurement']='units'
+		if row['description']== None or row['description']== '':
+			row['description'] = 'none'
+		if row['preparation']==None or row['preparation']== '':
+			row['preparation']='none'
+		response.append({'name':row['name'], 'quantity':row['quantity'], 
+		'measurement':row['measurement'], 'descriptor':row['description'], 
+		'preparation':row['preparation']})
+	output = json.dumps(response)
+	return output
+
+
+# EXAMPLE RECIPES
+
+#SwapRecipes('http://allrecipes.com/Recipe/Deluxe-Corned-Beef-Hash/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
+#SwapRecipes('http://allrecipes.com/Recipe/Amazingly-Easy-Irish-Soda-Bread/Detail.aspx?soid=recs_recipe_4')
+#SwapRecipes('http://allrecipes.com/Recipe/Cajun-Chicken-Pasta-2/Detail.aspx?soid=recs_recipe_3')
+#SwapRecipes('http://allrecipes.com/Recipe/Strawberry-Spinach-Salad-I/Detail.aspx')
+#SwapRecipes('http://allrecipes.com/Recipe/Hillbilly-Breakfast/Detail.aspx?event8=1&prop24=SR_Title&e11=breakfast&e8=Quick%20Search&event10=1&e7=Home%20Page&soid=sr_results_p1i8')
+#SwapRecipes('http://allrecipes.com/Recipe/Mediterranean-Pasta/Detail.aspx?event8=1&prop24=SR_Title&e11=pasta&e8=Quick%20Search&event10=1&e7=Home%20Page&soid=sr_results_p1i5')
+#SwapRecipes('http://allrecipes.com/Recipe/Tofu-Parmigiana/Detail.aspx?event8=1&prop24=SR_Thumb&e11=tofu&e8=Quick%20Search&event10=1&soid=sr_results_p1i1')
+
+#JSON OUTPUT TEST
+#output = JSONOutput('http://allrecipes.com/Recipe/Strawberry-Spinach-Salad-I/Detail.aspx')
+#print '\n\n'
+#print output

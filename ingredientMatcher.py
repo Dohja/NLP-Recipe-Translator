@@ -18,18 +18,17 @@ def calculateFlavorScore(ingredients, ingreDict):
 
     return score
 
-def findSwap(ingredients):
+def findSwap(ingredients, IngreDict):
     # just take a random ingredient that is important enough?
     trySwap = ""
     cutoff = 3.0
     testList = []
-
+    testList2 = []
     while len(testList) < 3:
         cutoff -= .333333333333333
         testList = [ing for ing in ingredients.keys() if ingredients[ing]["weight"] > cutoff]
     trySwap = random.choice(testList)
-
-    return trySwap
+    return IngreDict[trySwap]
 
 def weightFactor(newIngredient, origWeight, swap, IngredientDict):
     toMatch = {"sweet": IngredientDict[swap].sweet*origWeight,

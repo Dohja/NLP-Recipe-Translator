@@ -25,8 +25,12 @@ def veggify(ingredients, recipe, originalFlavor, IngredientsDict):
     if len(toSwap) == 0:
         print "this appears to be a vegetarian recipe that does not have any vegetarian protein in it... it's hard to just... add meat.  But feel free to throw some chicken in or something!"
     else:
-        for i in toSwap:
-            newIng, newRecipe = swapOut(newIng, newRecipe, originalFlavor, IngredientsDict, i, "veg Protein")
+		if cat == 'meat':
+			cat = 'veg Protein'
+		else:
+			cat = 'meat'
+		for i in toSwap:
+			newIng, newRecipe = swapOut(newIng, newRecipe, originalFlavor, IngredientsDict, 'veggify', i, cat)
 
     return [newIng, newRecipe]
 
@@ -39,7 +43,7 @@ def changeStyle(ingredients, recipe, originalFlavor, IngredientsDict, swapSpice)
     newRecipe = recipe
     newIngredients = dict(ingredients)
     for i in spices:
-        newIngredients, newRecipe = swapOut(newIngredients, newRecipe, originalFlavor, IngredientsDict, i, swapSpice)
+        newIngredients, newRecipe = swapOut(newIngredients, newRecipe, originalFlavor, IngredientsDict, 'style', i, swapSpice)
     return [newIngredients, newRecipe]
 
 def gatherSpices(ingredients, dicto):
@@ -58,31 +62,46 @@ def scaleRecipe(ingredients):
     scale = raw_input("1 leaves the recipe unchanged; 0.5 would halve it; 2 would double it; etc ")
     scale = float(scale)
     for i in ingredients.keys():
-        ingredients[i]["weight"] *= scale
-        ingredients[i]["quantity"] *= scale
+		print "i is: "+i
+		if ingredients[i]["weight"] != None:
+			ingredients[i]["weight"] *= scale
+		if ingredients[i]["quantity"] != None:
+			ingredients[i]["quantity"] *= scale
     return ingredients
 
-def swapOut(ingredients, recipe, originalFlavor, IngreDict, swap = "", fromGroup = "Ingredients"):
-    replaceWithSelf = True
-    if swap == "":
-        replaceWithSelf = False
-        swap = raw_input("did you have an ingredient in mind? if so, please type it here. Type 'you pick' to have me pick: ")
-        while swap not in ingredients.keys() and swap != "":
-            swap = raw_input("I didn't see that in my ingredients; here's what you can pick from:" + str(ingredients.keys()) + " or if you prefer, type 'you pick' to have me pick: ")
-    target = raw_input("did you want to switch " + swap + " with anything in particular? type 'you pick' to have me pick: ")
-    while target not in IngreDict.keys() and target != "you pick":
-        target = raw_input("I don't know how to use that ingredient... either try again, or type 'you pick' if you trust me: ")
-    if swap == "you pick":
-        swap = findSwap(ingredients)
-    else: swap = IngreDict[swap]
-    if target == "you pick":
-        targetOptions = collectSubTypes(IngreDict[fromGroup])
-        target = findBestMatch(swap, targetOptions, replaceWithSelf)
-    else: target = IngreDict[target]
-    targetWeighted = weightFactor(target.name, ingredients[swap.name]["weight"], swap.name, IngreDict)
-    newIngredients = swapIngredients(ingredients, swap.name, target.name, targetWeighted, IngreDict)
-    newRecipe = swapInRecipe(recipe, swap.name, target.name)
-    return [newIngredients, newRecipe]
+def swapOut(ingredients, recipe, originalFlavor, IngreDict, action, swap = "", fromGroup = "Ingredients"):
+	replaceWithSelf = False
+	if action == "style":
+	    replaceWithSelf = True
+	if swap == "":
+		swap = raw_input("did you have an ingredient in mind? if so, please type it here. Type 'you pick' to have me pick: ")
+		while swap not in ingredients.keys() and swap != "you pick":
+			swap = raw_input("I didn't see that in my ingredients; here's what you can pick from:" + str(ingredients.keys()) + " or if you prefer, type 'you pick' to have me pick: ")
+	target = raw_input("did you want to switch " + swap + " with anything in particular? type 'you pick' to have me pick: ")
+	while target not in IngreDict.keys() and target != "you pick":
+		target = raw_input("I don't know how to use that ingredient... either try again, or type 'you pick' if you trust me: ")
+	if swap == "you pick":
+		swap = findSwap(ingredients, IngreDict)
+	else: 
+		swap = IngreDict[swap]
+	if target == "you pick":
+		if action == 'swap':
+			swapGroup = swap.superTypes
+		else:
+			swapGroup = [IngreDict[fromGroup]]
+#		swapGroup = [IngreDict[fromGroup]]
+		targetOptions = []
+		for i in swapGroup:			
+			targetOptions += collectSubTypes(IngreDict[i.name])
+		target = findBestMatch(swap, targetOptions, replaceWithSelf)
+	else: 
+		target = IngreDict[target]
+	
+	print "Ok, swapping "+swap.name+' with '+target.name
+	targetWeighted = weightFactor(target.name, ingredients[swap.name]["weight"], swap.name, IngreDict)
+	newIngredients = swapIngredients(ingredients, swap.name, target.name, targetWeighted, IngreDict)
+	newRecipe = swapInRecipe(recipe, swap.name, target.name)
+	return [newIngredients, newRecipe]
 
 def typeConverter(spices):
     if spices == "all":

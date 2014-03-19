@@ -100,6 +100,7 @@ def collectIngredients():
     Broth = Ingredient("broth", ing)
     Stock = Ingredient("stock", ing)
     Wine = Ingredient("wine", ing)
+    Sauce = Ingredient('sauce',ing)
 
     # types of meat
     Beef = Ingredient("beef", ing)
@@ -123,6 +124,14 @@ def collectIngredients():
     Pork.setMeasure("8 ounces")
     
     Lamb = Ingredient("lamb", ing)
+    Lamb.setTaste("umami", 8)
+    Lamb.setTaste("salty", 4)
+    Lamb.setTaste("sweet", 2)
+    Lamb.setTaste("sour", 1)
+    Lamb.setTaste("bitter", 1)
+    Lamb.setTaste("hot", 1)
+    Lamb.setUnits("weight")
+    Lamb.setMeasure("8 ounces")
 
     # types of beef
     BeefRibs = Ingredient("beef ribs", ing)
@@ -229,7 +238,6 @@ def collectIngredients():
     PorkRoast.setUnits("weight")
     PorkRoast.setMeasure("8 ounces")
 
-
     PorkCutlet = Ingredient("pork cutlets", ing)
     PorkCutlet.setTaste("umami", 7)
     PorkCutlet.setTaste("salty", 4)
@@ -239,6 +247,26 @@ def collectIngredients():
     PorkCutlet.setTaste("hot", 1)
     PorkCutlet.setUnits("count")
     PorkCutlet.setMeasure("1 pork cutlet") 
+
+    Bacon = Ingredient("bacon", ing)
+    Bacon.setTaste("umami", 5)
+    Bacon.setTaste("salty", 6)
+    Bacon.setTaste("sweet", 2)
+    Bacon.setTaste("sour", 1)
+    Bacon.setTaste("bitter", 1)
+    Bacon.setTaste("hot", 1)
+    Bacon.setUnits("count")
+    Bacon.setMeasure("1 slice")
+    
+    ItalianSausage = Ingredient("italian sausage", ing)
+    ItalianSausage.setTaste("umami", 6)
+    ItalianSausage.setTaste("salty", 5)
+    ItalianSausage.setTaste("sweet", 2)
+    ItalianSausage.setTaste("sour", 2)
+    ItalianSausage.setTaste("bitter", 1)
+    ItalianSausage.setTaste("hot", 3)
+    ItalianSausage.setUnits("count")
+    ItalianSausage.setMeasure("1 italian sausage") 
 
     # types of lamb
     LambChops = Ingredient("lamb chops", ing)
@@ -282,7 +310,7 @@ def collectIngredients():
     GroundLamb.setMeasure("8 ounces")
 
     # types of veg protein
-    Tofu = Ingredient("Tofu", ing)
+    Tofu = Ingredient("tofu", ing)
     Tofu.setTaste("umami", 1)
     Tofu.setTaste("salty", 2)
     Tofu.setTaste("sweet", 1)
@@ -292,7 +320,7 @@ def collectIngredients():
     Tofu.setUnits("weight")
     Tofu.setMeasure("3 ounces")
 
-    Seitan = Ingredient("Seitan", ing)
+    Seitan = Ingredient("seitan", ing)
     Seitan.setTaste("umami", 2)
     Seitan.setTaste("salty", 2)
     Seitan.setTaste("sweet", 2)
@@ -302,7 +330,7 @@ def collectIngredients():
     Seitan.setUnits("weight")
     Seitan.setMeasure("3 ounces")
 
-    Tempeh = Ingredient("Tempeh", ing)
+    Tempeh = Ingredient("tempeh", ing)
     Tempeh.setTaste("umami", 6)
     Tempeh.setTaste("salty", 2)
     Tempeh.setTaste("sweet", 3)
@@ -1102,6 +1130,36 @@ def collectIngredients():
     Onions.setUnits("weight")
     Onions.setMeasure("6 ounces")
 
+    YellowOnions = Ingredient("yellow onions", ing)
+    YellowOnions.setTaste("umami", 1)
+    YellowOnions.setTaste("salty", 1)
+    YellowOnions.setTaste("sweet", 2)
+    YellowOnions.setTaste("sour", 2)
+    YellowOnions.setTaste("bitter", 2)
+    YellowOnions.setTaste("hot", 2)
+    YellowOnions.setUnits("weight")
+    YellowOnions.setMeasure("1 ounce")
+
+    RedOnions = Ingredient("red onions", ing)
+    RedOnions.setTaste("umami", 1)
+    RedOnions.setTaste("salty", 1)
+    RedOnions.setTaste("sweet", 2)
+    RedOnions.setTaste("sour", 2)
+    RedOnions.setTaste("bitter", 2)
+    RedOnions.setTaste("hot", 2)
+    RedOnions.setUnits("weight")
+    RedOnions.setMeasure("1 ounce")
+
+    GreenOnions = Ingredient("green onions", ing)
+    GreenOnions.setTaste("umami", 1)
+    GreenOnions.setTaste("salty", 1)
+    GreenOnions.setTaste("sweet", 2)
+    GreenOnions.setTaste("sour", 2)
+    GreenOnions.setTaste("bitter", 2)
+    GreenOnions.setTaste("hot", 2)
+    GreenOnions.setUnits("weight")
+    GreenOnions.setMeasure("1 ounce")
+
     Peas = Ingredient("peas", ing)
     Peas.setTaste("umami", 1)
     Peas.setTaste("salty", 1)
@@ -1294,7 +1352,16 @@ def collectIngredients():
     Cilantro.setTaste("hot", 1)
     Cilantro.setUnits("volume")
     Cilantro.setMeasure("1 tablespoon")
-
+    
+    Oregano = Ingredient("oregano", ing)
+    Oregano.setTaste("umami", 1)
+    Oregano.setTaste("salty", 1)
+    Oregano.setTaste("sweet", 4)
+    Oregano.setTaste("sour", 1)
+    Oregano.setTaste("bitter", 2)
+    Oregano.setTaste("hot", 1)
+    Oregano.setUnits("volume")
+    Oregano.setMeasure("1 tablespoon")
 
     Basil = Ingredient("basil", ing)
     Basil.setTaste("umami", 1)
@@ -1335,7 +1402,16 @@ def collectIngredients():
     Mint.setTaste("hot", 7)
     Mint.setUnits("volume")
     Mint.setMeasure("1 tablespoon")
-
+    
+    BayLeaf = Ingredient("bay leaf", ing)
+    BayLeaf.setTaste("umami", 6)
+    BayLeaf.setTaste("salty", 1)
+    BayLeaf.setTaste("sweet", 1)
+    BayLeaf.setTaste("sour", 2)
+    BayLeaf.setTaste("bitter", 2)
+    BayLeaf.setTaste("hot", 2)
+    BayLeaf.setUnits("count")
+    BayLeaf.setMeasure("1 leaf")
 
     BayLeaves = Ingredient("bay leaves", ing)
     BayLeaves.setTaste("umami", 6)
@@ -1425,6 +1501,16 @@ def collectIngredients():
     SoySauce.setUnits("volume")
     SoySauce.setMeasure("1 teaspoon")
     
+    HotSauce = Ingredient("hot sauce", ing)
+    HotSauce.setTaste("umami", 8)
+    HotSauce.setTaste("salty", 8)
+    HotSauce.setTaste("sweet", 1)
+    HotSauce.setTaste("sour", 1)
+    HotSauce.setTaste("bitter", 1)
+    HotSauce.setTaste("hot", 2)
+    HotSauce.setUnits("volume")
+    HotSauce.setMeasure("1 teaspoon")
+
     Anise = Ingredient("anise", ing)
     Anise.setTaste("umami", 2)
     Anise.setTaste("salty", 1)
@@ -1504,6 +1590,16 @@ def collectIngredients():
     Sugar.setTaste("hot", 1)
     Sugar.setUnits("volume")
     Sugar.setMeasure("1 teaspoon")
+
+    WhiteSugar = Ingredient("white sugar", ing) # all
+    WhiteSugar.setTaste("umami", 2)
+    WhiteSugar.setTaste("salty", 1)
+    WhiteSugar.setTaste("sweet", 9)
+    WhiteSugar.setTaste("sour", 2)
+    WhiteSugar.setTaste("bitter", 1)
+    WhiteSugar.setTaste("hot", 2)
+    WhiteSugar.setUnits("volume")
+    WhiteSugar.setMeasure("1 teaspoon")
 
     BrownSugar = Ingredient("brown sugar", ing) # all
     BrownSugar.setTaste("umami", 2)
@@ -1938,6 +2034,16 @@ def collectIngredients():
     WildRice.setTaste("hot", 1)
     WildRice.setUnits("volume")
     WildRice.setMeasure("1 cup")
+
+    Pasta = Ingredient("pasta", ing)
+    Pasta.setTaste("umami", 1)
+    Pasta.setTaste("salty", 1)
+    Pasta.setTaste("sweet", 1)
+    Pasta.setTaste("sour", 1)
+    Pasta.setTaste("bitter", 1)
+    Pasta.setTaste("hot", 1)
+    Pasta.setUnits("volume")
+    Pasta.setMeasure("8 ounces")
 
 
 
@@ -2691,6 +2797,16 @@ def collectIngredients():
     Butter.setUnits("volume")
     Butter.setMeasure("1 tablespoon")
 
+    Margarine = Ingredient("margarine", ing)
+    Margarine.setTaste("umami", 1)
+    Margarine.setTaste("salty", 2)
+    Margarine.setTaste("sweet", 1)
+    Margarine.setTaste("sour", 2)
+    Margarine.setTaste("bitter", 1)
+    Margarine.setTaste("hot", 1)
+    Margarine.setUnits("volume")
+    Margarine.setMeasure("1 tablespoon")
+
     Ghee = Ingredient("ghee", ing)
     Ghee.setTaste("umami", 1)
     Ghee.setTaste("salty", 1)
@@ -2852,7 +2968,7 @@ def collectIngredients():
 
     Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet, GroundBeef])
 
-    Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet])
+    Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet, ItalianSausage, Bacon])
 
     Lamb.addSubType([LambChops, LambLeg, LambRoast, GroundLamb])
 
@@ -2876,16 +2992,16 @@ def collectIngredients():
     Veg.addSubType([Artichokes, Asparagus, GreenBeans, Beets, Broccoli, BrusselsSprouts, Cabbage, CollardGreens, BellPepper,
                     BananaPepper, Carrots, Celery, Corn, Eggplant, Garlic, Ginger, Horseradish, Kale, Leeks, Lettuce, OysterMushrooms,
                     ButtonMushrooms, ShiitakeMushrooms, CriminiMushrooms, ChanterelleMushrooms, PortabelloMushrooms, PorciniMushrooms,
-                    MorelMushrooms, Okra, Onions, Peas, Radishes, Shallots, Spinach, AcornSquash, ButternutSquash, SpaghettiSquash,
+                    MorelMushrooms, Okra, Onions, GreenOnions, YellowOnions, RedOnions, Peas, Radishes, Shallots, Spinach, AcornSquash, ButternutSquash, SpaghettiSquash,
                     Tomatoes, GreenTomatoes, Tomatillos, Turnips, Zucchini, Fennel, Avocado, Cauliflower, Cucumber, Potatoes,
                     SweetPotatoes, Lentils, BlackBeans, PintoBeans])
 
-    Herbs.addSubType([Parsley, Cilantro, Basil, Watercress, Dill, Mint, BayLeaves,
-                      Rosemary, Lavender, Thyme, Chives, Sorrel, Garlic, Horseradish])
+    Herbs.addSubType([Parsley, Cilantro, Basil, Watercress, Dill, Mint, BayLeaves, BayLeaf,
+                      Rosemary, Lavender, Thyme, Chives, Sorrel, Garlic, Horseradish, Oregano])
 
     Rice.addSubType([WhiteRice, JasmineRice, BrownRice, BasmatiRice, SushiRice, WildRice])
     Flour.addSubType([WhiteFlour, WholeWheatFlour, BuckwheatFlour, CousCous, CornFlour])
-    Grain.addSubType([Wheat, Rice, Quinoa, Millet, Teff, Flour, Buckwheat, Barley, Bulghur])
+    Grain.addSubType([Wheat, Rice, Quinoa, Millet, Teff, Flour, Buckwheat, Barley, Bulghur, Pasta])
 
     Berries.addSubType([Strawberries, Raspberries, Blueberries, Blackberries])
     Melon.addSubType([Watermelon, Honeydew, Cantaloupe])
@@ -2897,19 +3013,19 @@ def collectIngredients():
     Plants.addSubType([Veg, Herbs, Fruit, Grain, Nuts])
 
     # SPICES and FLAVORS ########################################################
-    ArabFlavors.addSubType([Cumin, Cinnamon, Cayenne, BlackPepper, Salt, Sugar, BrownSugar, Paprika, Saffron, Tarragon,
+    ArabFlavors.addSubType([Cumin, Cinnamon, Cayenne, BlackPepper, Salt, Sugar, BrownSugar, WhiteSugar, Paprika, Saffron, Tarragon,
                            Turmeric, Cardamom, Baharat, Sumac, Zatar, Cilantro, Mint])
-    SouthAsianFlavors.addSubType([Cayenne, Cinnamon, BlackPepper, Ginger, Salt, Sugar, BrownSugar, Mace, Paprika, Saffron,
+    SouthAsianFlavors.addSubType([Cayenne, Cinnamon, BlackPepper, Ginger, Salt, Sugar, BrownSugar, WhiteSugar, Mace, Paprika, Saffron,
                                  Turmeric, CaromSeeds, Asafoetida, Cardamom, Cumin, Curry, Coriander, ChiliPepper,
                                  Fenugreek, KaffirLime, Lemongrass, Basil, Cilantro, Mint])
     EastAsianFlavors.addSubType([Ginger, Garlic, SoySauce])
     EuroFlavors.addSubType([AllSpice, Anise, Mustard, Cayenne, Cinnamon, FennelSeed, BlackPepper, BlackPepper, Salt,
-                           Sugar, BrownSugar, Mace, Nutmeg, Paprika, Paprika, Saffron, Tarragon, Turmeric, Sage, Ginger,
-                            Rosemary, Garlic, Sage, Basil, Parsley, Cilantro])
+                           Sugar, BrownSugar, WhiteSugar, Mace, Nutmeg, Paprika, Paprika, Saffron, Tarragon, Turmeric, Sage, Ginger,
+                            Rosemary, Garlic, Sage, Basil, Parsley, Cilantro, Oregano])
 
-    Spices.addSubType([BlackPepper, Cumin, Cinnamon, Cayenne, Salt, Sugar, BrownSugar, Paprika, Saffron, Tarragon,
+    Spices.addSubType([BlackPepper, Cumin, Cinnamon, Cayenne, Salt, Sugar, BrownSugar, WhiteSugar, Paprika, Saffron, Tarragon,
                        Turmeric, Cardamom, Baharat, Sumac, Zatar, Ginger, Mace, Saffron, CaromSeeds, Asafoetida, Curry, Coriander,
-                       ChiliPepper,Fenugreek, KaffirLime, Lemongrass, AllSpice, Anise, Mustard, FennelSeed, Nutmeg, Sage]) # not done with EastAsia; done with others?
+                       ChiliPepper,Fenugreek, KaffirLime, Lemongrass, AllSpice, Anise, Mustard, FennelSeed, Nutmeg, Sage, HotSauce]) # not done with EastAsia; done with others?
     Flavors = Ingredient("Flavors", ing)
     Flavors.addSubType([ArabFlavors, SouthAsianFlavors, EastAsianFlavors, EuroFlavors])
 
@@ -2933,7 +3049,7 @@ def collectIngredients():
     WhiteWine.addSubType([Chardonnay, Muscat, PinotBlanc, PinotGrigio, Riesling, Sauvignon])
     Wine.addSubType([RedWine, WhiteWine])
 
-    CookingMedia.addSubType([Oils, Broth, Stock, Wine, Butter, Ghee])
+    CookingMedia.addSubType([Oils, Broth, Stock, Wine, Butter, Ghee, Margarine,Sauce])
     ###########################################
 
     Ingredients.addSubType([Protein, Plants, Spices, Dairy, CookingMedia])
@@ -2947,11 +3063,11 @@ def collectIngredients():
                   'spatula','funnel','mixer', 'tenderizer', 'squeezer', 'corkscrew', 'trivet', 'tava',
                   'tamis', 'mandoline','diffuser','churckey', 'casserole', 'skewer', 'saran', 'shaker',
                   'chinois', 'skimmer', 'juicer', 'cookie press', 'cheesecloth', 'parchment paper',
-                  'oven', 'dutch oven', 'microwave' 'baking sheet', 'cast iron', 'griddle', 'grill', 'baking dish', 'wok','deep fryer','baster'] 
+                  'oven', 'dutch oven', 'microwave' 'baking sheet', 'cast iron', 'griddle', 'grill', 'baking dish', 'wok','deep fryer','baster', 'skillet','whisk'] 
     CookMethods = ['bake', 'broil', 'blanch', 'braise', 'barbecue', 'boil', 'roast', 'brine', 'fry', 'poach',
                'griddle', 'steam', 'stew', 'grill', 'stir fry', 'deep fry', 'poach', 'sauteing', 'pan fry',
-               'sweat', 'torch', 'scald', 'simmer', 'blanch', 'chop', 'mince', 'crush', 'squeeze', 'shake', 'mix', 'baste', 'basting', 'stir']
+               'sweat', 'torch', 'scald', 'simmer', 'blanch', 'chop', 'mince', 'crush', 'squeeze', 'shake', 'mix', 'baste', 'basting', 'stir','whisk', 'grate']
 
-    assocTools = {'bake':'oven', 'broil':'oven', 'blanch':'pot', 'braise':'crockpot', 'barbecue':'grill', 'boil':'pot', 'roast':'oven', 'fry':'pan', 'poach':'pot', 'steam':'pot', 'stew':'pot', 'grill':'grill', 'stir fry':'wok', 'deep fry':'deep fryer', 'sauteing':'pan', 'pan fry':'pan','simmer':'pot', 'blanch':'pot', 'chop':'knife', 'mince':'knife', 'mix':'spoon', 'baste':'baster', 'basting':'baster', 'stir':'spoon'}
+    assocTools = {'bake':'oven', 'broil':'oven', 'blanch':'pot', 'braise':'crockpot', 'barbecue':'grill', 'boil':'pot', 'roast':'oven', 'fry':'skillet', 'poach':'pot', 'steam':'pot', 'stew':'pot', 'grill':'grill', 'stir fry':'wok', 'deep fry':'deep fryer', 'sauteing':'pan', 'pan fry':'pan','simmer':'pot', 'blanch':'pot', 'chop':'knife', 'mince':'knife', 'mix':'spoon', 'baste':'baster', 'basting':'baster', 'stir':'spoon','whisk':'whisk','grate':'grater'}
     
     return [ing, CookImplements, CookMethods, assocTools]
