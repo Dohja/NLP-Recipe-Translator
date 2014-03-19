@@ -23,7 +23,6 @@ def findSwap(ingredients, IngreDict):
     trySwap = ""
     cutoff = 3.0
     testList = []
-    testList2 = []
     while len(testList) < 3:
         cutoff -= .333333333333333
         testList = [ing for ing in ingredients.keys() if ingredients[ing]["weight"] > cutoff]

@@ -1,7 +1,3 @@
-#NEED TO REWORK PARSING TO BETTER FIGURE OUT PARSING - IS NOT WORKING ALL THAT GREAT AFTER ALL
-#BETTER DEFINE 'TO TASTE'
-
-
 import nltk
 import fractions
 from CookingTerms import Ingredient
@@ -272,7 +268,3 @@ def convertWeight(amount, unit, stdAmt, stdUnit):
             print "we can't easily convert from " + unit + " to " + stdUnit
             return 1
     else: return 1
-
-
-#lemon pepper, garlic powder
-

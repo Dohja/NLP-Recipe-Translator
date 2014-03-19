@@ -133,6 +133,16 @@ def collectIngredients():
     Lamb.setUnits("weight")
     Lamb.setMeasure("8 ounces")
 
+    Venison = Ingredient("venison", ing)
+    Venison.setTaste("umami", 7)
+    Venison.setTaste("salty", 5)
+    Venison.setTaste("sweet", 2)
+    Venison.setTaste("sour", 1)
+    Venison.setTaste("bitter", 1)
+    Venison.setTaste("hot", 1)
+    Venison.setUnits("weight")
+    Venison.setMeasure("8 ounces")
+
     # types of beef
     BeefRibs = Ingredient("beef ribs", ing)
     BeefRibs.setTaste("umami", 6)
@@ -208,6 +218,17 @@ def collectIngredients():
     GroundBeef.setMeasure("8 ounces")
 
     # types of pork
+
+    Ham = Ingredient("ham", ing)
+    Ham.setTaste("umami", 5)
+    Ham.setTaste("salty", 5)
+    Ham.setTaste("sweet", 3)
+    Ham.setTaste("sour", 2)
+    Ham.setTaste("bitter", 1)
+    Ham.setTaste("hot", 1)
+    Ham.setUnits("weight")
+    Ham.setMeasure("8 ounces")
+
     PorkRibs = Ingredient("pork ribs", ing)
     PorkRibs.setTaste("umami", 7)
     PorkRibs.setTaste("salty", 4)
@@ -2964,11 +2985,11 @@ def collectIngredients():
     # PROTEIN #######################################################
     Protein.addSubType([Meat, VegProtein, Seafood, Poultry])
 
-    Meat.addSubType([Beef, Pork, Lamb, Poultry])
+    Meat.addSubType([Beef, Pork, Lamb, Poultry, Venison])
 
     Beef.addSubType([BeefRibs, Steak, RibTips, BeefStew, VealCutlet, GroundBeef])
 
-    Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet, ItalianSausage, Bacon])
+    Pork.addSubType([PorkRibs, PorkChops, PorkRoast, PorkCutlet, ItalianSausage, Bacon, Ham])
 
     Lamb.addSubType([LambChops, LambLeg, LambRoast, GroundLamb])
 

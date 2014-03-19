@@ -13,7 +13,7 @@ def SwapRecipes(url):
                     'pinch', 'dash', 'lb', 'lbs', 'pound', 'pounds', 'kg', 'kilo',
                     'kilos', 'kilograms', 'g', 'gs', 'grams', 'oz', 'ozs', "ounce", 'ounces',
                     'c', 'cup', 'cups', 'pint', 'pt', 'pints', 'quart', 'quarts', 'qt',
-                    'gal', 'gallon', 'gallons', 'to taste'])
+                    'gal', 'gallon', 'gallons', 'to taste', 'cloves'])
 
     print "so you'd like to mix up a recipe, eh? \n \n \n"
     IngreDict, implements, methods, assocTools = collectIngredients()
@@ -27,6 +27,8 @@ def SwapRecipes(url):
     for method, tool in assocTools.iteritems():
 	    if method in meths and tool not in impls:
 		    impls.append(tool)
+ #hack to eliminate duplicates
+    impls = list(set(impls))
     print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
     transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options: ")
     while transformation != "veg" and transformation != "style" and transformation != "scale" and transformation != "swap":
@@ -68,7 +70,7 @@ def JSONOutput(url):
                     'pinch', 'dash', 'lb', 'lbs', 'pound', 'pounds', 'kg', 'kilo',
                     'kilos', 'kilograms', 'g', 'gs', 'grams', 'oz', 'ozs', "ounce", 'ounces',
                     'c', 'cup', 'cups', 'pint', 'pt', 'pints', 'quart', 'quarts', 'qt',
-                    'gal', 'gallon', 'gallons', 'to taste'])
+                    'gal', 'gallon', 'gallons', 'to taste','cloves'])
 	IngreDict, implements, methods, assocTools = collectIngredients()
 	ingredInput, recipeInput = parseHTML(url)
 	ingredients = processIngredients(ingredInput, IngreDict, measures)
@@ -99,12 +101,14 @@ def JSONOutput(url):
 
 
 # EXAMPLE RECIPES
-
-#SwapRecipes('http://allrecipes.com/Recipe/Deluxe-Corned-Beef-Hash/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
+#SwapRecipes('http://allrecipes.com/Recipe/Chicken-Cordon-Bleu-II/Detail.aspx?soid=recs_recipe_8')
+SwapRecipes('http://allrecipes.com/Recipe/Venison-Bacon-Burgers/Detail.aspx?soid=recs_recipe_9')
+#SwapRecipes('http://allrecipes.com/Recipe/Irish-Cream-Chocolate-Cheesecake/Detail.aspx?soid=photos_vote_5')
+#SwapRecipes('http://allrecipes.com/Recipe/Pork-Carnitas-with-Cilantro-Tomatillo-Sauce/Detail.aspx?soid=photos_vote_6')
+#SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
 #SwapRecipes('http://allrecipes.com/Recipe/Amazingly-Easy-Irish-Soda-Bread/Detail.aspx?soid=recs_recipe_4')
 #SwapRecipes('http://allrecipes.com/Recipe/Cajun-Chicken-Pasta-2/Detail.aspx?soid=recs_recipe_3')
 #SwapRecipes('http://allrecipes.com/Recipe/Strawberry-Spinach-Salad-I/Detail.aspx')
-#SwapRecipes('http://allrecipes.com/Recipe/Hillbilly-Breakfast/Detail.aspx?event8=1&prop24=SR_Title&e11=breakfast&e8=Quick%20Search&event10=1&e7=Home%20Page&soid=sr_results_p1i8')
 #SwapRecipes('http://allrecipes.com/Recipe/Mediterranean-Pasta/Detail.aspx?event8=1&prop24=SR_Title&e11=pasta&e8=Quick%20Search&event10=1&e7=Home%20Page&soid=sr_results_p1i5')
 #SwapRecipes('http://allrecipes.com/Recipe/Tofu-Parmigiana/Detail.aspx?event8=1&prop24=SR_Thumb&e11=tofu&e8=Quick%20Search&event10=1&soid=sr_results_p1i1')
 
