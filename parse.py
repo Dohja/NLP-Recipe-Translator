@@ -12,7 +12,6 @@ def stripChars(x):
         x=x.lstrip().rstrip()
     return x
 
-
 def processIngredients(ingList, ingDict, measures):
     ingredients = {}
     for ingredient in ingList:
@@ -127,13 +126,11 @@ def extractIngredient(tokens, ingDict, units, num):
         else:
             name = " ".join(tokens)
             descriptor = ''
-#            print 'failed'
     if descriptor!='':
 		repl = descriptor+' '
 		name = name.replace(repl, '')
 		for x in name.split():
 			descriptor = descriptor.replace(x, '')
-#    print '    final choice: '+str([descriptor, name, prep])
     return [descriptor, name, prep]
 
 def checkForPlurals(nameables, ingDict):
