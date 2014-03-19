@@ -53,7 +53,7 @@ def SwapRecipes(url):
 
     # we need something to print the recipe...
     print "here are your new ingredients"
-    pprint.pprint(newIng)
+    printIngredients(newIng)
     print "and your recipe is "
     print newRecipe
     print "Here are the primary cooking methods for this recipe" + str(meths)
@@ -78,8 +78,22 @@ def SwapRecipes(url):
 		'measurement':row['measurement'], 'descriptor':row['description'], 
 		'preparation':row['preparation']})
     output = json.dumps(response)
-    print '\n\n\n'
+    print '\n\n\n'    
+    
     return output
+
+def printIngredients(ings):
+    for ing in ingredients:
+        if ing['quantity'] == None: q = ''
+        else: q = ing['quantity'] + " "
+        if ing['measurement'] == None: m = ''
+        else: m = ing['measurement'] + " "
+        if ing['description'] == None: d = ''
+        else: d = ing['description'] + " "
+        if ing['preparation'] == None: p = ''
+        else: p = ", " + ing['preparation']
+        print q + m + d + ing['name'] + " " + p
+    return
 
 
 
