@@ -62,7 +62,6 @@ def scaleRecipe(ingredients):
     scale = raw_input("1 leaves the recipe unchanged; 0.5 would halve it; 2 would double it; etc ")
     scale = float(scale)
     for i in ingredients.keys():
-		print "i is: "+i
 		if ingredients[i]["weight"] != None:
 			ingredients[i]["weight"] *= scale
 		if ingredients[i]["quantity"] != None:
@@ -89,7 +88,6 @@ def swapOut(ingredients, recipe, originalFlavor, IngreDict, action, swap = "", f
 			swapGroup = swap.superTypes
 		else:
 			swapGroup = [IngreDict[fromGroup]]
-#		swapGroup = [IngreDict[fromGroup]]
 		targetOptions = []
 		for i in swapGroup:			
 			targetOptions += collectSubTypes(IngreDict[i.name])

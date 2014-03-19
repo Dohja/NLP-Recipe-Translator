@@ -196,7 +196,6 @@ def collectIngredients():
     VealCutlet.setUnits("weight")
     VealCutlet.setMeasure("8 ounces")
 
-
     Hamburger = Ingredient("hamburger", ing)
     Hamburger.setTaste("umami", 7)
     Hamburger.setTaste("salty", 6)

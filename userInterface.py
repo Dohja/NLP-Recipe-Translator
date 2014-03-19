@@ -27,8 +27,7 @@ def SwapRecipes(url):
     for method, tool in assocTools.iteritems():
 	    if method in meths and tool not in impls:
 		    impls.append(tool)
- #hack to eliminate duplicates
-    impls = list(set(impls))
+    impls = list(set(impls)) #hack to eliminate duplicates
     print "you can do four sorts of transformations: making it vegetarian (or non-vegetarian, if it is vegetarian); change the style of cuisine; scale the recipe up or down; or swap a particular ingredient"
     transformation = raw_input("please say 'veg', 'style', 'scale', or 'swap' respectively for these options: ")
     while transformation != "veg" and transformation != "style" and transformation != "scale" and transformation != "swap":
@@ -60,7 +59,6 @@ def SwapRecipes(url):
     print "Here are the implements" + str(impls)
     ingredientList = [newIng[ing] for ing in newIng]
 
-
     response = []
     for key, row in ingredients.iteritems():
         if row['name']==None:
@@ -83,15 +81,17 @@ def SwapRecipes(url):
 
 
 
-# EXAMPLE RECIPES
+# ================== EXAMPLE RECIPES ================== #
 
+SwapRecipes('http://allrecipes.com/Recipe/Braised-Balsamic-Chicken/Detail.aspx?event8=1&prop24=SR_Thumb&e11=braised%20balsamic%20chicken&e8=Quick%20Search&event10=1&e7=Recipe&soid=sr_results_p1i1')
 #SwapRecipes('http://allrecipes.com/Recipe/Tofu-Parmigiana/Detail.aspx?event8=1&prop24=SR_Thumb&e11=tofu&e8=Quick%20Search&event10=1&soid=sr_results_p1i1')
 #SwapRecipes('http://allrecipes.com/Recipe/Chicken-Cordon-Bleu-II/Detail.aspx?soid=recs_recipe_8')
 #SwapRecipes('http://allrecipes.com/Recipe/Venison-Bacon-Burgers/Detail.aspx?soid=recs_recipe_9')
 #SwapRecipes('http://allrecipes.com/Recipe/Irish-Cream-Chocolate-Cheesecake/Detail.aspx?soid=photos_vote_5')
-#SwapRecipes('http://allrecipes.com/Recipe/Pork-Carnitas-with-Cilantro-Tomatillo-Sauce/Detail.aspx?soid=photos_vote_6')
 #SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
 #SwapRecipes('http://allrecipes.com/Recipe/Amazingly-Easy-Irish-Soda-Bread/Detail.aspx?soid=recs_recipe_4')
 #SwapRecipes('http://allrecipes.com/Recipe/Cajun-Chicken-Pasta-2/Detail.aspx?soid=recs_recipe_3')
+#SwapRecipes('http://allrecipes.com/recipe/bacon-cheeseburgers/')
 #SwapRecipes('http://allrecipes.com/Recipe/Strawberry-Spinach-Salad-I/Detail.aspx')
 #SwapRecipes('http://allrecipes.com/Recipe/Mediterranean-Pasta/Detail.aspx?event8=1&prop24=SR_Title&e11=pasta&e8=Quick%20Search&event10=1&e7=Home%20Page&soid=sr_results_p1i5')
+
