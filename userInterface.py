@@ -51,12 +51,14 @@ def SwapRecipes(url):
         newIng, newRecipe = swapOut(ingredients, recipe, originalFlavor, IngreDict, 'swap')
 
     # we need something to print the recipe...
-    print "here are your new ingredients"
+    print
+    print "--------------------------------------"
+    print "\nhere are your new ingredients:\n"
     printIngredients(newIng)
-    print "and your recipe is "
+    print "\nand your recipe is:"
     print newRecipe
-    print "Here are the primary cooking methods for this recipe" + str(meths)
-    print "Here are the implements" + str(impls)
+    print "\nHere are the primary cooking methods for this recipe: " + str(meths)
+    print "Here are the implements: " + str(impls)
     ingredientList = [newIng[ing] for ing in newIng]
 
     response = []
@@ -81,28 +83,28 @@ def SwapRecipes(url):
     return output
 
 def printIngredients(ings):
-    for ing in ingredients:
-        if ing['quantity'] == None: q = ''
-        else: q = ing['quantity'] + " "
-        if ing['measurement'] == None: m = ''
-        else: m = ing['measurement'] + " "
-        if ing['description'] == None: d = ''
-        else: d = ing['description'] + " "
-        if ing['preparation'] == None: p = ''
-        else: p = ", " + ing['preparation']
-        print q + m + d + ing['name'] + " " + p
+    for ing in ings:
+        if ings[ing]['quantity'] == None: q = ''
+        else: q = str(ings[ing]['quantity']) + " "
+        if ings[ing]['measurement'] == None: m = ''
+        else: m = ings[ing]['measurement'] + " "
+        if ings[ing]['description'] == None: d = ''
+        else: d = ings[ing]['description'] + " "
+        if ings[ing]['preparation'] == None: p = ''
+        else: p = ", " + ings[ing]['preparation']
+        print q + m + d + ings[ing]['name'] + p
     return
 
 
 
 # ================== EXAMPLE RECIPES ================== #
 
-SwapRecipes('http://allrecipes.com/Recipe/Braised-Balsamic-Chicken/Detail.aspx?event8=1&prop24=SR_Thumb&e11=braised%20balsamic%20chicken&e8=Quick%20Search&event10=1&e7=Recipe&soid=sr_results_p1i1')
+#SwapRecipes('http://allrecipes.com/Recipe/Braised-Balsamic-Chicken/Detail.aspx?event8=1&prop24=SR_Thumb&e11=braised%20balsamic%20chicken&e8=Quick%20Search&event10=1&e7=Recipe&soid=sr_results_p1i1')
 #SwapRecipes('http://allrecipes.com/Recipe/Tofu-Parmigiana/Detail.aspx?event8=1&prop24=SR_Thumb&e11=tofu&e8=Quick%20Search&event10=1&soid=sr_results_p1i1')
 #SwapRecipes('http://allrecipes.com/Recipe/Chicken-Cordon-Bleu-II/Detail.aspx?soid=recs_recipe_8')
 #SwapRecipes('http://allrecipes.com/Recipe/Venison-Bacon-Burgers/Detail.aspx?soid=recs_recipe_9')
 #SwapRecipes('http://allrecipes.com/Recipe/Irish-Cream-Chocolate-Cheesecake/Detail.aspx?soid=photos_vote_5')
-#SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
+SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
 #SwapRecipes('http://allrecipes.com/Recipe/Amazingly-Easy-Irish-Soda-Bread/Detail.aspx?soid=recs_recipe_4')
 #SwapRecipes('http://allrecipes.com/Recipe/Cajun-Chicken-Pasta-2/Detail.aspx?soid=recs_recipe_3')
 #SwapRecipes('http://allrecipes.com/recipe/bacon-cheeseburgers/')
