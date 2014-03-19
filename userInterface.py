@@ -53,12 +53,20 @@ def SwapRecipes(url):
     # we need something to print the recipe...
     print
     print "--------------------------------------"
-    print "\nhere are your new ingredients:\n"
+    print "\nhere are your new ingredients:"
     printIngredients(newIng)
     print "\nand your recipe is:"
     print newRecipe
-    print "\nHere are the primary cooking methods for this recipe: " + str(meths)
-    print "Here are the implements: " + str(impls)
+    print "\nHere are the primary cooking methods for this recipe: "
+    mout = '  '
+    for m in meths:
+        mout += m+', '
+    print mout[:-2]
+    print "Here are the implements: "
+    iout = '  '
+    for i in impls:
+        iout += i+', '
+    print iout[:-2]
     ingredientList = [newIng[ing] for ing in newIng]
 
     response = []
@@ -92,7 +100,7 @@ def printIngredients(ings):
         else: d = ings[ing]['description'] + " "
         if ings[ing]['preparation'] == None: p = ''
         else: p = ", " + ings[ing]['preparation']
-        print q + m + d + ings[ing]['name'] + p
+        print '  '+q + m + d + ings[ing]['name'] + p
     return
 
 
@@ -104,7 +112,7 @@ def printIngredients(ings):
 #SwapRecipes('http://allrecipes.com/Recipe/Chicken-Cordon-Bleu-II/Detail.aspx?soid=recs_recipe_8')
 #SwapRecipes('http://allrecipes.com/Recipe/Venison-Bacon-Burgers/Detail.aspx?soid=recs_recipe_9')
 #SwapRecipes('http://allrecipes.com/Recipe/Irish-Cream-Chocolate-Cheesecake/Detail.aspx?soid=photos_vote_5')
-#SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
+SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
 #SwapRecipes('http://allrecipes.com/Recipe/Amazingly-Easy-Irish-Soda-Bread/Detail.aspx?soid=recs_recipe_4')
 #SwapRecipes('http://allrecipes.com/Recipe/Cajun-Chicken-Pasta-2/Detail.aspx?soid=recs_recipe_3')
 #SwapRecipes('http://allrecipes.com/recipe/bacon-cheeseburgers/')
