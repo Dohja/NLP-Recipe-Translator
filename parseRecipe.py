@@ -24,17 +24,12 @@ def parseHTML(url):
 			else:
 				amt = ingAmt.string
 			ingredientList.append(amt+' '+name)
-	print 'Ingredients: '
-	print ingredientList
-	print '\n'
-	
+
 	directions = ''
 	dir = soup.find('div', {'class' : 'directions'})
 	dir = dir.find('ol')
 	dir = dir.find_all('li')
 	for d in dir:
 		directions += '\n'+d.string
-	print "Directions: "	
-	print directions
-	print '\n'
+
 	return ingredientList, directions

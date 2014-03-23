@@ -104,6 +104,35 @@ def printIngredients(ings):
     return
 
 
+def JSONOutput(url):
+	measures = Set(['tsp', 'teaspoon', 'teaspoons', 'tbsp', 'tbs', 'tablespoon', 'tablespoons',
+	                    'pinch', 'dash', 'lb', 'lbs', 'pound', 'pounds', 'kg', 'kilo',
+	                    'kilos', 'kilograms', 'g', 'gs', 'grams', 'oz', 'ozs', "ounce", 'ounces',
+	                    'c', 'cup', 'cups', 'pint', 'pt', 'pints', 'quart', 'quarts', 'qt',
+	                    'gal', 'gallon', 'gallons', 'to taste', 'cloves'])
+	IngreDict, implements, methods, assocTools = collectIngredients()
+	ingredInput, recipeInput = parseHTML(url)
+	ingredients = processIngredients(ingredInput, IngreDict, measures)
+	response = []
+	for key, row in ingredients.iteritems():
+		if row['name']==None:
+			print 'ERROR: NO NAME'
+			return -1
+		if row['quantity'] ==None:
+			row['quantity']= 1.0
+		if row['measurement'] == None:
+			row['measurement']='units'
+		if row['description']== None or row['description']== '':
+			row['description'] = 'none'
+		if row['preparation']==None or row['preparation']== '':
+			row['preparation']='none'
+		response.append({'name':row['name'], 'quantity':row['quantity'], 
+		'measurement':row['measurement'], 'descriptor':row['description'], 
+		'preparation':row['preparation']})
+	output = json.dumps(response)
+	return output
+
+
 
 # ================== EXAMPLE RECIPES ================== #
 
@@ -112,7 +141,7 @@ def printIngredients(ings):
 #SwapRecipes('http://allrecipes.com/Recipe/Chicken-Cordon-Bleu-II/Detail.aspx?soid=recs_recipe_8')
 #SwapRecipes('http://allrecipes.com/Recipe/Venison-Bacon-Burgers/Detail.aspx?soid=recs_recipe_9')
 #SwapRecipes('http://allrecipes.com/Recipe/Irish-Cream-Chocolate-Cheesecake/Detail.aspx?soid=photos_vote_5')
-SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
+#SwapRecipes('http://allrecipes.com/Recipe/Chicken-Breasts-with-Balsamic-Vinegar-and-Garlic/Detail.aspx?soid=carousel_0_rotd&prop24=rotd')
 #SwapRecipes('http://allrecipes.com/Recipe/Amazingly-Easy-Irish-Soda-Bread/Detail.aspx?soid=recs_recipe_4')
 #SwapRecipes('http://allrecipes.com/Recipe/Cajun-Chicken-Pasta-2/Detail.aspx?soid=recs_recipe_3')
 #SwapRecipes('http://allrecipes.com/recipe/bacon-cheeseburgers/')
